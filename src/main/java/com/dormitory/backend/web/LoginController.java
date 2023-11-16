@@ -31,5 +31,12 @@ public class LoginController {
       return ResponseEntity.ok("Login successful");
     }
   }
+
+  @CrossOrigin
+  @PostMapping(value = "api/register")
+  @ResponseBody
+  public ResponseEntity<String> register(@RequestBody user requestUser){
+    return null;
+  }
 }
 

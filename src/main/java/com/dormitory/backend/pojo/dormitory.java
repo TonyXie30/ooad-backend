@@ -1,31 +1,41 @@
 package com.dormitory.backend.pojo;
-
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity(name = "dormitory")
 @Table(schema = "public")
+@Schema
 public class dormitory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "dormitory_id")
+    @Schema
     int id;
     @Column
+    @Schema
     String location;
     @Column(name = "building_name")
+    @Schema
     String buildingName;
     @Column
+    @Schema
     int floor;
     @Column(name = "house_num")
+    @Schema
     String houseNum;
     @Column
+    @Schema
     String type;
     @Column(name = "booked_num")
+    @Schema
     int bookedNum;
     @Column
+    @Schema
     String bed;
     @ManyToMany(mappedBy = "bookmark")
+    @Schema
     List<user> marked_users;
 
     public int getId() {
