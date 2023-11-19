@@ -8,10 +8,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService{
 
-  @Autowired
-  UserRepository userRepository;
+    @Autowired
+    UserRepository userRepository;
 
-  public user findByUsername(String username) {
-    return userRepository.findByUsername(username);
-  }
+    public user findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+    public user register(user newUser){
+        userRepository.save(newUser);
+        return newUser;
+    }
+
 }
