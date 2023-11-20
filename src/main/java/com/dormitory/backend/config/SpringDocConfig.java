@@ -19,10 +19,10 @@ public class SpringDocConfig {
                 .info(new Info().title("Mall-Tiny API")
                         .description("SpringDoc API")
                         .version("v1.0.0")
-                        .license(new License().name("Apache 2.0").url("https://www.apache.org/licenses/LICENSE-2.0.html")))
-                .externalDocs(new ExternalDocumentation()
-                        .description("OOAD Dormitory Selection System API")
-                        .url("http://www.ooad_backend_api.com"));
+                        .license(new License().name("Apache 2.0").url("https://www.apache.org/licenses/LICENSE-2.0.html")));
+//                .externalDocs(new ExternalDocumentation()
+//                        .description("OOAD Dormitory Selection System API")
+//                        .url("http://www.ooad_backend_api.com"));
     }
 
 //    @Bean
