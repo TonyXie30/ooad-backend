@@ -21,7 +21,7 @@ public class dormitory {
     String buildingName;
     @Column
     @Schema
-    int floor;
+    Integer floor;
     @Column(name = "house_num")
     @Schema
     String houseNum;

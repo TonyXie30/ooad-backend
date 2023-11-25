@@ -1,6 +1,7 @@
 package com.dormitory.backend.service;
 
 import com.dormitory.backend.api.UserRepository;
+import com.dormitory.backend.pojo.dormitory;
 import com.dormitory.backend.pojo.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,10 @@ public class UserService{
     public user register(user newUser){
         userRepository.save(newUser);
         return newUser;
+    }
+    public void bookRoom(user user, dormitory dorm){
+        user.setBookedDormitory(dorm);
+        userRepository.save(user);
     }
 
 }

@@ -59,6 +59,45 @@ public class user {
         this.username = username;
     }
 
+    public List<dormitory> getBookmark() {
+        return bookmark;
+    }
+
+    public void setBookmark(List<dormitory> bookmark) {
+        this.bookmark = bookmark;
+    }
+
+    public dormitory getBookedDormitory() {
+        return bookedDormitory;
+    }
+
+    public void setBookedDormitory(dormitory bookedDormitory) {
+        this.bookedDormitory = bookedDormitory;
+    }
+
+    public com.dormitory.backend.pojo.subject getSubject() {
+        return subject;
+    }
+
+    public void setSubject(com.dormitory.backend.pojo.subject subject) {
+        this.subject = subject;
+    }
+
+    public List<timeRange> getBedtime() {
+        return bedtime;
+    }
+
+    public void setBedtime(List<timeRange> bedtime) {
+        this.bedtime = bedtime;
+    }
+
+    public List<timeRange> getWakeupTime() {
+        return wakeupTime;
+    }
+
+    public void setWakeupTime(List<timeRange> wakeupTime) {
+        this.wakeupTime = wakeupTime;
+    }
 
     public String getPassword() {
         return password;

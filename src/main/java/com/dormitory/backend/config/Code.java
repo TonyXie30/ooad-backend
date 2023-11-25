@@ -11,9 +11,9 @@ public enum Code {
     MISSING_FIELD(5000, "Missing required field"),
     REG_BAD_PASSWORD_FORMAT(5101,"wrong password format, should be characters and/or numbers"),
     REG_EXISTED_USER(5102, "Register failed: existed user"),
-    LOGIN_FAILED(5103, "Login failed, check username or password");
+    LOGIN_FAILED(5103, "Login failed, check username or password"),
+    Room_Occupied(5104, "Room not available");
 
-    
     private final int code;
     private final String msg;
 
