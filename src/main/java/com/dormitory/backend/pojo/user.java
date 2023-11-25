@@ -18,7 +18,7 @@ public class user {
     @Column(nullable = false)
     @Schema
     String username;
-    @Column
+    @Column(nullable = false)
     @Schema
     String password;
     @ManyToMany

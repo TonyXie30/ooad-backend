@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.sql.Time;
 import java.util.List;
 
-@Entity(name = "timeRange")
+@Entity(name = "time_range")
 @Table(schema = "public")
 @Schema
 public class timeRange {

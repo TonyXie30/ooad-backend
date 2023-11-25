@@ -5,13 +5,13 @@ import com.dormitory.backend.config.MyException;
 import com.dormitory.backend.service.UserService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.dormitory.backend.pojo.user;
+import org.springframework.web.util.HtmlUtils;
 
 import java.util.Objects;
-
+import jakarta.servlet.http.HttpSession;
 @RestController
 public class LoginController {
 
@@ -21,16 +21,18 @@ public class LoginController {
     @CrossOrigin
     @PostMapping(value = "api/login")
     @ResponseBody
-    public user login(@RequestBody user requestUser) {
+    public user login(@RequestBody user requestUser, HttpSession session) {
 
         String username = requestUser.getUsername();
         // 从数据库中查找用户信息
+        username = HtmlUtils.htmlEscape(username);
         user user = userService.findByUsername(username);
 
         // 如果用户不存在或密码不匹配，返回登录失败
         if (user == null || !Objects.equals(requestUser.getPassword(), user.getPassword())) {
             throw new MyException(Code.LOGIN_FAILED);
         } else {
+            session.setAttribute("user",user);
             return user;
         }
     }
