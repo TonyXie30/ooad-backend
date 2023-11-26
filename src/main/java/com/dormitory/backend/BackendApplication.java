@@ -5,9 +5,13 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 
 @EntityScan(basePackages = {"com.dormitory.backend.pojo"})
+@CrossOrigin(origins = "http://localhost:8080")
+@EnableTransactionManagement
 @SpringBootApplication
 public class BackendApplication {
 

@@ -13,7 +13,7 @@ public class LoginInterceptor  implements HandlerInterceptor {
         HttpSession session = httpServletRequest.getSession();
         String contextPath=session.getServletContext().getContextPath();
         String[] requireAuthPages = new String[]{
-                "index",
+                "/home",
         };
 
         String uri = httpServletRequest.getRequestURI();
@@ -22,7 +22,7 @@ public class LoginInterceptor  implements HandlerInterceptor {
         String page = uri;
 
         if(begingWith(page, requireAuthPages)){
-            user user = (user) session.getAttribute("user");
+            user user = (user) session.getAttribute("username");
             if(user==null) {
                 httpServletResponse.sendRedirect("login");
                 return false;

@@ -1,5 +1,6 @@
 package com.dormitory.backend.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
@@ -33,7 +34,7 @@ public class user {
     @JoinColumn(name = "subject_id")
     @Schema
     private subject subject;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "favour_bedtime")
     @Schema
     private List<timeRange> bedtime;
