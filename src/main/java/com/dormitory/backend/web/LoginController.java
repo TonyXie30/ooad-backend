@@ -31,14 +31,14 @@ public class LoginController {
         // 从数据库中查找用户信息
         HttpSession session = request.getSession();
         user user = userService.findByUsername(username);
-        Hibernate.initialize(user.getBookmark());
-        Hibernate.initialize(user.getBedtime());
-        Hibernate.initialize(user.getWakeupTime());
         // 如果用户不存在或密码不匹配，返回登录失败
         if (user == null || !Objects.equals(requestUser.getPassword(), user.getPassword())) {
             throw new MyException(Code.LOGIN_FAILED);
         } else {
             session.setAttribute("username",user.getUsername());
+            Hibernate.initialize(user.getBookmark());
+            Hibernate.initialize(user.getBedtime());
+            Hibernate.initialize(user.getWakeupTime());
             return user;
         }
     }

@@ -42,6 +42,10 @@ public class user {
     @JoinTable(name = "favour_wakeup_time")
     @Schema
     private List<timeRange> wakeupTime;
+    @ManyToOne
+    @JoinTable(name = "leader_id")
+    @Schema
+    private user leaderId;
 
     public int getId() {
         return id;
