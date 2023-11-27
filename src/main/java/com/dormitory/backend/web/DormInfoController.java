@@ -43,7 +43,7 @@ public class DormInfoController {
     @PostMapping(value = "api/checkInDorm")
     @ResponseBody
     public void checkInDorm(@RequestBody dormitory dormitory, user user){
-        if (dormitory==null&&user==null){
+        if (dormitory==null||user==null){
             throw new MyException(Code.MISSING_FIELD);
         }
         else{
