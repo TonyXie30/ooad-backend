@@ -6,6 +6,8 @@ import com.dormitory.backend.pojo.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService{
 
@@ -21,7 +23,8 @@ public class UserService{
     }
     public void bookRoom(user user, dormitory dorm){
         user.setBookedDormitory(dorm);
-        userRepository.save(user);
+        List<user> members = userRepository.findByLeaderId(user.getLeaderId().getId());
+        userRepository.saveAll(members); //contains leader
     }
 
 }
