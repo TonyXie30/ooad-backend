@@ -13,7 +13,8 @@ public enum Code {
     REG_EXISTED_USER(5102, "Register failed: existed user"),
     LOGIN_FAILED(5103, "Login failed, check username or password"),
     Room_Occupied(5104, "Room not available"),
-    UNAUTHORISED_NOT_LEADER(5105,"Unauthorised: user should be a team leader");
+    UNAUTHORISED_NOT_LEADER(5105,"Unauthorised operation: user should be a team leader"),
+    USER_NOT_EXIST(5106,"Cannot find this user");
 
     private final int code;
     private final String msg;

@@ -26,5 +26,11 @@ public class UserService{
         List<user> members = userRepository.findByLeaderId(user.getLeaderId().getId());
         userRepository.saveAll(members); //contains leader
     }
+    public void teamUp(user user, int leader_id){
+        user leader = userRepository.findById(leader_id);
+        user.setLeaderId(leader);
+        userRepository.save(user);
+    }
+
 
 }
