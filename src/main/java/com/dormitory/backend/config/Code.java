@@ -7,12 +7,13 @@ package com.dormitory.backend.config;
  */
 public enum Code {
 //    generally, 5xxx means something goes wrong.
-    SUCCESS(0,"success"),
+    SUCCESS(0,"success"),// try not throw an exception, with success message
     MISSING_FIELD(5000, "Missing required field"),
     REG_BAD_PASSWORD_FORMAT(5101,"wrong password format, should be characters and/or numbers"),
     REG_EXISTED_USER(5102, "Register failed: existed user"),
     LOGIN_FAILED(5103, "Login failed, check username or password"),
-    Room_Occupied(5104, "Room not available");
+    Room_Occupied(5104, "Room not available"),
+    UNAUTHORISED_NOT_LEADER(5105,"Unauthorised: user should be a team leader");
 
     private final int code;
     private final String msg;

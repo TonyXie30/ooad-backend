@@ -33,7 +33,7 @@ public class dormitory {
     int bookedNum;
     @Column
     @Schema
-    String bed;
+    int bed;
     @ManyToMany(mappedBy = "bookmark")
     @Schema
     List<user> marked_users;
@@ -94,11 +94,11 @@ public class dormitory {
         this.bookedNum = bookedNum;
     }
 
-    public String getBed() {
+    public int getBed() {
         return bed;
     }
 
-    public void setBed(String bed) {
+    public void setBed(int bed) {
         this.bed = bed;
     }
 

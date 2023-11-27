@@ -47,6 +47,9 @@ public class DormInfoController {
             throw new MyException(Code.MISSING_FIELD);
         }
         else{
+            if (user.getLeaderId().getId() != user.getId()){
+                throw new MyException(Code.UNAUTHORISED_NOT_LEADER);
+            }
             if (dormitoryService.checkRoomAvailable(dormitory)){
                 userService.bookRoom(user,dormitory);
             }

@@ -42,6 +42,7 @@ public class user {
     @JoinTable(name = "favour_wakeup_time")
     @Schema
     private List<timeRange> wakeupTime;
+
     @ManyToOne
     @JoinTable(name = "leader_id")
     @Schema
@@ -55,6 +56,13 @@ public class user {
         this.id = id;
     }
 
+    public user getLeaderId() {
+        return leaderId;
+    }
+
+    public void setLeaderId(user leaderId) {
+        this.leaderId = leaderId;
+    }
 
     public String getUsername() {
         return username;
@@ -80,11 +88,11 @@ public class user {
         this.bookedDormitory = bookedDormitory;
     }
 
-    public com.dormitory.backend.pojo.subject getSubject() {
+    public subject getSubject() {
         return subject;
     }
 
-    public void setSubject(com.dormitory.backend.pojo.subject subject) {
+    public void setSubject(subject subject) {
         this.subject = subject;
     }
 
