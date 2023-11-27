@@ -14,6 +14,10 @@
 
 默认网页端口为8443
 
+### Run
+
+程序入口为BackendApplication.java，位于./src/main/java/com.dormitory.backend/下
+
 ## Api doc
 
 本项目使用springdoc 2.1，运行BackendApplication.java后，访问http://localhost:8443/swagger-ui/index.html#/ 查看自动生成的api文档。
