@@ -26,7 +26,7 @@ public class TeamController {
         if(user==null){
             throw new MyException(Code.MISSING_FIELD);
         }
-        if(leaderId==user.getId()||leaderId==user.getLeaderId().getId()){
+        if(leaderId==user.getLeaderId().getId()){
             // 已存在的队长。
             // 不视为异常，但也不进行数据库交互。
             return user;
