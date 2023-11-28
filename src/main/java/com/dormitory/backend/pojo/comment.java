@@ -27,5 +27,43 @@ public class comment {
     @Schema
     String content;
 
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public comment getParent() {
+        return parent;
+    }
+
+    public void setParent(comment parent) {
+        this.parent = parent;
+    }
+
+    public com.dormitory.backend.pojo.dormitory getDormitory() {
+        return dormitory;
+    }
+
+    public void setDormitory(com.dormitory.backend.pojo.dormitory dormitory) {
+        this.dormitory = dormitory;
+    }
+
+    public com.dormitory.backend.pojo.user getUser() {
+        return user;
+    }
+
+    public void setUser(com.dormitory.backend.pojo.user user) {
+        this.user = user;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 }

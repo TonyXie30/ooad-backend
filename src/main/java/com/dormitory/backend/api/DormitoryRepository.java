@@ -9,5 +9,5 @@ public interface DormitoryRepository extends JpaRepository<dormitory, Long> {
     List<dormitory> findByHouseNumAndFloorAndBuildingNameAndLocation(String houseNum, Integer floor, String buildingName, String location);
     int findByBed(dormitory dormitory);
     int findByBookedNum(dormitory dormitory);
-
+    dormitory findById(int id);
 }

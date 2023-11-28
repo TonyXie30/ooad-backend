@@ -1,6 +1,5 @@
 package com.dormitory.backend.pojo;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
@@ -34,7 +33,7 @@ public class user {
     @JoinColumn(name = "subject_id")
     @Schema
     private subject subject;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name = "favour_bedtime")
     @Schema
     private List<timeRange> bedtime;
@@ -118,5 +117,8 @@ public class user {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    public void insertBookmark(dormitory dormitory){
+        this.bookmark.add(dormitory);
     }
 }

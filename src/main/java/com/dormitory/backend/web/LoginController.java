@@ -11,8 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.dormitory.backend.pojo.user;
+import com.dormitory.backend.pojo.comment;
+import com.dormitory.backend.pojo.dormitory;
 import org.springframework.web.util.HtmlUtils;
 
+import java.util.List;
 import java.util.Objects;
 import jakarta.servlet.http.HttpSession;
 @RestController
@@ -63,6 +66,41 @@ public class LoginController {
             return userService.register(requestUser);
         }
 
+    }
+
+    @CrossOrigin("http://localhost:8080")
+    @PostMapping(value = "api/getComment")
+    @ResponseBody
+    public List<comment> getComment(@RequestBody dormitory dormitory, Integer parentId){
+        if (dormitory==null)
+            throw new MyException(Code.MISSING_FIELD);
+        return userService.getComment(dormitory,parentId);
+    }
+    @CrossOrigin("http://localhost:8080")
+    @PostMapping(value = "api/setComment")
+    @ResponseBody
+    public void setComment(comment object,user user, dormitory dormitory, String content, Integer parentId){
+        if (dormitory==null||user==null||content==null)
+            throw new MyException(Code.MISSING_FIELD);
+        userService.setComment(object,user,dormitory,content,parentId);
+    }
+
+    @CrossOrigin("http://localhost:8080")
+    @PostMapping(value = "api/getBookMark")
+    @ResponseBody
+    public List<dormitory> getBookMark(user user){
+        if (user==null)
+            throw new MyException(Code.MISSING_FIELD);
+        return userService.getBookMark(user);
+    }
+
+    @CrossOrigin("http://localhost:8080")
+    @PostMapping(value = "api/setBookMark")
+    @ResponseBody
+    public void setBookMark(dormitory dormitory,user user){
+        if (user==null||dormitory==null)
+            throw new MyException(Code.MISSING_FIELD);
+        userService.setBookMark(dormitory,user);
     }
 }
 
