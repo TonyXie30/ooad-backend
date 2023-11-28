@@ -1,5 +1,6 @@
 package com.dormitory.backend.pojo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
@@ -45,6 +46,7 @@ public class user {
     @ManyToOne
     @JoinTable(name = "leader_id")
     @Schema
+    @JsonBackReference
     private user leaderId;
 
     public int getId() {
