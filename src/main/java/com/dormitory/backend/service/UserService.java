@@ -29,7 +29,7 @@ public class UserService{
     }
     public void bookRoom(user user, dormitory dorm){
         user.setBookedDormitory(dorm);
-        List<user> members = userRepository.findByLeaderId(user.getLeaderId().getId());
+        List<user> members = userRepository.findByLeaderId(user.getLeaderId());
         userRepository.saveAll(members); //contains leader
     }
     public void teamUp(user user, int leader_id){
