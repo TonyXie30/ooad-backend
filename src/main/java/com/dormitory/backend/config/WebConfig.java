@@ -13,7 +13,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = "com.dormitory.backend")
 public class WebConfig implements WebMvcConfigurer {
     @Bean
     public LoginInterceptor getLoginIntercepter() {
@@ -28,10 +27,11 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:8080")
+                .allowedOrigins("*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowCredentials(true)
+
                 .maxAge(1800)
                 .allowedHeaders("*");
     }
+
 }

@@ -1,8 +1,10 @@
 package com.dormitory.backend.service;
 
 import com.dormitory.backend.api.DormitoryRepository;
+import com.dormitory.backend.api.DormitorySpecifications;
 import com.dormitory.backend.pojo.dormitory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,7 +14,10 @@ public class DormitoryService {
     @Autowired
     DormitoryRepository dormitoryRepository;
     public List<dormitory> findByHouseNumAndFloorAndBuildingNameAndLocation(String houseNum, Integer floor, String buildingName, String location){
-        return dormitoryRepository.findByHouseNumAndFloorAndBuildingNameAndLocation(houseNum,floor,buildingName,location);
+        Specification<dormitory> spec = DormitorySpecifications.findByCriteria(houseNum, floor, buildingName, location);
+
+        // 调用 JpaRepository 的 findAll 方法，传入 Specification 对象
+        return dormitoryRepository.findAll(spec);
     }
     public boolean checkRoomAvailable(dormitory dormitory){
         return dormitoryRepository.findByBed(dormitory)>=dormitoryRepository.findByBookedNum(dormitory);

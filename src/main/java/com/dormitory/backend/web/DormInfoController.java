@@ -20,7 +20,8 @@ public class DormInfoController {
     @CrossOrigin
     @PostMapping(value = "api/findDorm")
     @ResponseBody
-    public List<dormitory> findDorm(@RequestBody String houseNum, Integer floor, String buildingName, String location){
+    public List<dormitory> findDorm(@RequestParam String houseNum, @RequestParam(required = false) Integer floor,
+                                    @RequestParam String buildingName, @RequestParam String location){
         if (houseNum==null&&floor==null&&buildingName==null&&location==null)
             throw new MyException(Code.MISSING_FIELD);
         else {

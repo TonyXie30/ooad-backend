@@ -2,6 +2,8 @@ package com.dormitory.backend.pojo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.List;
 
@@ -21,7 +23,7 @@ public class user {
     @Column(nullable = false)
     @Schema
     String password;
-    @ManyToMany
+    @ManyToMany //@Fetch(FetchMode.JOIN)
     @JoinTable(name = "bookmark")
     @Schema
     private List<dormitory> bookmark;

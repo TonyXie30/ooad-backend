@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 
 @EntityScan(basePackages = {"com.dormitory.backend.pojo"})
-@CrossOrigin(origins = "http://localhost:8080")
 @EnableTransactionManagement
 @SpringBootApplication
 public class BackendApplication {

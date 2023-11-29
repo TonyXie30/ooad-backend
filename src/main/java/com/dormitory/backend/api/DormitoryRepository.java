@@ -2,11 +2,11 @@ package com.dormitory.backend.api;
 
 import com.dormitory.backend.pojo.dormitory;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-import java.util.List;
 
-public interface DormitoryRepository extends JpaRepository<dormitory, Long> {
-    List<dormitory> findByHouseNumAndFloorAndBuildingNameAndLocation(String houseNum, Integer floor, String buildingName, String location);
+
+public interface DormitoryRepository extends JpaRepository<dormitory, Long>, JpaSpecificationExecutor<dormitory> {
     int findByBed(dormitory dormitory);
     int findByBookedNum(dormitory dormitory);
     dormitory findById(int id);

@@ -16,6 +16,7 @@ import com.dormitory.backend.pojo.dormitory;
 import org.springframework.web.util.HtmlUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import jakarta.servlet.http.HttpSession;
 @RestController
@@ -24,18 +25,16 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
-    @CrossOrigin("http://localhost:8080")
+
     @PostMapping(value = "api/login")
-    @Transactional
+    @Transactional //avoid no session exception
     @ResponseBody
     public user login(@RequestBody user requestUser, HttpServletRequest request) {
-
-        String username = requestUser.getUsername();
         // 从数据库中查找用户信息
         HttpSession session = request.getSession();
-        user user = userService.findByUsername(username);
+        user user = userService.findByUsername(requestUser.getUsername());
         // 如果用户不存在或密码不匹配，返回登录失败
-        if (user == null || !Objects.equals(requestUser.getPassword(), user.getPassword())) {
+        if (user == null || !requestUser.getPassword().equals(user.getPassword())) {
             throw new MyException(Code.LOGIN_FAILED);
         } else {
             session.setAttribute("username",user.getUsername());
@@ -46,7 +45,7 @@ public class LoginController {
         }
     }
 
-    @CrossOrigin("http://localhost:8080")
+
     @PostMapping(value = "api/register")
     @ResponseBody
     public user register(@RequestBody @NotNull user requestUser){
@@ -68,36 +67,41 @@ public class LoginController {
 
     }
 
-    @CrossOrigin("http://localhost:8080")
+
     @PostMapping(value = "api/getComment")
     @ResponseBody
-    public List<comment> getComment(@RequestBody dormitory dormitory, Integer parentId){
-        if (dormitory==null)
+    public List<comment> getComment(@RequestParam Integer dormitoryId, @RequestParam Integer parentId){
+        if (dormitoryId==null) //在数据库中0就是null，输入0就是无parent
             throw new MyException(Code.MISSING_FIELD);
-        return userService.getComment(dormitory,parentId);
+        return userService.getComment(dormitoryId,parentId);
     }
-    @CrossOrigin("http://localhost:8080")
+
     @PostMapping(value = "api/setComment")
+    @Transactional
     @ResponseBody
-    public void setComment(comment object,user user, dormitory dormitory, String content, Integer parentId){
+    public void setComment(@RequestBody comment object,user user, dormitory dormitory, String content, Integer parentId){
         if (dormitory==null||user==null||content==null)
             throw new MyException(Code.MISSING_FIELD);
         userService.setComment(object,user,dormitory,content,parentId);
     }
 
-    @CrossOrigin("http://localhost:8080")
+
     @PostMapping(value = "api/getBookMark")
+    @Transactional
     @ResponseBody
-    public List<dormitory> getBookMark(user user){
-        if (user==null)
+    public List<dormitory> getBookMark(@RequestParam String username){
+        if (username==null||userService.findByUsername(username)==null)
             throw new MyException(Code.MISSING_FIELD);
-        return userService.getBookMark(user);
+        else {
+            return userService.getBookMark(username);
+        }
     }
 
-    @CrossOrigin("http://localhost:8080")
+
     @PostMapping(value = "api/setBookMark")
+    @Transactional
     @ResponseBody
-    public void setBookMark(dormitory dormitory,user user){
+    public void setBookMark(@RequestBody dormitory dormitory,user user){
         if (user==null||dormitory==null)
             throw new MyException(Code.MISSING_FIELD);
         userService.setBookMark(dormitory,user);

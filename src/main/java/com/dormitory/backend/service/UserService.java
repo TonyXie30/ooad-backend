@@ -48,16 +48,16 @@ public class UserService{
         }
         commentRepository.save(object);
     }
-    public List<comment> getComment(dormitory dormitory, Integer parentId){
-        return commentRepository.findByDormitoryAndParent(dormitory, commentRepository.findById(parentId));
+    public List<comment> getComment(Integer dormitoryId, Integer parentId){
+        return commentRepository.findByDormitoryAndParent(dormitoryRepository.findById(dormitoryId), commentRepository.findById(parentId));
     }
     public void setBookMark(dormitory dormitory,user user){
         user author = userRepository.findByUsername(user.getUsername());
         author.insertBookmark(dormitory);
         userRepository.save(author);
     }
-    public List<dormitory> getBookMark(user user){
-        user author = userRepository.findByUsername(user.getUsername());
+    public List<dormitory> getBookMark(String username){
+        user author = userRepository.findByUsername(username);
         return author.getBookmark();
     }
 }
