@@ -14,7 +14,9 @@ public enum Code {
     LOGIN_FAILED(5103, "Login failed, check username or password"),
     Room_Occupied(5104, "Room not available"),
     UNAUTHORISED_NOT_LEADER(5105,"Unauthorised operation: user should be a team leader"),
-    USER_NOT_EXIST(5106,"Cannot find this user");
+    UNAUTHORISED_NOT_ADMIN(5106,"Unauthorised operation: user should be an administrator"),
+    USER_NOT_EXIST(5107,"Cannot find this user"),
+    DORMITORY_NOT_EXIST(5108,"Cannot find this dormitory");
 
     private final int code;
     private final String msg;
