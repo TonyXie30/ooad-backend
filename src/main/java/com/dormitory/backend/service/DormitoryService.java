@@ -22,4 +22,16 @@ public class DormitoryService {
     public boolean checkRoomAvailable(dormitory dormitory){
         return dormitoryRepository.findByBed(dormitory)>=dormitoryRepository.findByBookedNum(dormitory);
     }
+
+    public dormitory checkRoomExisted(dormitory dormitory){
+        return dormitoryRepository.findById(dormitory.getId());
+    }
+
+    public dormitory addDormitory(dormitory dormitory) {
+        return dormitoryRepository.save(dormitory);
+    }
+
+    public void removeDormitory(dormitory dormitory) {
+        dormitoryRepository.delete(dormitory);
+    }
 }
