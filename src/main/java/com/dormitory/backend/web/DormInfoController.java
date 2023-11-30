@@ -18,7 +18,7 @@ public class DormInfoController {
     @Autowired
     private UserService userService;
     @CrossOrigin
-    @GetMapping(value = "api/findDorm")
+    @PostMapping(value = "api/findDorm")
     @ResponseBody
     public List<dormitory> findDorm(@RequestParam String houseNum, @RequestParam(required = false) Integer floor,
                                     @RequestParam String buildingName, @RequestParam String location){
