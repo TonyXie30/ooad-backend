@@ -51,9 +51,10 @@ public class UserService{
     public List<comment> getComment(Integer dormitoryId, Integer parentId){
         return commentRepository.findByDormitoryAndParent(dormitoryRepository.findById(dormitoryId), commentRepository.findById(parentId));
     }
-    public void setBookMark(dormitory dormitory,user user){
-        user author = userRepository.findByUsername(user.getUsername());
-        author.insertBookmark(dormitory);
+    public void setBookMark(String dormitoryId,String username){
+        user author = userRepository.findByUsername(username);
+        dormitory dorm = dormitoryRepository.findById(Integer.parseInt(dormitoryId));
+        author.insertBookmark(dorm);
         userRepository.save(author);
     }
     public List<dormitory> getBookMark(String username){

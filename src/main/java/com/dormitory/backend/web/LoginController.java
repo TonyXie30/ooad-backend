@@ -101,10 +101,10 @@ public class LoginController {
     @PostMapping(value = "api/setBookMark")
     @Transactional
     @ResponseBody
-    public void setBookMark(@RequestBody dormitory dormitory,user user){
-        if (user==null||dormitory==null)
+    public void setBookMark(@RequestParam String dormitoryId,@RequestParam String username){
+        if (username==null||dormitoryId==null)
             throw new MyException(Code.MISSING_FIELD);
-        userService.setBookMark(dormitory,user);
+        userService.setBookMark(dormitoryId,username);
     }
 }
 
