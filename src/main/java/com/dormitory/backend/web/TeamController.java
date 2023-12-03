@@ -26,16 +26,31 @@ public class TeamController {
         if(user==null){
             throw new MyException(Code.MISSING_FIELD);
         }
-        user leader = userRepository.findById(leaderId);
-        if(leader==null){
-            throw new MyException(Code.USER_NOT_EXIST);
+        try{
+            user leader = userRepository.findById(leaderId);
+            if(leader==null){
+                throw new MyException(Code.USER_NOT_EXIST);
+            }
+            if(leaderId==user.getId()){
+                // 已存在的队长。
+                // 不视为异常，但也不进行数据库交互。
+                System.out.println("existed leader");
+                return user;
+            }
+            userService.teamUp(user,leaderId);
+        }catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
         }
-        if(leaderId==leader.getId()){
-            // 已存在的队长。
-            // 不视为异常，但也不进行数据库交互。
-            return user;
+        return user;
+    }
+    @CrossOrigin("http://localhost:8080")
+    @PostMapping(value = "api/leaveTeam")
+    @ResponseBody
+    public user leaveTeam(user user){
+        if(user==null){
+            throw new MyException(Code.MISSING_FIELD);
         }
-        userService.teamUp(user,leaderId);
+        userService.teamUp(user,user.getId());
         return user;
     }
 }
