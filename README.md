@@ -36,4 +36,20 @@ Home -> Click search dormitory module
 
 -> find specific area till dormitory -> do operation on dormitory
 
+## Bugs
 
+### Query may raise a null pointer exception
+
+#### Desciption:
+
+If an object has a null **integer** attribute,
+when a query trying to select such object, JPA will raise a null pointer exception.
+
+#### Reason:
+
+JPA may apply Integer.parseInt() on returned attribute,
+but such method does not allow a null input.
+
+#### Solution:
+
+Input check: do not set a null value on int attribute.
