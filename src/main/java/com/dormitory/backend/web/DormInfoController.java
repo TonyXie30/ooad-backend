@@ -20,8 +20,8 @@ public class DormInfoController {
     @CrossOrigin
     @PostMapping(value = "api/findDorm")
     @ResponseBody
-    public List<dormitory> findDorm(@RequestParam String houseNum, @RequestParam(required = false) Integer floor,
-                                    @RequestParam String buildingName, @RequestParam String location){
+    public List<dormitory> findDorm(@RequestParam(required = false) String houseNum, @RequestParam(required = false) Integer floor,
+                                    @RequestParam(required = false) String buildingName, @RequestParam(required = false) String location){
         if (houseNum==null&&floor==null&&buildingName==null&&location==null)
             throw new MyException(Code.MISSING_FIELD);
         else {
@@ -44,27 +44,29 @@ public class DormInfoController {
     @CrossOrigin
     @PostMapping(value = "api/checkDorm")
     @ResponseBody
-    public boolean checkDormAvailableOrNot(@RequestBody dormitory dormitory){
-        if (dormitory==null){
+    public boolean checkDormAvailableOrNot(@RequestParam String dormitoryId){
+        if (dormitoryId==null){
             throw new MyException(Code.MISSING_FIELD);
         }
         else{
-            return dormitoryService.checkRoomAvailable(dormitory);
+            return dormitoryService.checkRoomAvailable(dormitoryId);
         }
     }
 
     @CrossOrigin
     @PostMapping(value = "api/checkInDorm")
     @ResponseBody
-    public void checkInDorm(@RequestBody dormitory dormitory, user user){
-        if (dormitory==null||user==null){
+    public void checkInDorm(@RequestParam String dormitoryId, @RequestParam String username){
+        if (dormitoryId==null||username==null){
             throw new MyException(Code.MISSING_FIELD);
         }
         else{
+            user user = userService.findByUsername(username);
             if (user.getLeaderId().getId() != user.getId()){
                 throw new MyException(Code.UNAUTHORISED_NOT_LEADER);
             }
-            if (dormitoryService.checkRoomAvailable(dormitory)){
+            if (dormitoryService.checkRoomAvailable(dormitoryId)){
+                dormitory dormitory = dormitoryService.findById(dormitoryId);
                 userService.bookRoom(user,dormitory);
             }
             else {
