@@ -29,6 +29,20 @@ public class DormInfoController {
         }
     }
     @CrossOrigin
+    @PostMapping(value = "api/findBuilding")
+    @ResponseBody
+    public List<String> findBuilding(@RequestParam(required = false) String location){
+        return dormitoryService.findBuilding(location);
+
+    }
+    @CrossOrigin
+    @PostMapping(value = "api/findFloor")
+    @ResponseBody
+    public List<String> findFloor(@RequestParam(required = false) String location,
+                                  @RequestParam(required = false) String buildingName){
+        return dormitoryService.findFloor(location,buildingName);
+    }
+    @CrossOrigin
     @PostMapping(value = "api/checkDorm")
     @ResponseBody
     public boolean checkDormAvailableOrNot(@RequestBody dormitory dormitory){

@@ -22,6 +22,17 @@ public class DormitoryService {
     public boolean checkRoomAvailable(dormitory dormitory){
         return dormitoryRepository.findByBed(dormitory)>=dormitoryRepository.findByBookedNum(dormitory);
     }
+    public List<String> findBuilding(String location){
+        location = location==null?"":location;
+        return dormitoryRepository.findBuilding("%"+location+"%");
+    }
+    public List<String> findFloor(String location,String buildingName){
+        location = location==null?"":location;
+        buildingName = buildingName==null?"":buildingName;
+        return dormitoryRepository.findFloor("%"+location+"%","%"+buildingName+"%");
+    }
+
+
 
     public dormitory checkRoomExisted(dormitory dormitory){
         return dormitoryRepository.findById(dormitory.getId());
