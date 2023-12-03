@@ -53,4 +53,6 @@ public class TeamController {
         userService.teamUp(user,user.getId());
         return user;
     }
+
+
 }

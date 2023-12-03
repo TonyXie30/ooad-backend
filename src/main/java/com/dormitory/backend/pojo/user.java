@@ -48,7 +48,7 @@ public class user {
     @ManyToOne
     @JoinTable(name = "leader_id")
     @Schema
-    @JsonBackReference
+    @JsonBackReference //防止json打印无限递归
     private user leaderId;
 
     public int getId() {

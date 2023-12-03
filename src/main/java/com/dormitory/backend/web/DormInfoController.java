@@ -33,7 +33,6 @@ public class DormInfoController {
     @ResponseBody
     public List<String> findBuilding(@RequestParam(required = false) String location){
         return dormitoryService.findBuilding(location);
-
     }
     @CrossOrigin
     @PostMapping(value = "api/findFloor")
