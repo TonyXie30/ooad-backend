@@ -22,11 +22,7 @@ public class DormInfoController {
     @ResponseBody
     public List<dormitory> findDorm(@RequestParam(required = false) String houseNum, @RequestParam(required = false) Integer floor,
                                     @RequestParam(required = false) String buildingName, @RequestParam(required = false) String location){
-        if (houseNum==null&&floor==null&&buildingName==null&&location==null)
-            throw new MyException(Code.MISSING_FIELD);
-        else {
-            return dormitoryService.findByHouseNumAndFloorAndBuildingNameAndLocation(houseNum, floor, buildingName, location);
-        }
+        return dormitoryService.findByHouseNumAndFloorAndBuildingNameAndLocation(houseNum, floor, buildingName, location);
     }
     @CrossOrigin
     @PostMapping(value = "api/findBuilding")
