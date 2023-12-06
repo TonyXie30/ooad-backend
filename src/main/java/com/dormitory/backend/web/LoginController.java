@@ -62,9 +62,10 @@ public class LoginController {
             if(pw == null||!pw.matches("\\S+")){
                 throw new MyException(Code.REG_BAD_PASSWORD_FORMAT);
             }
-            return userService.register(requestUser);
+            user = userService.register(requestUser);
+            userService.teamUp(user,user.getId());
+            return user;
         }
-
     }
 
 
