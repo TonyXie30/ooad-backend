@@ -21,7 +21,9 @@ public class DormitoryService {
     }
     public boolean checkRoomAvailable(String dormitoryId){
         dormitory dormitory = dormitoryRepository.findById(Integer.parseInt(dormitoryId));
-        return dormitoryRepository.findByBed(dormitory)>=dormitoryRepository.findByBookedNum(dormitory);
+        int bookedBed = dormitory.getBed();
+        int bookedNumber = dormitory.getBookedNum();
+        return bookedBed>bookedNumber;
     }
     public List<String> findBuilding(String location){
         location = location==null?"":location;

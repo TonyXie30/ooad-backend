@@ -9,8 +9,6 @@ import java.util.List;
 
 
 public interface DormitoryRepository extends JpaRepository<dormitory, Long>, JpaSpecificationExecutor<dormitory> {
-    int findByBed(dormitory dormitory);
-    int findByBookedNum(dormitory dormitory);
     dormitory findById(int id);
     @Query("select DISTINCT d.buildingName from dormitory d " +
             "where (d.location like :location)" +
