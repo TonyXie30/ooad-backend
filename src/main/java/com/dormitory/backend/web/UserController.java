@@ -35,4 +35,6 @@ public class UserController {
                                   @RequestParam(required = false) String sort){
         return userService.getUsers(page, limit, sort);
     }
+
+
 }

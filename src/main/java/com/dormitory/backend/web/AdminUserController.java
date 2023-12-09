@@ -2,13 +2,12 @@ package com.dormitory.backend.web;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.read.listener.PageReadListener;
+import com.dormitory.backend.config.Code;
+import com.dormitory.backend.config.MyException;
 import com.dormitory.backend.pojo.user;
 import com.dormitory.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -50,5 +49,17 @@ public class AdminUserController {
             throw new RuntimeException(e);
         }
     }
-
+    @CrossOrigin
+    @PostMapping("api/admin/user/deleteUser")
+    @ResponseBody
+    public void deleteUser(@RequestParam String username){
+        if(username==null){
+            throw new MyException(Code.MISSING_FIELD);
+        }
+        user userInDB = userService.findByUsername(username);
+        if(userInDB==null){
+            throw new MyException(Code.USER_NOT_EXIST);
+        }
+        userService.deleteUser(userInDB);
+    }
 }

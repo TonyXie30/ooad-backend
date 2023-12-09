@@ -2,16 +2,12 @@ package com.dormitory.backend.service;
 
 import com.dormitory.backend.api.CommentRepository;
 import com.dormitory.backend.api.DormitoryRepository;
-import com.dormitory.backend.api.DormitorySpecifications;
 import com.dormitory.backend.api.UserRepository;
-import com.dormitory.backend.config.Code;
-import com.dormitory.backend.config.MyException;
 import com.dormitory.backend.pojo.dormitory;
 import com.dormitory.backend.pojo.user;
 import com.dormitory.backend.pojo.comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,10 +33,9 @@ public class UserService{
         List<user> members = userRepository.findByLeaderId(user.getLeaderId());
         userRepository.saveAll(members); //contains leader
     }
-    public void teamUp(user user, int leader_id){
-        user leader = userRepository.findById(leader_id);
-        user.setLeaderId(leader);
-        userRepository.save(user);
+    public void teamUp(user member, user leader){
+        member.setLeaderId(leader);
+        userRepository.save(member);
     }
     public void setComment(comment object,user user, dormitory dormitory, String content, Integer parentId){
         user author = userRepository.findByUsername(user.getUsername());
@@ -82,5 +77,9 @@ public class UserService{
             return new PageImpl<>(userRepository.findAll());
         }
         // 调用 JpaRepository 的 findAll 方法，传入 Specification 对象
+    }
+
+    public void deleteUser(user user) {
+        userRepository.delete(user);
     }
 }
