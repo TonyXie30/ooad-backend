@@ -5,6 +5,7 @@ import com.dormitory.backend.config.MyException;
 import com.dormitory.backend.pojo.user;
 import com.dormitory.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,5 +25,14 @@ public class UserController {
             throw new MyException(Code.USER_NOT_EXIST);
         }
         return userInDB.getBookedDormitory()!=null;
+    }
+
+    @CrossOrigin
+    @PostMapping(value = "api/getUsers")
+    @ResponseBody
+    public Page<user> getUsers(@RequestParam(required = false) Integer page,
+                                  @RequestParam(required = false) Integer limit,
+                                  @RequestParam(required = false) String sort){
+        return userService.getUsers(page, limit, sort);
     }
 }

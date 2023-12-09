@@ -2,11 +2,16 @@ package com.dormitory.backend.service;
 
 import com.dormitory.backend.api.CommentRepository;
 import com.dormitory.backend.api.DormitoryRepository;
+import com.dormitory.backend.api.DormitorySpecifications;
 import com.dormitory.backend.api.UserRepository;
+import com.dormitory.backend.config.Code;
+import com.dormitory.backend.config.MyException;
 import com.dormitory.backend.pojo.dormitory;
 import com.dormitory.backend.pojo.user;
 import com.dormitory.backend.pojo.comment;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -60,5 +65,22 @@ public class UserService{
     public List<dormitory> getBookMark(String username){
         user author = userRepository.findByUsername(username);
         return author.getBookmark();
+    }
+
+    public Page<user> getUsers(Integer page,Integer limit,String sort){
+        if(page != null && limit != null){
+            Sort sort_;
+            if (sort==null||sort.equals("+")){
+                sort_ = Sort.by("id").ascending();
+            } else {
+                sort_ = Sort.by("id").descending();
+            }
+
+            PageRequest pageable = PageRequest.of(page,limit,sort_);
+            return userRepository.findAll(pageable);
+        }else{
+            return new PageImpl<>(userRepository.findAll());
+        }
+        // 调用 JpaRepository 的 findAll 方法，传入 Specification 对象
     }
 }
