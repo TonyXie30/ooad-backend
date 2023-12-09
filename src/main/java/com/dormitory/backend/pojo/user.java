@@ -24,7 +24,7 @@ public class user {
     @Column(nullable = false)
     @Schema
     String password;
-    @Column(nullable = false)
+    @Column
     @Schema
     boolean admin;
     @ManyToMany //@Fetch(FetchMode.JOIN)
