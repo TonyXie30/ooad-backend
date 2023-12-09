@@ -23,6 +23,20 @@ public class AdminDormInfoController {
         return dormitoryService.addDormitory(dormitory);
     }
     @CrossOrigin
+    @PostMapping(value = "api/admin/modifyDormitory")
+    @ResponseBody
+    public dormitory modifyDormitory(@RequestBody dormitory dormitory){
+        if(dormitory==null){
+            throw new MyException(Code.MISSING_FIELD);
+        }
+        dormitory dor_DB = dormitoryService.findById(Integer.toString(dormitory.getId()));
+        if(dor_DB==null){
+            throw new MyException(Code.DORMITORY_NOT_EXIST);
+        }
+        return dormitoryService.addDormitory(dormitory);
+    }
+
+    @CrossOrigin
     @PostMapping(value = "api/admin/removeDormitory")
     @ResponseBody
     public dormitory removeDormitory(@RequestBody dormitory dormitory){
