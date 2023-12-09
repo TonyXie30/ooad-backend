@@ -9,6 +9,7 @@ public enum Code {
 //    generally, 5xxx means something goes wrong.
     SUCCESS(0,"success"),// try not throw an exception, with success message
     MISSING_FIELD(5000, "Missing required field"),
+    METHOD_FAILED(5001, "method failed for unknown reason"),
     REG_BAD_PASSWORD_FORMAT(5101,"wrong password format, should be characters and/or numbers"),
     REG_EXISTED_USER(5102, "Register failed: existed user"),
     LOGIN_FAILED(5103, "Login failed, check username or password"),
