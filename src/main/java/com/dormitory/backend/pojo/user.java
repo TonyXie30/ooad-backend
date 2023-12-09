@@ -24,6 +24,9 @@ public class user {
     @Column(nullable = false)
     @Schema
     String password;
+    @Column(nullable = false)
+    @Schema
+    boolean admin;
     @ManyToMany //@Fetch(FetchMode.JOIN)
     @JoinTable(name = "bookmark")
     @Schema
@@ -57,6 +60,14 @@ public class user {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 
     public user getLeaderId() {
