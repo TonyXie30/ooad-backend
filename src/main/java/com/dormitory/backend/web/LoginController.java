@@ -69,44 +69,5 @@ public class LoginController {
         }
     }
 
-
-    @PostMapping(value = "api/getComment")
-    @ResponseBody
-    public List<comment> getComment(@RequestParam Integer dormitoryId, @RequestParam Integer parentId){
-        if (dormitoryId==null) //在数据库中0就是null，输入0就是无parent
-            throw new MyException(Code.MISSING_FIELD);
-        return userService.getComment(dormitoryId,parentId);
-    }
-
-    @PostMapping(value = "api/setComment")
-    @Transactional
-    @ResponseBody
-    public void setComment(@RequestBody comment object,user user, dormitory dormitory, String content, Integer parentId){
-        if (dormitory==null||user==null||content==null)
-            throw new MyException(Code.MISSING_FIELD);
-        userService.setComment(object,user,dormitory,content,parentId);
-    }
-
-
-    @PostMapping(value = "api/getBookMark")
-    @Transactional
-    @ResponseBody
-    public List<dormitory> getBookMark(@RequestParam String username){
-        if (username==null||userService.findByUsername(username)==null)
-            throw new MyException(Code.MISSING_FIELD);
-        else {
-            return userService.getBookMark(username);
-        }
-    }
-
-
-    @PostMapping(value = "api/setBookMark")
-    @Transactional
-    @ResponseBody
-    public void setBookMark(@RequestParam String dormitoryId,@RequestParam String username){
-        if (username==null||dormitoryId==null)
-            throw new MyException(Code.MISSING_FIELD);
-        userService.setBookMark(dormitoryId,username);
-    }
 }
 
