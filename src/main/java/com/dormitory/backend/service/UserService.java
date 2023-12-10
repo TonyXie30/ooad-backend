@@ -88,24 +88,24 @@ public class UserService{
         userRepository.delete(user);
     }
 
-    public void setUpTimeStart(user userInDB, Time time) {
-        timeRange t = timeRangeRepository.findByTimeSlot(time);
-        userInDB.setUptimeStart(t);
+    public timeRange findTimeSlot(Time time){
+        return timeRangeRepository.findByTimeSlot(time);
+    }
+
+    public void setUpTimeStart(user userInDB, timeRange time) {
+        userInDB.setUptimeStart(time);
         userRepository.save(userInDB);
     }
-    public void setUpTimeEnd(user userInDB, Time time) {
-        timeRange t = timeRangeRepository.findByTimeSlot(time);
-        userInDB.setUptimeEnd(t);
+    public void setUpTimeEnd(user userInDB, timeRange time) {
+        userInDB.setUptimeEnd(time);
         userRepository.save(userInDB);
     }
-    public void setBedTimeStart(user userInDB, Time time) {
-        timeRange t = timeRangeRepository.findByTimeSlot(time);
-        userInDB.setBedtimeStart(t);
+    public void setBedTimeStart(user userInDB, timeRange time) {
+        userInDB.setBedtimeStart(time);
         userRepository.save(userInDB);
     }
-    public void setBedTimeEnd(user userInDB, Time time) {
-        timeRange t = timeRangeRepository.findByTimeSlot(time);
-        userInDB.setBedtimeEnd(t);
+    public void setBedTimeEnd(user userInDB, timeRange time) {
+        userInDB.setBedtimeEnd(time);
         userRepository.save(userInDB);
     }
 }

@@ -52,12 +52,12 @@ public class AdminUserController {
     @CrossOrigin
     @PostMapping("api/admin/user/deleteUser")
     @ResponseBody
-    public void deleteUser(@RequestParam String username){
-        if(username==null){
+    public void deleteUser(@RequestParam String username) {
+        if (username == null) {
             throw new MyException(Code.MISSING_FIELD);
         }
         user userInDB = userService.findByUsername(username);
-        if(userInDB==null){
+        if (userInDB == null) {
             throw new MyException(Code.USER_NOT_EXIST);
         }
         userService.deleteUser(userInDB);

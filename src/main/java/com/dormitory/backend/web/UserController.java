@@ -4,6 +4,7 @@ import com.dormitory.backend.config.Code;
 import com.dormitory.backend.config.MyException;
 import com.dormitory.backend.pojo.comment;
 import com.dormitory.backend.pojo.dormitory;
+import com.dormitory.backend.pojo.timeRange;
 import com.dormitory.backend.pojo.user;
 import com.dormitory.backend.service.UserService;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -85,7 +86,7 @@ public class UserController {
     @PostMapping(value = "api/setFavourTime")
     @ResponseBody
     public void setFavourTime(@RequestParam String username,
-                              @RequestParam Time time,
+                              @RequestParam @Schema(description = "hh:mm:ss (请先在timeRange表插入数据)") Time time,
                               @RequestParam @Schema(description = "标识设置起床或入睡，0表示起床，1表示睡觉") Integer type,
                               @RequestParam @Schema(description = "用0/1标识设置时段的起/止") Integer start){
 //        type:0 - 起床，1 - 睡觉
@@ -93,21 +94,28 @@ public class UserController {
         if(username==null||time==null||type==null||start==null){
             throw new MyException(Code.MISSING_FIELD);
         }
+
         user userInDB = userService.findByUsername(username);
         if(userInDB==null){
             throw new MyException(Code.USER_NOT_EXIST);
         }
+
+        timeRange time_ = userService.findTimeSlot(time);
+        if(time_==null){
+            throw new MyException(Code.TIME_NOT_EXIST);
+        }
+
         if(type==0){
             if(start==0){
-                userService.setUpTimeStart(userInDB,time);
+                userService.setUpTimeStart(userInDB,time_);
             } else if (start==1) {
-                userService.setUpTimeEnd(userInDB,time);
+                userService.setUpTimeEnd(userInDB,time_);
             }
         } else if (type==1) {
             if(start==0){
-                userService.setBedTimeStart(userInDB,time);
+                userService.setBedTimeStart(userInDB,time_);
             } else if (start==1) {
-                userService.setBedTimeEnd(userInDB,time);
+                userService.setBedTimeEnd(userInDB,time_);
             }
         }
     }

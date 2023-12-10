@@ -17,7 +17,8 @@ public enum Code {
     UNAUTHORISED_NOT_LEADER(5105,"Unauthorised operation: user should be a team leader"),
     UNAUTHORISED_NOT_ADMIN(5106,"Unauthorised operation: user should be an administrator"),
     USER_NOT_EXIST(5107,"Cannot find this user"),
-    DORMITORY_NOT_EXIST(5108,"Cannot find this dormitory");
+    DORMITORY_NOT_EXIST(5108,"Cannot find this dormitory"),
+    TIME_NOT_EXIST(5109, "This time slot is not existed, check if inserted yet.");
 
     private final int code;
     private final String msg;
