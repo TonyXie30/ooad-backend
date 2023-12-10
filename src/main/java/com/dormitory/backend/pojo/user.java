@@ -61,9 +61,11 @@ public class user {
     @Schema
     @JsonBackReference //防止json打印无限递归
     private user leaderId;
+
     @Column
     @Schema
-    boolean admin;
+    private boolean admin;
+
 
     public int getId() {
         return id;
