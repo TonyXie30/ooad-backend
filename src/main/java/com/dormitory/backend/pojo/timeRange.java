@@ -14,15 +14,9 @@ public class timeRange {
     @Column(name = "timeslot_id")
     @Schema
     int id;
-    @Column(name = "timeslot")
+    @Column(name = "timeslot",unique = true)
     @Schema
     Time timeSlot;
-    @ManyToMany(mappedBy = "bedtime")
-    @Schema
-    List<user> bedtime_Users;
-    @ManyToMany(mappedBy = "wakeupTime")
-    @Schema
-    List<user> uptime_Users;
 
     public int getId() {
         return id;
