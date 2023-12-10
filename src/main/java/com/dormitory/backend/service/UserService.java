@@ -37,10 +37,10 @@ public class UserService{
         member.setLeaderId(leader);
         userRepository.save(member);
     }
-    public void setComment(comment object,user user, dormitory dormitory, String content, Integer parentId){
-        user author = userRepository.findByUsername(user.getUsername());
+    public void setComment(comment object,String username, String dormitoryId, String content, Integer parentId){
+        user author = userRepository.findByUsername(username);
         object.setUser(author);
-        dormitory dormitory1 = dormitoryRepository.findById(dormitory.getId());
+        dormitory dormitory1 = dormitoryRepository.findById(Integer.parseInt(dormitoryId));
         object.setDormitory(dormitory1);
         object.setContent(content);
         if (parentId!=null){
