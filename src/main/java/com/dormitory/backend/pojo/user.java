@@ -42,19 +42,19 @@ public class user {
     @ManyToOne
     @JoinColumn(name = "bedtime_start",referencedColumnName = "timeslot")
     @Schema
-    private timeRange bedtime_start;
+    private timeRange bedtimeStart;
     @ManyToOne
     @JoinColumn(name = "bedtime_end",referencedColumnName = "timeslot")
     @Schema
-    private timeRange bedtime_end;
+    private timeRange bedtimeEnd;
     @ManyToOne
     @JoinColumn(name = "uptime_start",referencedColumnName = "timeslot")
     @Schema
-    private timeRange uptime_start;
+    private timeRange uptimeStart;
     @ManyToOne
     @JoinColumn(name = "uptime_end",referencedColumnName = "timeslot")
     @Schema
-    private timeRange uptime_end;
+    private timeRange uptimeEnd;
 
     @ManyToOne
     @JoinTable(name = "leader_id")
@@ -121,36 +121,44 @@ public class user {
         this.subject = subject;
     }
 
-    public timeRange getBedtime_start() {
-        return bedtime_start;
+    public String getGender() {
+        return gender;
     }
 
-    public void setBedtime_start(timeRange bedtime_start) {
-        this.bedtime_start = bedtime_start;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
-    public timeRange getBedtime_end() {
-        return bedtime_end;
+    public timeRange getBedtimeStart() {
+        return bedtimeStart;
     }
 
-    public void setBedtime_end(timeRange bedtime_end) {
-        this.bedtime_end = bedtime_end;
+    public void setBedtimeStart(timeRange bedtimeStart) {
+        this.bedtimeStart = bedtimeStart;
     }
 
-    public timeRange getUptime_start() {
-        return uptime_start;
+    public timeRange getBedtimeEnd() {
+        return bedtimeEnd;
     }
 
-    public void setUptime_start(timeRange uptime_start) {
-        this.uptime_start = uptime_start;
+    public void setBedtimeEnd(timeRange bedtimeEnd) {
+        this.bedtimeEnd = bedtimeEnd;
     }
 
-    public timeRange getUptime_end() {
-        return uptime_end;
+    public timeRange getUptimeStart() {
+        return uptimeStart;
     }
 
-    public void setUptime_end(timeRange uptime_end) {
-        this.uptime_end = uptime_end;
+    public void setUptimeStart(timeRange uptimeStart) {
+        this.uptimeStart = uptimeStart;
+    }
+
+    public timeRange getUptimeEnd() {
+        return uptimeEnd;
+    }
+
+    public void setUptimeEnd(timeRange uptimeEnd) {
+        this.uptimeEnd = uptimeEnd;
     }
 
     public String getPassword() {

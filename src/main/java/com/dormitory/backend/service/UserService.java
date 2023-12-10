@@ -2,14 +2,17 @@ package com.dormitory.backend.service;
 
 import com.dormitory.backend.api.CommentRepository;
 import com.dormitory.backend.api.DormitoryRepository;
+import com.dormitory.backend.api.TimeRangeRepository;
 import com.dormitory.backend.api.UserRepository;
 import com.dormitory.backend.pojo.dormitory;
+import com.dormitory.backend.pojo.timeRange;
 import com.dormitory.backend.pojo.user;
 import com.dormitory.backend.pojo.comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
 import java.util.List;
 
 @Service
@@ -21,6 +24,8 @@ public class UserService{
     CommentRepository commentRepository;
     @Autowired
     DormitoryRepository dormitoryRepository;
+    @Autowired
+    TimeRangeRepository timeRangeRepository;
     public user findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
@@ -81,5 +86,26 @@ public class UserService{
 
     public void deleteUser(user user) {
         userRepository.delete(user);
+    }
+
+    public void setUpTimeStart(user userInDB, Time time) {
+        timeRange t = timeRangeRepository.findByTimeSlot(time);
+        userInDB.setUptimeStart(t);
+        userRepository.save(userInDB);
+    }
+    public void setUpTimeEnd(user userInDB, Time time) {
+        timeRange t = timeRangeRepository.findByTimeSlot(time);
+        userInDB.setUptimeEnd(t);
+        userRepository.save(userInDB);
+    }
+    public void setBedTimeStart(user userInDB, Time time) {
+        timeRange t = timeRangeRepository.findByTimeSlot(time);
+        userInDB.setBedtimeStart(t);
+        userRepository.save(userInDB);
+    }
+    public void setBedTimeEnd(user userInDB, Time time) {
+        timeRange t = timeRangeRepository.findByTimeSlot(time);
+        userInDB.setBedtimeEnd(t);
+        userRepository.save(userInDB);
     }
 }
