@@ -1,3 +1,4 @@
+
 INSERT INTO time_range (timeslot)
 values
     ('00:00:00'),

@@ -1,0 +1,32 @@
+package com.dormitory.backend.config;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
+
+import java.io.File;
+
+import static com.dormitory.backend.utils.ReadFile.readSQLFile;
+
+
+@Component
+public class DataInitializer implements ApplicationRunner {
+
+    @Autowired
+    @Qualifier("jdbcTemplate") //有多个数据源的，需要名称区分
+    private JdbcTemplate jdbcTemplate;
+
+    public void timeRangeInitialization() {
+        String sql = readSQLFile(new File("src/main/resources/time_slots.sql"));
+        jdbcTemplate.execute(sql);
+        System.out.println("time_range initialization success");
+    }
+
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        timeRangeInitialization();
+    }
+}
