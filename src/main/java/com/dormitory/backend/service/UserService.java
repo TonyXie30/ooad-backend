@@ -92,20 +92,12 @@ public class UserService{
         return timeRangeRepository.findByTimeSlot(time);
     }
 
-    public void setUpTimeStart(user userInDB, timeRange time) {
-        userInDB.setUptimeStart(time);
+    public void setUpTime(user userInDB, timeRange time) {
+        userInDB.setUptime(time);
         userRepository.save(userInDB);
     }
-    public void setUpTimeEnd(user userInDB, timeRange time) {
-        userInDB.setUptimeEnd(time);
-        userRepository.save(userInDB);
-    }
-    public void setBedTimeStart(user userInDB, timeRange time) {
-        userInDB.setBedtimeStart(time);
-        userRepository.save(userInDB);
-    }
-    public void setBedTimeEnd(user userInDB, timeRange time) {
-        userInDB.setBedtimeEnd(time);
+    public void setBedTime(user userInDB, timeRange time) {
+        userInDB.setBedtime(time);
         userRepository.save(userInDB);
     }
 }

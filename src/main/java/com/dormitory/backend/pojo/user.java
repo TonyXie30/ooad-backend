@@ -40,21 +40,13 @@ public class user {
     @Schema
     private subject subject;
     @ManyToOne
-    @JoinColumn(name = "bedtime_start",referencedColumnName = "timeslot")
+    @JoinColumn(name = "bedtime",referencedColumnName = "timeslot")
     @Schema
-    private timeRange bedtimeStart;
+    private timeRange bedtime;
     @ManyToOne
-    @JoinColumn(name = "bedtime_end",referencedColumnName = "timeslot")
+    @JoinColumn(name = "uptime",referencedColumnName = "timeslot")
     @Schema
-    private timeRange bedtimeEnd;
-    @ManyToOne
-    @JoinColumn(name = "uptime_start",referencedColumnName = "timeslot")
-    @Schema
-    private timeRange uptimeStart;
-    @ManyToOne
-    @JoinColumn(name = "uptime_end",referencedColumnName = "timeslot")
-    @Schema
-    private timeRange uptimeEnd;
+    private timeRange uptime;
 
     @ManyToOne
     @JoinTable(name = "leader_id")
@@ -131,36 +123,20 @@ public class user {
         this.gender = gender;
     }
 
-    public timeRange getBedtimeStart() {
-        return bedtimeStart;
+    public timeRange getBedtime() {
+        return bedtime;
     }
 
-    public void setBedtimeStart(timeRange bedtimeStart) {
-        this.bedtimeStart = bedtimeStart;
+    public void setBedtime(timeRange bedtime) {
+        this.bedtime = bedtime;
     }
 
-    public timeRange getBedtimeEnd() {
-        return bedtimeEnd;
+    public timeRange getUptime() {
+        return uptime;
     }
 
-    public void setBedtimeEnd(timeRange bedtimeEnd) {
-        this.bedtimeEnd = bedtimeEnd;
-    }
-
-    public timeRange getUptimeStart() {
-        return uptimeStart;
-    }
-
-    public void setUptimeStart(timeRange uptimeStart) {
-        this.uptimeStart = uptimeStart;
-    }
-
-    public timeRange getUptimeEnd() {
-        return uptimeEnd;
-    }
-
-    public void setUptimeEnd(timeRange uptimeEnd) {
-        this.uptimeEnd = uptimeEnd;
+    public void setUptime(timeRange uptime) {
+        this.uptime = uptime;
     }
 
     public String getPassword() {

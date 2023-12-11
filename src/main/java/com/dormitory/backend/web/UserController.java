@@ -87,11 +87,10 @@ public class UserController {
     @ResponseBody
     public void setFavourTime(@RequestParam String username,
                               @RequestParam @Schema(description = "hh:mm:ss (请先在timeRange表插入数据)") Time time,
-                              @RequestParam @Schema(description = "标识设置起床或入睡，0表示起床，1表示睡觉") Integer type,
-                              @RequestParam @Schema(description = "用0/1标识设置时段的起/止") Integer start){
+                              @RequestParam @Schema(description = "标识设置起床或入睡，0表示起床，1表示睡觉") Integer type){
 //        type:0 - 起床，1 - 睡觉
 //        start 的 01 分别表示时间段的 起止
-        if(username==null||time==null||type==null||start==null){
+        if(username==null||time==null||type==null){
             throw new MyException(Code.MISSING_FIELD);
         }
 
@@ -106,17 +105,9 @@ public class UserController {
         }
 
         if(type==0){
-            if(start==0){
-                userService.setUpTimeStart(userInDB,time_);
-            } else if (start==1) {
-                userService.setUpTimeEnd(userInDB,time_);
-            }
+            userService.setUpTime(userInDB,time_);
         } else if (type==1) {
-            if(start==0){
-                userService.setBedTimeStart(userInDB,time_);
-            } else if (start==1) {
-                userService.setBedTimeEnd(userInDB,time_);
-            }
+            userService.setBedTime(userInDB,time_);
         }
     }
 }
