@@ -14,6 +14,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Pageable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,11 +25,11 @@ public class DormitoryService {
             String houseNum, Integer floor, String buildingName, String location,Integer page,Integer limit,String sort){
         Specification<dormitory> spec = DormitorySpecifications.findByCriteria(houseNum, floor, buildingName, location);
         if(page != null && limit != null){
-            Sort sort_;
+            Sort sort_ = Sort.by("location","buildingName","floor","houseNum");
             if (sort==null||sort.equals("+")){
-                sort_ = Sort.by("id").ascending();
+                sort_ = sort_.ascending();
             } else {
-                sort_ = Sort.by("id").descending();
+                sort_ = sort_.descending();
             }
 
             PageRequest pageable = PageRequest.of(page,limit,sort_);
@@ -41,9 +42,10 @@ public class DormitoryService {
     }
     public Page<dormitory> findByHouseNumAndFloorAndBuildingNameAndLocation(
             String houseNum, Integer floor, String buildingName, String location){
+        Sort sort_ = Sort.by("location","buildingName","floor","houseNum").ascending();
         Specification<dormitory> spec = DormitorySpecifications.findByCriteria(houseNum, floor, buildingName, location);
         // 调用 JpaRepository 的 findAll 方法，传入 Specification 对象
-        return new PageImpl<>(dormitoryRepository.findAll(spec));
+        return new PageImpl<>(dormitoryRepository.findAll(spec,sort_));
     }
     public boolean checkRoomAvailable(String dormitoryId){
         dormitory dormitory = dormitoryRepository.findById(Integer.parseInt(dormitoryId));
