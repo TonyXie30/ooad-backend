@@ -55,10 +55,10 @@ public class UserController {
     @PostMapping(value = "api/setComment")
     @Transactional
     @ResponseBody
-    public void setComment(@RequestBody comment object,@RequestParam String username,@RequestParam String dormitoryId,@RequestParam String content,@RequestParam Integer parentId){
+    public void setComment(@RequestParam String username,@RequestParam String dormitoryId,@RequestParam String content,@RequestParam(required = false) Integer parentId){
         if (username==null||dormitoryId==null)
             throw new MyException(Code.MISSING_FIELD);
-        userService.setComment(object,username,dormitoryId,content,parentId);
+        userService.setComment(username,dormitoryId,content,parentId);
     }
 
 

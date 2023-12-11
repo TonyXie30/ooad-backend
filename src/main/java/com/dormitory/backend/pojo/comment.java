@@ -26,6 +26,13 @@ public class comment {
     @Column
     @Schema
     String content;
+    //帮助进行反序列化
+    public comment(String content) {
+        this.content = content;
+    }
+
+    public comment() {
+    }
 
     public int getId() {
         return id;

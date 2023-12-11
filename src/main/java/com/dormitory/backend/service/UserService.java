@@ -42,12 +42,13 @@ public class UserService{
         member.setLeaderId(leader);
         userRepository.save(member);
     }
-    public void setComment(comment object,String username, String dormitoryId, String content, Integer parentId){
+    public void setComment(String username, String dormitoryId, String content, Integer parentId){
+        comment object = new comment(content);
         user author = userRepository.findByUsername(username);
         object.setUser(author);
         dormitory dormitory1 = dormitoryRepository.findById(Integer.parseInt(dormitoryId));
         object.setDormitory(dormitory1);
-        object.setContent(content);
+        //object.setContent(content);
         if (parentId!=null){
             object.setParent(commentRepository.findById(parentId));
         }
