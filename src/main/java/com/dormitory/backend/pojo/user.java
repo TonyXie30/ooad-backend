@@ -24,9 +24,6 @@ public class user {
     @Column(nullable = false)
     @Schema
     String password;
-    @Column(nullable = false)
-    @Schema
-    String gender;
     @ManyToMany //@Fetch(FetchMode.JOIN)
     @JoinTable(name = "bookmark")
     @Schema
@@ -113,14 +110,6 @@ public class user {
 
     public void setSubject(subject subject) {
         this.subject = subject;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
     }
 
     public timeRange getBedtime() {

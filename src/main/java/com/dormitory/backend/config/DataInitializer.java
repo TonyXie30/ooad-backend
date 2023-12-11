@@ -16,7 +16,7 @@ import static com.dormitory.backend.utils.ReadFile.readSQLFile;
 public class DataInitializer implements ApplicationRunner {
 
     @Autowired
-    @Qualifier("jdbcTemplate") //有多个数据源的，需要名称区分
+    @Qualifier("jdbcTemplate")
     private JdbcTemplate jdbcTemplate;
 
     public void timeRangeInitialization() {
