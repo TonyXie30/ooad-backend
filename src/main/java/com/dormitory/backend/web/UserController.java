@@ -2,10 +2,7 @@ package com.dormitory.backend.web;
 
 import com.dormitory.backend.config.Code;
 import com.dormitory.backend.config.MyException;
-import com.dormitory.backend.pojo.comment;
-import com.dormitory.backend.pojo.dormitory;
-import com.dormitory.backend.pojo.timeRange;
-import com.dormitory.backend.pojo.user;
+import com.dormitory.backend.pojo.*;
 import com.dormitory.backend.service.UserService;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.transaction.Transactional;
@@ -109,5 +106,20 @@ public class UserController {
         } else if (type==1) {
             userService.setBedTime(userInDB,time_);
         }
+    }
+
+    @PostMapping(value = "api/communicate")
+    @ResponseBody
+    public void communicate(@RequestParam String receiver_name,@RequestParam String sender_name,@RequestParam String content){
+        user sender = userService.findByUsername(sender_name);
+        user receiver = userService.findByUsername(receiver_name);
+        userService.communicate(sender,receiver,content);
+    }
+
+    @PostMapping(value = "api/checkMailbox")
+    @ResponseBody
+    public List<Notification> checkMailbox(@RequestParam String username){
+        user user = userService.findByUsername(username);
+        return userService.checkMailbox(user);
     }
 }

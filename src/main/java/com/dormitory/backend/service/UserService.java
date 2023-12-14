@@ -1,18 +1,14 @@
 package com.dormitory.backend.service;
 
-import com.dormitory.backend.api.CommentRepository;
-import com.dormitory.backend.api.DormitoryRepository;
-import com.dormitory.backend.api.TimeRangeRepository;
-import com.dormitory.backend.api.UserRepository;
-import com.dormitory.backend.pojo.dormitory;
-import com.dormitory.backend.pojo.timeRange;
-import com.dormitory.backend.pojo.user;
-import com.dormitory.backend.pojo.comment;
+import com.dormitory.backend.api.*;
+import com.dormitory.backend.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -26,6 +22,8 @@ public class UserService{
     DormitoryRepository dormitoryRepository;
     @Autowired
     TimeRangeRepository timeRangeRepository;
+    @Autowired
+    NotificationRepository notificationRepository;
     public user findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
@@ -41,6 +39,22 @@ public class UserService{
     public void teamUp(user member, user leader){
         member.setLeaderId(leader);
         userRepository.save(member);
+        //系统通知组队信息
+        user system = userRepository.findByUsername("System");
+        communicate(system,member, """
+                Notification:
+                    You have teamed up with the leader %s, whose id=%d. Please pay attention to that. If you have\s
+                    any questions, please communicate with the admin.
+                    
+                    Sent by System.
+                """.formatted(leader.getUsername(),leader.getId()));
+        communicate(system,leader, """
+                Notification:
+                    You have teamed up with the member %s, whose id=%d. Please pay attention to that. If you have\s
+                    any questions, please communicate with the admin.
+                    
+                    Sent by System.
+                """.formatted(member.getUsername(),member.getId()));
     }
     public void setComment(String username, String dormitoryId, String content, Integer parentId){
         comment object = new comment(content);
@@ -53,6 +67,8 @@ public class UserService{
             object.setParent(commentRepository.findById(parentId));
         }
         commentRepository.save(object);
+        //info the user who add dorm as bookmark
+        //List<user> receiverGroup =
     }
     public List<comment> getComment(Integer dormitoryId, Integer parentId){
         return commentRepository.findByDormitoryAndParent(dormitoryRepository.findById(dormitoryId), commentRepository.findById(parentId));
@@ -100,5 +116,16 @@ public class UserService{
     public void setBedTime(user userInDB, timeRange time) {
         userInDB.setBedtime(time);
         userRepository.save(userInDB);
+    }
+    public void communicate(user sender,user receiver,String content){
+        Notification notification = new Notification();
+        notification.setContent(content);
+        notification.setReceiver(receiver);
+        notification.setSender(sender);
+        notification.setTime(new Timestamp(System.currentTimeMillis()));
+        notificationRepository.save(notification);
+    }
+    public List<Notification> checkMailbox(user user){
+        return notificationRepository.findByReceiver(user);
     }
 }

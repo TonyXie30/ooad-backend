@@ -25,8 +25,13 @@ public class DataInitializer implements ApplicationRunner {
         System.out.println("time_range initialization success");
     }
 
+    public void systemInitialization(){
+        String sql = "INSERT INTO users(admin,password,username) VALUES (true,'system','System');";
+        jdbcTemplate.execute(sql);
+    }
     @Override
     public void run(ApplicationArguments args) throws Exception {
         timeRangeInitialization();
+        systemInitialization();
     }
 }
