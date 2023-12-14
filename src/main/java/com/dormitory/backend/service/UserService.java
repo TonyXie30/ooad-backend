@@ -107,6 +107,20 @@ public class UserService{
         }
         // 调用 JpaRepository 的 findAll 方法，传入 Specification 对象
     }
+    public Page<user> getUsers(Integer page,Integer limit,String sort,String[] attr){
+        Sort sort_;
+        if (sort==null||sort.equals("+")){
+            sort_ = Sort.by(attr).ascending();
+        } else {
+            sort_ = Sort.by(attr).descending();
+        }
+        if(page != null && limit != null){
+            PageRequest pageable = PageRequest.of(page,limit,sort_);
+            return userRepository.findAll(pageable);
+        }else{
+            return new PageImpl<>(userRepository.findAll(sort_));
+        }
+    }
 
     public void deleteUser(user user) {
         userRepository.delete(user);

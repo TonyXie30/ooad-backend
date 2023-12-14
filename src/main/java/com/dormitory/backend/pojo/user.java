@@ -18,7 +18,7 @@ public class user {
     @Column(name = "user_id")
     @Schema
     int id;
-    @Column(nullable = false)
+    @Column(nullable = false,unique = true)
     @Schema
     String username;
     @Column(nullable = false)

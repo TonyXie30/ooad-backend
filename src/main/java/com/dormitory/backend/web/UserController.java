@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Field;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -36,9 +38,30 @@ public class UserController {
     @PostMapping(value = "api/getUsers")
     @ResponseBody
     public Page<user> getUsers(@RequestParam(required = false) Integer page,
-                                  @RequestParam(required = false) Integer limit,
-                                  @RequestParam(required = false) String sort){
-        return userService.getUsers(page, limit, sort);
+                               @RequestParam(required = false) Integer limit,
+                               @RequestParam(required = false) String sort,
+                               @RequestParam(required = false,value = "sortBy[]") String[] sortBy){
+
+        if(sortBy==null) {
+            return userService.getUsers(page, limit, sort);
+        } else{
+            List<String> sortByList = new ArrayList<>(List.of(sortBy));
+            Field[] fields = user.class.getDeclaredFields();
+            List<String> attr = new ArrayList<>();
+            for (Field f:fields) {
+                f.setAccessible(true);
+                for (int i = 0; i < sortByList.size(); i++) {
+                    String by = sortByList.get(i);
+                    if(by.equals(f.getName())){
+                        attr.add(f.getName());
+                        sortByList.remove(i);
+                        System.out.println("match: "+f.getName());
+                        break;
+                    }
+                }
+            }
+            return userService.getUsers(page, limit, sort,attr.toArray(new String[0]));
+        }
     }
 
     @PostMapping(value = "api/getComment")

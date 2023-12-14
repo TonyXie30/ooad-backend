@@ -18,8 +18,9 @@ public class AdminUserController {
     UserService userService;
 
     /**
-     * 这个接口接收前端发送的excel表格（.xlsx/.xls/.csv），实现批量注册学生账号。
-     * @param file
+     * 这个接口接收前端发送的excel，实现批量注册学生账号。
+     *
+     * @param file excel表格（.xlsx/.xls/.csv）
      */
     @CrossOrigin
     @PostMapping("api/admin/user/register/upload")
@@ -31,6 +32,7 @@ public class AdminUserController {
 //            .read()中，第一个参数输入文件（也支持文件路径），第二个参数指定每行映射到的类，
 //            第三个参数内部lambda表达式中完成对数据的操作，其中dataList装载了映射后的对象们。
 //            .sheet()中，可指定表页序数或表名来指定读取的文件中的表，默认为第一张。
+
 //            easyExcel实现了分段读取，对内存友好，可在占用少量内存的情况下读取大表格。
             EasyExcel.read(file.getInputStream(), user.class, new PageReadListener<user>(dataList -> {
                 for (user newUser:dataList) {
