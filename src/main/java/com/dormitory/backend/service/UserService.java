@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -68,7 +67,15 @@ public class UserService{
         }
         commentRepository.save(object);
         //info the user who add dorm as bookmark
-        //List<user> receiverGroup =
+        List<user> receiverGroup = getUsersByBookmarkedDormitoryId(Integer.parseInt(dormitoryId));
+        user system = userRepository.findByUsername("System");
+        receiverGroup.forEach(user -> communicate(system, user, """
+                Notification:
+                The dormitory %s in %s Room%s you set as bookmark has new comments. Have a check! If you have\s
+                any questions, please communicate with the admin.
+                                    
+                Sent by System.
+                """.formatted(dormitoryId, dormitory1.getBuildingName(), dormitory1.getBookedNum())));
     }
     public List<comment> getComment(Integer dormitoryId, Integer parentId){
         return commentRepository.findByDormitoryAndParent(dormitoryRepository.findById(dormitoryId), commentRepository.findById(parentId));
@@ -127,5 +134,8 @@ public class UserService{
     }
     public List<Notification> checkMailbox(user user){
         return notificationRepository.findByReceiver(user);
+    }
+    public List<user> getUsersByBookmarkedDormitoryId(int dormitoryId) {
+        return userRepository.findByBookmarkedDormitoryId(dormitoryId);
     }
 }
