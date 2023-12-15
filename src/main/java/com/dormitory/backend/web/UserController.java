@@ -87,7 +87,7 @@ public class UserController {
     public void deleteComment(@RequestParam int comment_id){
 
     }
-    
+
     @PostMapping(value = "api/getBookMark")
     @Transactional
     @ResponseBody
@@ -153,6 +153,7 @@ public class UserController {
         return userService.checkMailbox(user);
     }
 
+//    这是模板方法，不用加注解，可以拿来用。
     public user checkUser(String username){
         if(username==null){
             throw new MyException(Code.MISSING_FIELD);
