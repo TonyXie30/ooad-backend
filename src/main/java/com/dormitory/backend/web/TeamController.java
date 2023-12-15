@@ -8,6 +8,8 @@ import com.dormitory.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class TeamController {
     @Autowired
@@ -44,10 +46,41 @@ public class TeamController {
             throw new MyException(Code.MISSING_FIELD);
         }
         user user = userService.findByUsername(username);
+        //TODO: 队长退队一键解散
         if(user==null){
             throw new MyException(Code.USER_NOT_EXIST);
         }
         userService.teamUp(user,user);
         return user;
     }
+
+    @CrossOrigin("http://localhost:8080")
+    @PostMapping(value = "api/getTeamLeader")
+    @ResponseBody
+    public user getTeamLeader(String username){
+        if(username==null){
+            throw new MyException(Code.MISSING_FIELD);
+        }
+        user user = userService.findByUsername(username);
+        if(user==null){
+            throw new MyException(Code.USER_NOT_EXIST);
+        }
+        return user.getLeaderId();
+    }
+
+    @CrossOrigin("http://localhost:8080")
+    @PostMapping(value = "api/getTeam")
+    @ResponseBody
+    public List<user> getTeam(String username){
+        if(username==null){
+            throw new MyException(Code.MISSING_FIELD);
+        }
+        user user = userService.findByUsername(username);
+        if(user==null){
+            throw new MyException(Code.USER_NOT_EXIST);
+        }
+        return userService.findByLeaderId(username);
+    }
+
+//    TODO:申请换宿舍
 }

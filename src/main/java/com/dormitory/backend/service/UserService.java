@@ -32,8 +32,14 @@ public class UserService{
     }
     public void bookRoom(user user, dormitory dorm){
         user.setBookedDormitory(dorm);
-        List<user> members = userRepository.findByLeaderId(user.getLeaderId());
+        List<user> members = findByLeaderId(user);
         userRepository.saveAll(members); //contains leader
+    }
+    public List<user> findByLeaderId(user user){
+        return userRepository.findByLeaderId(user.getLeaderId());
+    }
+    public List<user> findByLeaderId(String username){
+        return userRepository.findByLeaderId(findByUsername(username).getLeaderId());
     }
     public void teamUp(user member, user leader){
         member.setLeaderId(leader);
