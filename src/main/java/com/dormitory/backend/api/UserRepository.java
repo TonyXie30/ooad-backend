@@ -13,6 +13,5 @@ public interface UserRepository extends JpaRepository<user, Long> {
   List<user> findByLeaderId(user leaderId);
   @Query("SELECT u FROM users u JOIN u.bookmark b WHERE b.id = :dormitoryId")
   List<user> findByBookmarkedDormitoryId(@Param("dormitoryId") int dormitoryId);
-
 }
 

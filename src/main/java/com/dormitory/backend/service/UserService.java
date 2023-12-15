@@ -158,4 +158,18 @@ public class UserService{
     public List<user> getUsersByBookmarkedDormitoryId(int dormitoryId) {
         return userRepository.findByBookmarkedDormitoryId(dormitoryId);
     }
+    public void disbandTeam(user leader){
+        List<user> group_member = userRepository.findByLeaderId(leader);
+        leader.setLeaderId(leader);
+        userRepository.save(leader);
+        group_member.remove(leader);
+        user system = userRepository.findByUsername("System");
+        for (user member:group_member){
+            member.setLeaderId(member);
+            userRepository.save(leader);
+            communicate(system,member, """
+                    Your team has been disbanded. Please pay attention to that.
+                    """);
+        }
+    }
 }

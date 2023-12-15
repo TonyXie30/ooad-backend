@@ -55,6 +55,33 @@ public class TeamController {
     }
 
     @CrossOrigin("http://localhost:8080")
+    @PostMapping(value = "api/disbandTeam")
+    @ResponseBody
+    public void disbandTeam(String leader_name){
+        if (leader_name==null)
+            throw new MyException(Code.MISSING_FIELD);
+        user leader = userService.findByUsername(leader_name);
+        if (leader==null)
+            throw new MyException(Code.USER_NOT_EXIST);
+        userService.disbandTeam(leader);
+    }
+
+    @CrossOrigin("http://localhost:8080")
+    @PostMapping(value = "api/kickMember")
+    @ResponseBody
+    public void kickMember(String leader_name,String username){
+        if (username==null||leader_name==null)
+            throw new MyException(Code.MISSING_FIELD);
+        user user = userService.findByUsername(username);
+        user leader = userService.findByUsername(leader_name);
+        List<user> team = userService.findByLeaderId(leader);
+        if (!team.contains(user))
+            throw new MyException(Code.NOT_HAVE_THIS_MEMBER);
+        else
+            userService.teamUp(user,user);
+    }
+
+    @CrossOrigin("http://localhost:8080")
     @PostMapping(value = "api/getTeamLeader")
     @ResponseBody
     public user getTeamLeader(String username){

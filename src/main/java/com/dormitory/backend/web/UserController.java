@@ -81,7 +81,12 @@ public class UserController {
             throw new MyException(Code.MISSING_FIELD);
         userService.setComment(username,dormitoryId,content,parentId);
     }
+    @PostMapping(value = "api/deleteComment")
+    @Transactional
+    @ResponseBody
+    public void deleteComment(@RequestParam int comment_id){
 
+    }
     @PostMapping(value = "api/getBookMark")
     @Transactional
     @ResponseBody
