@@ -23,6 +23,11 @@ public class UserService{
     TimeRangeRepository timeRangeRepository;
     @Autowired
     NotificationRepository notificationRepository;
+    @Autowired
+    DegreeRepository degreeRepository;
+    @Autowired
+    GenderRepository genderRepository;
+
     public user findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
@@ -158,18 +163,26 @@ public class UserService{
     public List<user> getUsersByBookmarkedDormitoryId(int dormitoryId) {
         return userRepository.findByBookmarkedDormitoryId(dormitoryId);
     }
-    public void disbandTeam(user leader){
+
+    public void disbandTeam(user leader) {
         List<user> group_member = userRepository.findByLeaderId(leader);
         leader.setLeaderId(leader);
         userRepository.save(leader);
         group_member.remove(leader);
         user system = userRepository.findByUsername("System");
-        for (user member:group_member){
+        for (user member : group_member) {
             member.setLeaderId(member);
             userRepository.save(leader);
-            communicate(system,member, """
+            communicate(system, member, """
                     Your team has been disbanded. Please pay attention to that.
                     """);
         }
+    }
+
+    public Gender getGender(String gender){
+        return genderRepository.findByGender(gender);
+    }
+    public Degree getDegree(String degree){
+        return degreeRepository.findByDegree(degree);
     }
 }

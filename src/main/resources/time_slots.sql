@@ -51,3 +51,4 @@ values
     ('23:30:00')
 ON conflict(timeslot)
     DO NOTHING;
+COMMIT;

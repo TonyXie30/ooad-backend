@@ -25,9 +25,14 @@ public class dormitory {
     @Column(name = "house_num")
     @Schema
     String houseNum;
-    @Column
+    @ManyToOne
+    @JoinColumn(name = "gender",referencedColumnName = "gender")
     @Schema
-    String type;
+    Gender gender;
+    @ManyToOne
+    @JoinColumn(name = "degree",referencedColumnName = "degree")
+    @Schema
+    Degree degree;
     @Column(name = "booked_num")
     @Schema
     int bookedNum;
@@ -78,12 +83,32 @@ public class dormitory {
         this.houseNum = houseNum;
     }
 
-    public String getType() {
-        return type;
+    public void setFloor(Integer floor) {
+        this.floor = floor;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public Degree getDegree() {
+        return degree;
+    }
+
+    public void setDegree(Degree degree) {
+        this.degree = degree;
+    }
+
+    public List<user> getMarked_users() {
+        return marked_users;
+    }
+
+    public void setMarked_users(List<user> marked_users) {
+        this.marked_users = marked_users;
     }
 
     public int getBookedNum() {

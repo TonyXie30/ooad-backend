@@ -24,6 +24,16 @@ public class DataInitializer implements ApplicationRunner {
         jdbcTemplate.execute(sql);
         System.out.println("time_range initialization success");
     }
+    public void genderInitialization() {
+        String sql = readSQLFile(new File("src/main/resources/gender.sql"));
+        jdbcTemplate.execute(sql);
+        System.out.println("gender initialization success");
+    }
+    public void degreeInitialization() {
+        String sql = readSQLFile(new File("src/main/resources/degree.sql"));
+        jdbcTemplate.execute(sql);
+        System.out.println("degree initialization success");
+    }
 
     public void systemInitialization(){
         String sql = "INSERT INTO users(admin,password,username) " +
@@ -32,8 +42,10 @@ public class DataInitializer implements ApplicationRunner {
         System.out.println("system user initialization success");
     }
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
         timeRangeInitialization();
+        genderInitialization();
+        degreeInitialization();
         systemInitialization();
     }
 }
