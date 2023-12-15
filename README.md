@@ -53,3 +53,22 @@ but such method does not allow a null input.
 #### Solution:
 
 Input check: do not set a null value on int attribute.
+
+### object references an unsaved transient instance - save the transient instance before flushing
+
+#### Description:
+
+If trying to directly save an object (entity) from front-end into a table when the object has
+a **reference attribute (foreign key)**, the error may be raised.
+
+#### Reason:
+
+The **reference attribute** is not the same as the one in database - 
+at least the id is likely different or lost. Thus, system will assume that
+is a "new" attribute, and when saving an object with a "new" reference attribute
+not in database, the error will be triggered.
+
+#### Solution:
+
+Always retrieve the reference attribute (entity) from database by the information
+given by front-end, then re-assemble the object before saving it.
