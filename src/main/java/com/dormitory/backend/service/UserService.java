@@ -23,6 +23,11 @@ public class UserService{
     TimeRangeRepository timeRangeRepository;
     @Autowired
     NotificationRepository notificationRepository;
+    @Autowired
+    DegreeRepository degreeRepository;
+    @Autowired
+    GenderRepository genderRepository;
+
     public user findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
@@ -151,5 +156,11 @@ public class UserService{
     }
     public List<user> getUsersByBookmarkedDormitoryId(int dormitoryId) {
         return userRepository.findByBookmarkedDormitoryId(dormitoryId);
+    }
+    public Gender getGender(String gender){
+        return genderRepository.findByGender(gender);
+    }
+    public Degree getDegree(String degree){
+        return degreeRepository.findByDegree(degree);
     }
 }

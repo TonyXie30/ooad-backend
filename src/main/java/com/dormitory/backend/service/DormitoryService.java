@@ -2,8 +2,12 @@ package com.dormitory.backend.service;
 
 import com.dormitory.backend.api.DormitoryRepository;
 import com.dormitory.backend.api.DormitorySpecifications;
+import com.dormitory.backend.api.SelectionTimeConfigRepository;
 import com.dormitory.backend.config.Code;
 import com.dormitory.backend.config.MyException;
+import com.dormitory.backend.pojo.SelectionTimeConfig;
+import com.dormitory.backend.pojo.Degree;
+import com.dormitory.backend.pojo.Gender;
 import com.dormitory.backend.pojo.dormitory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,14 +17,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class DormitoryService {
     @Autowired
     DormitoryRepository dormitoryRepository;
+    @Autowired
+    SelectionTimeConfigRepository selectionTimeConfigRepository;
+
     public Page<dormitory> findByHouseNumAndFloorAndBuildingNameAndLocation(
             String houseNum, Integer floor, String buildingName, String location,Integer page,Integer limit,String sort){
         Specification<dormitory> spec = DormitorySpecifications.findByCriteria(houseNum, floor, buildingName, location);
@@ -77,5 +82,12 @@ public class DormitoryService {
 
     public void removeDormitory(dormitory dormitory) {
         dormitoryRepository.delete(dormitory);
+    }
+
+    public void setSelectionTime(SelectionTimeConfig config){
+        selectionTimeConfigRepository.save(config);
+    }
+    public SelectionTimeConfig getSelectionTime(Gender gender, Degree degree){
+        return selectionTimeConfigRepository.findByGenderAndDegree(gender,degree);
     }
 }

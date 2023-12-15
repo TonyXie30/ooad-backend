@@ -17,21 +17,21 @@ public class user {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     @Schema
-    int id;
+    private int id;
     @Column(nullable = false,unique = true)
     @Schema
-    String username;
+    private String username;
     @Column(nullable = false)
     @Schema
-    String password;
-    @ManyToMany //@Fetch(FetchMode.JOIN)
-    @JoinTable(name = "bookmark")
-    @Schema
-    private List<dormitory> bookmark;
+    private String password;
     @ManyToOne
-    @JoinColumn(name = "dormitory_id")
+    @JoinColumn(name = "gender",referencedColumnName = "gender")
     @Schema
-    private dormitory bookedDormitory;
+    private Gender gender;
+    @ManyToOne
+    @JoinColumn(name = "degree",referencedColumnName = "degree")
+    @Schema
+    private Degree degree;
     @ManyToOne
     @JoinColumn(name = "subject_id")
     @Schema
@@ -44,6 +44,15 @@ public class user {
     @JoinColumn(name = "uptime",referencedColumnName = "timeslot")
     @Schema
     private timeRange uptime;
+    @ManyToMany //@Fetch(FetchMode.JOIN)
+    @JoinTable(name = "bookmark")
+    @Schema
+    private List<dormitory> bookmark;
+    @ManyToOne
+    @JoinColumn(name = "dormitory_id")
+    @Schema
+    private dormitory bookedDormitory;
+
 
     @ManyToOne
     @JoinTable(name = "leader_id")
@@ -70,6 +79,22 @@ public class user {
 
     public void setAdmin(boolean admin) {
         this.admin = admin;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public Degree getDegree() {
+        return degree;
+    }
+
+    public void setDegree(Degree degree) {
+        this.degree = degree;
     }
 
     public user getLeaderId() {
