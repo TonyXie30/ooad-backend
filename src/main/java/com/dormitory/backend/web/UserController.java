@@ -24,13 +24,7 @@ public class UserController {
     @PostMapping(value = "api/checkUserIsCheckedIn")
     @ResponseBody
     public boolean checkUserIsCheckedIn(@RequestBody String username){
-        if(username==null){
-            throw new MyException(Code.MISSING_FIELD);
-        }
-        user userInDB = userService.findByUsername(username);
-        if(userInDB==null){
-            throw new MyException(Code.USER_NOT_EXIST);
-        }
+        user userInDB = this.checkUser(username);
         return userInDB.getBookedDormitory()!=null;
     }
 
@@ -64,6 +58,13 @@ public class UserController {
         }
     }
 
+    @CrossOrigin
+    @PostMapping(value = "api/getUser")
+    @ResponseBody
+    public user getUser(@RequestParam String username){
+        return this.checkUser(username);
+    }
+
     @PostMapping(value = "api/getComment")
     @ResponseBody
     public List<comment> getComment(@RequestParam Integer dormitoryId, @RequestParam Integer parentId){
@@ -80,7 +81,6 @@ public class UserController {
             throw new MyException(Code.MISSING_FIELD);
         userService.setComment(username,dormitoryId,content,parentId);
     }
-
 
     @PostMapping(value = "api/getBookMark")
     @Transactional
@@ -133,7 +133,8 @@ public class UserController {
 
     @PostMapping(value = "api/communicate")
     @ResponseBody
-    public void communicate(@RequestParam String receiver_name,@RequestParam String sender_name,@RequestParam String content){
+    public void communicate(@RequestParam String receiver_name,@RequestParam String sender_name,
+                            @RequestParam String content){
         user sender = userService.findByUsername(sender_name);
         user receiver = userService.findByUsername(receiver_name);
         userService.communicate(sender,receiver,content);
@@ -144,5 +145,16 @@ public class UserController {
     public List<Notification> checkMailbox(@RequestParam String username){
         user user = userService.findByUsername(username);
         return userService.checkMailbox(user);
+    }
+
+    public user checkUser(String username){
+        if(username==null){
+            throw new MyException(Code.MISSING_FIELD);
+        }
+        user userInDB = userService.findByUsername(username);
+        if(userInDB==null){
+            throw new MyException(Code.USER_NOT_EXIST);
+        }
+        return userInDB;
     }
 }
