@@ -72,7 +72,7 @@ public class UserService{
         object.setUser(author);
         dormitory dormitory1 = dormitoryRepository.findById(Integer.parseInt(dormitoryId));
         object.setDormitory(dormitory1);
-        //object.setContent(content);
+        object.setCreate_time(new Timestamp(System.currentTimeMillis()));
         if (parentId!=null){
             object.setParent(commentRepository.findById(parentId));
         }
