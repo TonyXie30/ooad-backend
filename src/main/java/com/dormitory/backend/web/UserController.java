@@ -10,13 +10,16 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class UserController {
@@ -77,13 +80,17 @@ public class UserController {
         return userService.getComment(dormitoryId,parentId);
     }
 
-    @PostMapping(value = "api/setComment")
+    @PostMapping(value = "api/setComment",produces = "application/json")
     @Transactional
     @ResponseBody
-    public comment setComment(@RequestParam String username, @RequestParam String dormitoryId, @RequestParam String content, @RequestParam(required = false) Integer parentId){
+    public Map<String,Integer> setComment(@RequestParam String username, @RequestParam String dormitoryId, @RequestParam String content, @RequestParam(required = false) Integer parentId){
         if (username==null||dormitoryId==null)
             throw new MyException(Code.MISSING_FIELD);
-        return userService.setComment(username,dormitoryId,content,parentId);
+        comment comment = userService.setComment(username,dormitoryId,content,parentId);
+        Map<String,Integer> map = new HashMap<>();
+        map.put("comment_id",comment.getId());
+        map.put("parent_id",comment.getParent().getId());
+        return map;
     }
 
 
