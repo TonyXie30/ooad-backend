@@ -1,6 +1,8 @@
 package com.dormitory.backend.service;
 
 import com.dormitory.backend.api.*;
+import com.dormitory.backend.config.Code;
+import com.dormitory.backend.config.MyException;
 import com.dormitory.backend.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -188,5 +191,14 @@ public class UserService{
     }
     public Degree getDegree(String degree){
         return degreeRepository.findByDegree(degree);
+    }
+    public List<UserProjection> recommendFriend(String username){
+        user user = userRepository.findByUsername(username);
+        if (user==null)
+            throw new MyException(Code.USER_NOT_EXIST);
+        if (user.getGender()==null||user.getDegree()==null||user.getBedtime()==null||user.getUptime()==null)
+            throw new MyException(Code.MISSING_FIELD);
+        return userRepository.recommend(user.getGender().toString(),user.getDegree().toString(),
+                LocalTime.parse(user.getBedtime().toString()),LocalTime.parse(user.getUptime().toString()),username);
     }
 }

@@ -3,7 +3,6 @@ package com.dormitory.backend.pojo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import java.sql.Time;
-import java.util.List;
 
 @Entity(name = "time_range")
 @Table(schema = "public")
@@ -32,5 +31,10 @@ public class timeRange {
 
     public void setTimeSlot(Time timeSlot) {
         this.timeSlot = timeSlot;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(timeSlot);
     }
 }

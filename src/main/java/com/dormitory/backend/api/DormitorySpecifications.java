@@ -2,8 +2,6 @@ package com.dormitory.backend.api;
 
 import com.dormitory.backend.pojo.dormitory;
 import jakarta.persistence.criteria.Predicate;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.awt.print.Pageable;

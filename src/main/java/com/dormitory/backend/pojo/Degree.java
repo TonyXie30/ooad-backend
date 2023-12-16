@@ -36,4 +36,9 @@ public class Degree {
     public void setDegree(String degree) {
         this.degree = degree;
     }
+
+    @Override
+    public String toString() {
+        return degree;
+    }
 }
