@@ -5,7 +5,9 @@ import com.alibaba.excel.read.listener.PageReadListener;
 import com.dormitory.backend.config.Code;
 import com.dormitory.backend.config.MyException;
 import com.dormitory.backend.pojo.user;
+import com.dormitory.backend.service.CommentService;
 import com.dormitory.backend.service.UserService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,7 +18,8 @@ import java.io.IOException;
 public class AdminUserController {
     @Autowired
     UserService userService;
-
+    @Autowired
+    CommentService commentService;
     /**
      * 这个接口接收前端发送的excel，实现批量注册学生账号。
      *
@@ -63,5 +66,11 @@ public class AdminUserController {
             throw new MyException(Code.USER_NOT_EXIST);
         }
         userService.deleteUser(userInDB);
+    }
+    @PostMapping(value = "api/admin/deleteComment")
+    @Transactional
+    @ResponseBody
+    public void deleteComment(@RequestParam int comment_id){
+        commentService.deleteCommentAndChildrenRecursively(commentService.findById(comment_id));
     }
 }

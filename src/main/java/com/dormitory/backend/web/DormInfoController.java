@@ -2,10 +2,14 @@ package com.dormitory.backend.web;
 
 import com.dormitory.backend.config.Code;
 import com.dormitory.backend.config.MyException;
+import com.dormitory.backend.pojo.CommentResponseDTO;
+import com.dormitory.backend.pojo.comment;
 import com.dormitory.backend.pojo.dormitory;
 import com.dormitory.backend.pojo.user;
+import com.dormitory.backend.service.CommentService;
 import com.dormitory.backend.service.DormitoryService;
 import com.dormitory.backend.service.UserService;
+import jakarta.transaction.Transactional;
 import org.springdoc.core.converters.models.Sort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
@@ -14,10 +18,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RestController
 public class DormInfoController {
@@ -25,6 +33,8 @@ public class DormInfoController {
     private DormitoryService dormitoryService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private CommentService commentService;
     @CrossOrigin
     @PostMapping(value = "api/findDorm")
     @ResponseBody
@@ -84,6 +94,23 @@ public class DormInfoController {
                 throw new MyException(Code.Room_Occupied);
             }
         }
+    }
+    @PostMapping(value = "api/treeOfComments")
+    @Transactional
+    @ResponseBody
+    public ResponseEntity<List<CommentResponseDTO>> allComment(@RequestParam String dormitory_id){
+        dormitory dorm = dormitoryService.findById(dormitory_id);
+        List<comment> lst =dormitoryService.treeOfComments(dorm);
+        List<CommentResponseDTO> commentDTOs = lst
+                .stream()
+                .map(commentId -> {
+                    comment comment = commentService.findById(commentId.getId());
+                    return comment != null ? commentService.convertToDTO(comment) : null;
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(commentDTOs);
     }
 
 

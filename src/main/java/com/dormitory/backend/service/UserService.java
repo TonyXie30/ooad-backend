@@ -66,7 +66,7 @@ public class UserService{
                     Sent by System.
                 """.formatted(member.getUsername(),member.getId()));
     }
-    public void setComment(String username, String dormitoryId, String content, Integer parentId){
+    public comment setComment(String username, String dormitoryId, String content, Integer parentId){
         comment object = new comment(content);
         user author = userRepository.findByUsername(username);
         object.setUser(author);
@@ -77,6 +77,9 @@ public class UserService{
             object.setParent(commentRepository.findById(parentId));
         }
         commentRepository.save(object);
+        if (parentId==null){
+            object.setParent(commentRepository.findById(object.getId()));
+        }
         //info the user who add dorm as bookmark
         List<user> receiverGroup = getUsersByBookmarkedDormitoryId(Integer.parseInt(dormitoryId));
         user system = userRepository.findByUsername("System");
@@ -87,6 +90,7 @@ public class UserService{
                                     
                 Sent by System.
                 """.formatted(dormitoryId, dormitory1.getBuildingName(), dormitory1.getBookedNum())));
+        return object;
     }
     public List<comment> getComment(Integer dormitoryId, Integer parentId){
         return commentRepository.findByDormitoryAndParent(dormitoryRepository.findById(dormitoryId), commentRepository.findById(parentId));

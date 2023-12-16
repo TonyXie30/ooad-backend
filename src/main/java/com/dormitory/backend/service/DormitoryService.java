@@ -1,14 +1,12 @@
 package com.dormitory.backend.service;
 
+import com.dormitory.backend.api.CommentRepository;
 import com.dormitory.backend.api.DormitoryRepository;
 import com.dormitory.backend.api.DormitorySpecifications;
 import com.dormitory.backend.api.SelectionTimeConfigRepository;
 import com.dormitory.backend.config.Code;
 import com.dormitory.backend.config.MyException;
-import com.dormitory.backend.pojo.SelectionTimeConfig;
-import com.dormitory.backend.pojo.Degree;
-import com.dormitory.backend.pojo.Gender;
-import com.dormitory.backend.pojo.dormitory;
+import com.dormitory.backend.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -25,6 +23,8 @@ public class DormitoryService {
     DormitoryRepository dormitoryRepository;
     @Autowired
     SelectionTimeConfigRepository selectionTimeConfigRepository;
+    @Autowired
+    CommentRepository commentRepository;
 
     public Page<dormitory> findByHouseNumAndFloorAndBuildingNameAndLocation(
             String houseNum, Integer floor, String buildingName, String location,Integer page,Integer limit,String sort){
@@ -89,5 +89,8 @@ public class DormitoryService {
     }
     public SelectionTimeConfig getSelectionTime(Gender gender, Degree degree){
         return selectionTimeConfigRepository.findByGenderAndDegree(gender,degree);
+    }
+    public List<comment> treeOfComments(dormitory dormitory){
+        return commentRepository.findFirstLevelComments(dormitory);
     }
 }

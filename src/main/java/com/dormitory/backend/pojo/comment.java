@@ -2,6 +2,8 @@ package com.dormitory.backend.pojo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
+import java.sql.Timestamp;
+
 @Entity(name = "comment")
 @Table(schema = "public")
 @Schema
@@ -27,6 +29,9 @@ public class comment {
     @Schema
     String content;
     //帮助进行反序列化
+    @Column
+    @Schema
+    Timestamp create_time;
     public comment(String content) {
         this.content = content;
     }
@@ -64,6 +69,14 @@ public class comment {
 
     public void setUser(com.dormitory.backend.pojo.user user) {
         this.user = user;
+    }
+
+    public Timestamp getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(Timestamp create_time) {
+        this.create_time = create_time;
     }
 
     public String getContent() {
