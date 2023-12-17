@@ -46,6 +46,7 @@ public class CommentService {
         dto.setCreate_time(comment.getCreate_time());
         dto.setId(comment.getId());
         dto.setParent_id(comment.getParent().getId());
+        dto.setDormitory_id(comment.getDormitory().getId());
         List<CommentResponseDTO> replies = getAllChildComments(comment)
                 .stream()
                 .filter(childComment -> !childComment.equals(comment))

@@ -83,13 +83,14 @@ public class UserController {
     @PostMapping(value = "api/setComment",produces = "application/json")
     @Transactional
     @ResponseBody
-    public Map<String,Integer> setComment(@RequestParam String username, @RequestParam String dormitoryId, @RequestParam String content, @RequestParam(required = false) Integer parentId){
+    public Map<String,Object> setComment(@RequestParam String username, @RequestParam String dormitoryId, @RequestParam String content, @RequestParam(required = false) Integer parentId){
         if (username==null||dormitoryId==null)
             throw new MyException(Code.MISSING_FIELD);
         comment comment = userService.setComment(username,dormitoryId,content,parentId);
-        Map<String,Integer> map = new HashMap<>();
-        map.put("comment_id",comment.getId());
-        map.put("parent_id",comment.getParent().getId());
+        Map<String,Object> map = new HashMap<>();
+        map.put("comment_id", comment.getId());
+        map.put("parent_id", comment.getParent().getId());
+        map.put("create_time", comment.getCreate_time());
         return map;
     }
 
