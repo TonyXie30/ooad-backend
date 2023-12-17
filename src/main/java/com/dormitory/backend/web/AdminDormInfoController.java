@@ -60,6 +60,18 @@ public class AdminDormInfoController {
     @PostMapping(value = "api/admin/setSelectionTime")
     @ResponseBody
     public void setSelectionTime(@RequestBody SelectionTimeConfig config){
+        SelectionTimeConfig fullConfig = buildConfig(config);
+        dormitoryService.setSelectionTime(fullConfig);
+    }
+    @CrossOrigin
+    @PostMapping(value = "api/admin/deleteSelectionTime")
+    @ResponseBody
+    public void deleteSelectionTime(@RequestBody SelectionTimeConfig config){
+        SelectionTimeConfig config_ = buildConfig(config);
+        SelectionTimeConfig configInDB = dormitoryService.getSelectionTime(config_.getGender(),config_.getDegree());
+        dormitoryService.deleteSelectionTime(configInDB);
+    }
+    public SelectionTimeConfig buildConfig(SelectionTimeConfig config){
         if(config.getGender()==null||config.getDegree()==null){
             throw new MyException(Code.MISSING_FIELD);
         }
@@ -74,6 +86,6 @@ public class AdminDormInfoController {
         }
         config.setDegree(degree);
         config.setGender(gender);
-        dormitoryService.setSelectionTime(config);
+        return config;
     }
 }

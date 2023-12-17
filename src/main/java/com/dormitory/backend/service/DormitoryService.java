@@ -7,6 +7,7 @@ import com.dormitory.backend.api.SelectionTimeConfigRepository;
 import com.dormitory.backend.config.Code;
 import com.dormitory.backend.config.MyException;
 import com.dormitory.backend.pojo.*;
+import org.hibernate.annotations.NotFoundAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -92,5 +93,9 @@ public class DormitoryService {
     }
     public List<comment> treeOfComments(dormitory dormitory){
         return commentRepository.findFirstLevelComments(dormitory);
+    }
+
+    public void deleteSelectionTime(SelectionTimeConfig configInDB) {
+        selectionTimeConfigRepository.delete(configInDB);
     }
 }
