@@ -59,9 +59,19 @@ public class AdminDormInfoController {
     @CrossOrigin
     @PostMapping(value = "api/admin/setSelectionTime")
     @ResponseBody
-    public void setSelectionTime(@RequestBody SelectionTimeConfig config){
-        SelectionTimeConfig fullConfig = buildConfig(config);
-        dormitoryService.setSelectionTime(fullConfig);
+    public String setSelectionTime(@RequestBody SelectionTimeConfig config){
+        SelectionTimeConfig config_ = buildConfig(config);
+        SelectionTimeConfig configInDB = dormitoryService.getSelectionTime(config_.getGender(),config_.getDegree());
+        if (configInDB!=null){
+            configInDB.setStartTime(config.getStartTime());
+            configInDB.setEndTime(config.getEndTime());
+            dormitoryService.setSelectionTime(configInDB);
+//            注意这不是异常。
+            return "modify an existed time slot";
+        } else {
+            dormitoryService.setSelectionTime(config_);
+            return "create a new time slot";
+        }
     }
     @CrossOrigin
     @PostMapping(value = "api/admin/deleteSelectionTime")
@@ -69,8 +79,13 @@ public class AdminDormInfoController {
     public void deleteSelectionTime(@RequestBody SelectionTimeConfig config){
         SelectionTimeConfig config_ = buildConfig(config);
         SelectionTimeConfig configInDB = dormitoryService.getSelectionTime(config_.getGender(),config_.getDegree());
+        if (configInDB==null){
+            throw new MyException(Code.GENERAL_NOT_EXIST);
+        }
         dormitoryService.deleteSelectionTime(configInDB);
     }
+
+//    模板方法
     public SelectionTimeConfig buildConfig(SelectionTimeConfig config){
         if(config.getGender()==null||config.getDegree()==null){
             throw new MyException(Code.MISSING_FIELD);
