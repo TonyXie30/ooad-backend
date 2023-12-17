@@ -3,6 +3,7 @@ package com.dormitory.backend.web;
 import com.dormitory.backend.api.UserRepository;
 import com.dormitory.backend.config.Code;
 import com.dormitory.backend.config.MyException;
+import com.dormitory.backend.pojo.Team;
 import com.dormitory.backend.pojo.user;
 import com.dormitory.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,7 +99,7 @@ public class TeamController {
     @CrossOrigin("http://localhost:8080")
     @PostMapping(value = "api/getTeam")
     @ResponseBody
-    public List<user> getTeam(String username){
+    public Team getTeam(String username){
         if(username==null){
             throw new MyException(Code.MISSING_FIELD);
         }
@@ -106,7 +107,8 @@ public class TeamController {
         if(user==null){
             throw new MyException(Code.USER_NOT_EXIST);
         }
-        return userService.findByLeaderId(username);
+        List<user> userList = userService.findByLeaderId(user);
+        return new Team(userList,user.getLeaderId(),userList.size());
     }
 
 //    TODO:申请换宿舍
