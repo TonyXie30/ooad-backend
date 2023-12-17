@@ -63,6 +63,8 @@ public class LoginController {
                 throw new MyException(Code.REG_BAD_PASSWORD_FORMAT);
             }
             requestUser.setAdmin(false);
+            requestUser.setGender(userService.getGender(requestUser.getGender().getGender()));
+            requestUser.setDegree(userService.getDegree(requestUser.getDegree().getDegree()));
             user = userService.register(requestUser);
             userService.teamUp(user,user);
             return user;
