@@ -11,6 +11,15 @@ public class CommentResponseDTO {
     private List<CommentResponseDTO> replies;
     private int id;
     private int parent_id;
+    private int dormitory_id;
+
+    public int getDormitory_id() {
+        return dormitory_id;
+    }
+
+    public void setDormitory_id(int dormitory_id) {
+        this.dormitory_id = dormitory_id;
+    }
 
     public int getId() {
         return id;
