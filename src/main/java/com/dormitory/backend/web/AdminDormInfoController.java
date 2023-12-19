@@ -11,6 +11,8 @@ import com.dormitory.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @RestController
 public class AdminDormInfoController {
     //尚未完成用户权限控制以方便调试
@@ -23,9 +25,11 @@ public class AdminDormInfoController {
     @PostMapping(value = "api/admin/addDormitory")
     @ResponseBody
     public dormitory addDormitory(@RequestBody dormitory dormitory){
-        if(dormitory==null){
+        if(dormitory==null||dormitory.getGender().getGender()==null||dormitory.getDegree().getDegree()==null){
             throw new MyException(Code.MISSING_FIELD);
         }
+        dormitory.setGender(userService.getGender(dormitory.getGender().getGender()));
+        dormitory.setDegree(userService.getDegree(dormitory.getDegree().getDegree()));
         return dormitoryService.addDormitory(dormitory);
     }
     @CrossOrigin
@@ -39,6 +43,20 @@ public class AdminDormInfoController {
         if(dor_DB==null){
             throw new MyException(Code.DORMITORY_NOT_EXIST);
         }
+        if (dormitory.getGender()!=null && !Objects.equals(dormitory.getGender().getGender(), dor_DB.getGender().getGender()))
+            dor_DB.setGender(userService.getGender(dormitory.getGender().getGender()));
+        if (dormitory.getDegree()!=null && !Objects.equals(dormitory.getDegree().getDegree(), dor_DB.getDegree().getDegree()))
+            dor_DB.setDegree(userService.getDegree(dormitory.getDegree().getDegree()));
+        if (dormitory.getFloor()!=0 && dormitory.getFloor()!=dor_DB.getFloor())
+            dor_DB.setFloor(dormitory.getFloor());
+        if (dormitory.getBuildingName()!=null && !Objects.equals(dormitory.getBuildingName(), dor_DB.getBuildingName()))
+            dor_DB.setBuildingName(dormitory.getBuildingName());
+        if (dormitory.getHouseNum()!=null && !Objects.equals(dormitory.getHouseNum(), dor_DB.getHouseNum()))
+            dor_DB.setHouseNum(dormitory.getHouseNum());
+        if  (dormitory.getLocation()!=null && !Objects.equals(dormitory.getLocation(), dor_DB.getLocation()))
+            dor_DB.setLocation(dormitory.getLocation());
+        if (dormitory.getBed()!=0 && dormitory.getBed()!=dor_DB.getBed())
+            dor_DB.setBed(dormitory.getBed());
         return dormitoryService.addDormitory(dormitory);
     }
 
