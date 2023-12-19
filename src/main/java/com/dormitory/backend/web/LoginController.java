@@ -53,22 +53,21 @@ public class LoginController {
         if(username==null){
             throw new MyException(Code.MISSING_FIELD);
         }
-        user user = userService.findByUsername(username);
-
-        if(user!=null){
+        user user = userService.findByUsernameUnCheck(username);
+        if(user != null){
             throw new MyException(Code.REG_EXISTED_USER);
-        } else {
-            String pw = requestUser.getPassword();
-            if(pw == null||!pw.matches("\\S+")){
-                throw new MyException(Code.REG_BAD_PASSWORD_FORMAT);
-            }
-            requestUser.setAdmin(false);
-            requestUser.setGender(userService.getGender(requestUser.getGender().getGender()));
-            requestUser.setDegree(userService.getDegree(requestUser.getDegree().getDegree()));
-            user = userService.register(requestUser);
-            userService.teamUp(user,user);
-            return user;
         }
+
+        String pw = requestUser.getPassword();
+        if(pw == null||!pw.matches("\\S+")){
+            throw new MyException(Code.REG_BAD_PASSWORD_FORMAT);
+        }
+        requestUser.setAdmin(false);
+        requestUser.setGender(userService.getGender(requestUser.getGender().getGender()));
+        requestUser.setDegree(userService.getDegree(requestUser.getDegree().getDegree()));
+        user = userService.register(requestUser);
+        userService.teamUp(user,user);
+        return user;
     }
 
 

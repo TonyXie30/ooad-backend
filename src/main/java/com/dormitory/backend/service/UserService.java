@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalTime;
@@ -30,8 +31,23 @@ public class UserService{
     DegreeRepository degreeRepository;
     @Autowired
     GenderRepository genderRepository;
+    @Autowired
+    SelectionTimeConfigRepository selectionTimeConfigRepository;
 
     public user findByUsername(String username) {
+        if(username==null){
+            throw new MyException(Code.MISSING_FIELD);
+        }
+        user userInDB = userRepository.findByUsername(username);
+        if(userInDB==null){
+            throw new MyException(Code.USER_NOT_EXIST);
+        }
+        return userInDB;
+    }
+    public user findByUsernameUnCheck(String username) {
+        if(username==null){
+            throw new MyException(Code.MISSING_FIELD);
+        }
         return userRepository.findByUsername(username);
     }
     public user register(user newUser){
@@ -106,6 +122,9 @@ public class UserService{
     }
     public List<dormitory> getBookMark(String username){
         user author = userRepository.findByUsername(username);
+        return author.getBookmark();
+    }
+    public List<dormitory> getBookMark(user author){
         return author.getBookmark();
     }
 
@@ -200,5 +219,8 @@ public class UserService{
             throw new MyException(Code.MISSING_FIELD);
         return userRepository.recommend(user.getGender().toString(),user.getDegree().toString(),
                 LocalTime.parse(user.getBedtime().toString()),LocalTime.parse(user.getUptime().toString()),username);
+    }
+        }
+        return time.after(timeConfig.getStartTime()) & time.before(timeConfig.getEndTime());
     }
 }

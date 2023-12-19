@@ -31,7 +31,7 @@ public class UserController {
     @PostMapping(value = "api/checkUserIsCheckedIn")
     @ResponseBody
     public boolean checkUserIsCheckedIn(@RequestBody String username){
-        user userInDB = this.checkUser(username);
+        user userInDB = userService.findByUsername(username);
         return userInDB.getBookedDormitory()!=null;
     }
 
@@ -69,7 +69,7 @@ public class UserController {
     @PostMapping(value = "api/getUser")
     @ResponseBody
     public user getUser(@RequestParam String username){
-        return this.checkUser(username);
+        return userService.findByUsername(username);
     }
 
     @PostMapping(value = "api/getComment")
@@ -99,11 +99,8 @@ public class UserController {
     @Transactional
     @ResponseBody
     public List<dormitory> getBookMark(@RequestParam String username){
-        if (username==null||userService.findByUsername(username)==null)
-            throw new MyException(Code.MISSING_FIELD);
-        else {
-            return userService.getBookMark(username);
-        }
+        user author = userService.findByUsername(username);
+        return userService.getBookMark(author);
     }
 
 
@@ -128,9 +125,6 @@ public class UserController {
         }
 
         user userInDB = userService.findByUsername(username);
-        if(userInDB==null){
-            throw new MyException(Code.USER_NOT_EXIST);
-        }
 
         timeRange time_ = userService.findTimeSlot(time);
         if(time_==null){
@@ -158,17 +152,5 @@ public class UserController {
     public List<Notification> checkMailbox(@RequestParam String username){
         user user = userService.findByUsername(username);
         return userService.checkMailbox(user);
-    }
-
-//    这是模板方法，不用加注解，可以拿来用。
-    public user checkUser(String username){
-        if(username==null){
-            throw new MyException(Code.MISSING_FIELD);
-        }
-        user userInDB = userService.findByUsername(username);
-        if(userInDB==null){
-            throw new MyException(Code.USER_NOT_EXIST);
-        }
-        return userInDB;
     }
 }
