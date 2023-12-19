@@ -74,6 +74,17 @@ public class AdminDormInfoController {
         }
     }
     @CrossOrigin
+    @PostMapping(value = "api/admin/getSelectionTime")
+    @ResponseBody
+    public SelectionTimeConfig getSelectionTime(@RequestParam String gender,@RequestParam String degree){
+        SelectionTimeConfig configInDB = dormitoryService.getSelectionTime(
+                userService.getGender(gender), userService.getDegree(degree));
+        if (configInDB==null){
+            throw new MyException(Code.GENERAL_NOT_EXIST);
+        }
+        return configInDB;
+    }
+    @CrossOrigin
     @PostMapping(value = "api/admin/deleteSelectionTime")
     @ResponseBody
     public void deleteSelectionTime(@RequestBody SelectionTimeConfig config){

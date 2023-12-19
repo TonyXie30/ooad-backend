@@ -9,11 +9,14 @@ import com.dormitory.backend.pojo.user;
 import com.dormitory.backend.service.CommentService;
 import com.dormitory.backend.service.DormitoryService;
 import com.dormitory.backend.service.UserService;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import jakarta.transaction.Transactional;
 import org.springdoc.core.converters.models.Sort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.beans.support.SortDefinition;
+import org.springframework.cglib.core.Local;
+import org.springframework.context.annotation.Description;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -21,7 +24,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -35,6 +40,7 @@ public class DormInfoController {
     private UserService userService;
     @Autowired
     private CommentService commentService;
+
     @CrossOrigin
     @PostMapping(value = "api/findDorm")
     @ResponseBody
@@ -77,7 +83,9 @@ public class DormInfoController {
     @CrossOrigin
     @PostMapping(value = "api/checkInDorm")
     @ResponseBody
-    public void checkInDorm(@RequestParam String dormitoryId, @RequestParam String username){
+    public void checkInDorm(@RequestParam String dormitoryId, @RequestParam String username,
+                            @JsonPropertyDescription(value = "若不指定则后端会查询当前系统时间")
+                            @RequestParam(required = false) Date time){
         if (dormitoryId==null||username==null){
             throw new MyException(Code.MISSING_FIELD);
         }
@@ -86,7 +94,7 @@ public class DormInfoController {
             if (user.getLeaderId().getId() != user.getId()){
                 throw new MyException(Code.UNAUTHORISED_NOT_LEADER);
             }
-            if (dormitoryService.checkRoomAvailable(dormitoryId)){
+            if (dormitoryService.checkRoomAvailable(dormitoryId) && checkTime_(user,time)){
                 dormitory dormitory = dormitoryService.findById(dormitoryId);
                 userService.bookRoom(user,dormitory);
             }
@@ -114,6 +122,25 @@ public class DormInfoController {
     }
 
 
+    @CrossOrigin
+    @PostMapping(value = "api/checkTime")
+    @ResponseBody
+    public boolean checkTime(@RequestParam String username,
+                             @JsonPropertyDescription(value = "若不指定则后端会查询当前系统时间")
+                             @RequestParam(required = false) Date time){
+        return checkTime_(username, time);
+    }
 
+//    模板方法
+    public boolean checkTime_(String username, Date time){
+        user user = userService.findByUsername(username);
+        return checkTime_(user,time);
+    }
+    public boolean checkTime_(user user, Date time){
+        if(time==null){
+            time = new Date(new java.util.Date().getTime());
+        }
+        return userService.checkTimeValid(user, time);
+    }
 
 }

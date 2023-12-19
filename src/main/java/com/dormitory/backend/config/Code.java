@@ -19,8 +19,9 @@ public enum Code {
     USER_NOT_EXIST(5107,"Cannot find this user"),
     DORMITORY_NOT_EXIST(5108,"Cannot find this dormitory"),
     TIME_NOT_EXIST(5109, "This time slot is not existed, check if inserted yet."),
+    GENERAL_NOT_EXIST(5110, "At least one attribute referring to not exist in database"),
     NOT_HAVE_THIS_MEMBER(5111, "The team don't have this member"),
-    GENERAL_NOT_EXIST(5110, "At least one attribute referring to not exist in database");
+    TIME_CONFIG_NOT_EXIST(5112, "Corresponding time configuration not exist in database");
 
     private final int code;
     private final String msg;

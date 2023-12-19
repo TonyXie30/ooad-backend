@@ -220,6 +220,12 @@ public class UserService{
         return userRepository.recommend(user.getGender().toString(),user.getDegree().toString(),
                 LocalTime.parse(user.getBedtime().toString()),LocalTime.parse(user.getUptime().toString()),username);
     }
+
+    public boolean checkTimeValid(user user,Date time) {
+        SelectionTimeConfig timeConfig = selectionTimeConfigRepository
+                .findByGenderAndDegree(user.getGender(),user.getDegree());
+        if (timeConfig==null){
+            throw new  MyException(Code.TIME_CONFIG_NOT_EXIST);
         }
         return time.after(timeConfig.getStartTime()) & time.before(timeConfig.getEndTime());
     }
