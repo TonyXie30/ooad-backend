@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Arrays;
+
 @ControllerAdvice
 public class MyExceptionHandler {
 
@@ -24,7 +26,7 @@ public class MyExceptionHandler {
         System.out.println("Unknown Exception！Reason is :"+e);
         return GlobalResponse.<String>builder()
             .code(-10086)
-            .msg(e.getMessage() + e.getStackTrace())
+            .msg(e.getMessage() + Arrays.toString(e.getStackTrace()).replace(",","\n"))
             .build();
     }
 }

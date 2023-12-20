@@ -7,7 +7,6 @@ import com.dormitory.backend.api.SelectionTimeConfigRepository;
 import com.dormitory.backend.config.Code;
 import com.dormitory.backend.config.MyException;
 import com.dormitory.backend.pojo.*;
-import org.hibernate.annotations.NotFoundAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -61,12 +60,12 @@ public class DormitoryService {
     }
     public List<String> findBuilding(String location){
         location = location==null?"":location;
-        return dormitoryRepository.findBuilding("%"+location+"%");
+        return dormitoryRepository.findBuilding(location);
     }
     public List<String> findFloor(String location,String buildingName){
-        location = location==null?"":location;
-        buildingName = buildingName==null?"":buildingName;
-        return dormitoryRepository.findFloor("%"+location+"%","%"+buildingName+"%");
+        return dormitoryRepository.findFloor(
+                location,
+                buildingName);
     }
 
     public dormitory findById(String dormitoryId){
