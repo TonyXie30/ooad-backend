@@ -2,32 +2,18 @@ package com.dormitory.backend.web;
 
 import com.dormitory.backend.config.Code;
 import com.dormitory.backend.config.MyException;
-import com.dormitory.backend.pojo.CommentResponseDTO;
-import com.dormitory.backend.pojo.comment;
-import com.dormitory.backend.pojo.dormitory;
-import com.dormitory.backend.pojo.user;
+import com.dormitory.backend.pojo.*;
 import com.dormitory.backend.service.CommentService;
 import com.dormitory.backend.service.DormitoryService;
 import com.dormitory.backend.service.UserService;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import jakarta.transaction.Transactional;
-import org.springdoc.core.converters.models.Sort;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.support.PagedListHolder;
-import org.springframework.beans.support.SortDefinition;
-import org.springframework.cglib.core.Local;
-import org.springframework.context.annotation.Description;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
-import java.sql.Time;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -85,7 +71,7 @@ public class DormInfoController {
     @ResponseBody
     public void checkInDorm(@RequestParam String dormitoryId, @RequestParam String username,
                             @JsonPropertyDescription(value = "若不指定则后端会查询当前系统时间")
-                            @RequestParam(required = false) Date time){
+                            @RequestParam(required = false) Timestamp time){
         if (dormitoryId==null||username==null){
             throw new MyException(Code.MISSING_FIELD);
         }
@@ -121,24 +107,41 @@ public class DormInfoController {
         return ResponseEntity.ok(commentDTOs);
     }
 
+    @CrossOrigin
+    @PostMapping(value = "api/getSelectionTime")
+    @ResponseBody
+    public List<SelectionTimeConfig> getSelectionTime(@RequestParam(required = false) String gender,
+                                                      @RequestParam(required = false) String degree){
+        if (gender==null){
+            gender="";
+        }
+        if (degree==null){
+            degree="";
+        }
+        List<SelectionTimeConfig> configInDB = dormitoryService.getSelectionTimeList(gender,degree);
+        if (configInDB==null){
+            throw new MyException(Code.GENERAL_NOT_EXIST);
+        }
+        return configInDB;
+    }
 
     @CrossOrigin
     @PostMapping(value = "api/checkTime")
     @ResponseBody
     public boolean checkTime(@RequestParam String username,
                              @JsonPropertyDescription(value = "若不指定则后端会查询当前系统时间")
-                             @RequestParam(required = false) Date time){
+                             @RequestParam(required = false) Timestamp time){
         return checkTime_(username, time);
     }
 
 //    模板方法
-    public boolean checkTime_(String username, Date time){
+    public boolean checkTime_(String username, Timestamp time){
         user user = userService.findByUsername(username);
         return checkTime_(user,time);
     }
-    public boolean checkTime_(user user, Date time){
+    public boolean checkTime_(user user, Timestamp time){
         if(time==null){
-            time = new Date(new java.util.Date().getTime());
+            time = new Timestamp(new java.util.Date().getTime());
         }
         return userService.checkTimeValid(user, time);
     }
