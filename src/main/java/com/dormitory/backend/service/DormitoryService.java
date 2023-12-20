@@ -102,4 +102,12 @@ public class DormitoryService {
     public void deleteSelectionTime(SelectionTimeConfig configInDB) {
         selectionTimeConfigRepository.delete(configInDB);
     }
+
+    public void bookRoom(dormitory dormitory) {
+        bookRoom(dormitory,1);
+    }
+    public void bookRoom(dormitory dormitory, int bookedNum) {
+        dormitory.setBookedNum(dormitory.getBookedNum()+bookedNum);
+        dormitoryRepository.save(dormitory);
+    }
 }

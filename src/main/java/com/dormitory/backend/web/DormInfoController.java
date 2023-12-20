@@ -83,6 +83,7 @@ public class DormInfoController {
             if (dormitoryService.checkRoomAvailable(dormitoryId) && checkTime_(user,time)){
                 dormitory dormitory = dormitoryService.findById(dormitoryId);
                 userService.bookRoom(user,dormitory);
+                dormitoryService.bookRoom(dormitory);
             }
             else {
                 throw new MyException(Code.Room_Occupied);
