@@ -30,7 +30,7 @@ public class UserController {
     @CrossOrigin
     @PostMapping(value = "api/checkUserIsCheckedIn")
     @ResponseBody
-    public boolean checkUserIsCheckedIn(@RequestBody String username){
+    public boolean checkUserIsCheckedIn(@RequestParam String username){
         user userInDB = userService.findByUsername(username);
         return userInDB.getBookedDormitory()!=null;
     }
