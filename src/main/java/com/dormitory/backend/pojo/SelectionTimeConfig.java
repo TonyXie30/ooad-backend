@@ -1,14 +1,10 @@
 package com.dormitory.backend.pojo;
 
-import com.dormitory.backend.pojo.Degree;
-import com.dormitory.backend.pojo.Gender;
-import com.dormitory.backend.pojo.timeRange;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
-import java.sql.Date;
-import java.sql.Time;
+import java.sql.Timestamp;
 
 @Entity
 @Table(schema = "public",name = "selection_time_config")
@@ -30,13 +26,13 @@ public class SelectionTimeConfig {
 
     @JoinColumn(name = "start_time")
     @Schema
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
-    Date startTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    Timestamp startTime;
 
     @JoinColumn(name = "end_time")
     @Schema
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
-    Date endTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    Timestamp endTime;
 
     public Gender getGender() {
         return gender;
@@ -54,19 +50,19 @@ public class SelectionTimeConfig {
         this.degree = degree;
     }
 
-    public Date getStartTime() {
+    public Timestamp getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(Timestamp startTime) {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+    public Timestamp getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(Timestamp endTime) {
         this.endTime = endTime;
     }
     //    YYYY-MM-DD hh:mm:ss

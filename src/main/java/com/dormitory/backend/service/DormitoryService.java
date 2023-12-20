@@ -91,6 +91,11 @@ public class DormitoryService {
     public SelectionTimeConfig getSelectionTime(Gender gender, Degree degree){
         return selectionTimeConfigRepository.findByGenderAndDegree(gender,degree);
     }
+    public List<SelectionTimeConfig> getSelectionTimeList(String gender, String degree){
+        return selectionTimeConfigRepository.getSelectionTimeConfigListByGenderAndDegree(
+                gender,
+                degree);
+    }
     public List<comment> treeOfComments(dormitory dormitory){
         return commentRepository.findFirstLevelComments(dormitory);
     }

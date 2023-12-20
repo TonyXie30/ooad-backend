@@ -11,7 +11,9 @@ import com.dormitory.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 public class AdminDormInfoController {
@@ -91,17 +93,7 @@ public class AdminDormInfoController {
             return "create a new time slot";
         }
     }
-    @CrossOrigin
-    @PostMapping(value = "api/admin/getSelectionTime")
-    @ResponseBody
-    public SelectionTimeConfig getSelectionTime(@RequestParam String gender,@RequestParam String degree){
-        SelectionTimeConfig configInDB = dormitoryService.getSelectionTime(
-                userService.getGender(gender), userService.getDegree(degree));
-        if (configInDB==null){
-            throw new MyException(Code.GENERAL_NOT_EXIST);
-        }
-        return configInDB;
-    }
+
     @CrossOrigin
     @PostMapping(value = "api/admin/deleteSelectionTime")
     @ResponseBody

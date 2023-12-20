@@ -221,7 +221,7 @@ public class UserService{
                 LocalTime.parse(user.getBedtime().toString()),LocalTime.parse(user.getUptime().toString()),username);
     }
 
-    public boolean checkTimeValid(user user,Date time) {
+    public boolean checkTimeValid(user user,Timestamp time) {
         SelectionTimeConfig timeConfig = selectionTimeConfigRepository
                 .findByGenderAndDegree(user.getGender(),user.getDegree());
         if (timeConfig==null){
