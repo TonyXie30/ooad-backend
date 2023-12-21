@@ -32,6 +32,11 @@ public interface UserRepository extends JpaRepository<user, Long> {
           @Param("excludeUsername") String excludeUsername
   );
 
+  List<user> getByBookedDormitoryIsNotNull();
+
+  @Query("SELECT u FROM users u JOIN u.bookedDormitory d WHERE d.id = :dormitoryId")
+  List<user> findByCheckInedDormitoryId(@Param("dormitoryId") int dormitoryId);
+
 
 }
 

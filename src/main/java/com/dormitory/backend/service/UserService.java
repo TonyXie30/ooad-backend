@@ -229,4 +229,7 @@ public class UserService{
         }
         return time.after(timeConfig.getStartTime()) & time.before(timeConfig.getEndTime());
     }
+    public List<user> getRoomCheckInedUsers(Integer dormitoryid) {
+        return userRepository.findByCheckInedDormitoryId(dormitoryid);
+    }
 }
