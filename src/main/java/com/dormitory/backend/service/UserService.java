@@ -129,34 +129,24 @@ public class UserService{
     }
 
     public Page<user> getUsers(Integer page,Integer limit,String sort){
-        if(page != null && limit != null){
-            Sort sort_;
-            if (sort==null||sort.equals("+")){
-                sort_ = Sort.by("id").ascending();
-            } else {
-                sort_ = Sort.by("id").descending();
-            }
-
-            PageRequest pageable = PageRequest.of(page,limit,sort_);
-            return userRepository.findAll(pageable);
-        }else{
-            return new PageImpl<>(userRepository.findAll());
-        }
+        return getUsers(page,limit,sort, new String[]{"id"});
         // 调用 JpaRepository 的 findAll 方法，传入 Specification 对象
     }
     public Page<user> getUsers(Integer page,Integer limit,String sort,String[] attr){
-        Sort sort_;
-        if (sort==null||sort.equals("+")){
-            sort_ = Sort.by(attr).ascending();
-        } else {
-            sort_ = Sort.by(attr).descending();
-        }
+        return getUsersBy(page,limit,sort,attr,null);
+    }
+    public Page<user> getUsersBy(Integer page, Integer limit, String sort,
+                                 String[] attr, String by) {
+        Sort sort_ = getSort(sort, attr);
         if(page != null && limit != null){
             PageRequest pageable = PageRequest.of(page,limit,sort_);
-            return userRepository.findAll(pageable);
+            if(by==null)return userRepository.findAll(pageable);
+//            根据某一属性提取对应
+//            return userRepository.getBy(by,pageable);
         }else{
-            return new PageImpl<>(userRepository.findAll(sort_));
+            if(by==null)return new PageImpl<>(userRepository.findAll(sort_));
         }
+        return null;
     }
 
     public void deleteUser(user user) {
@@ -229,6 +219,21 @@ public class UserService{
         }
         return time.after(timeConfig.getStartTime()) & time.before(timeConfig.getEndTime());
     }
+
+    public List<user> getCheckInedUsers() {
+        return userRepository.getByBookedDormitoryIsNotNull();
+    }
+
+    private static Sort getSort(String sort, String[] attr) {
+        Sort sort_;
+        if (sort ==null|| sort.equals("+")){
+            sort_ = Sort.by(attr).ascending();
+        } else {
+            sort_ = Sort.by(attr).descending();
+        }
+        return sort_;
+    }
+
     public List<user> getRoomCheckInedUsers(Integer dormitoryid) {
         return userRepository.findByCheckInedDormitoryId(dormitoryid);
     }

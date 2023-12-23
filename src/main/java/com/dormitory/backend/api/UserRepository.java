@@ -2,6 +2,9 @@ package com.dormitory.backend.api;
 
 import com.dormitory.backend.pojo.UserProjection;
 import com.dormitory.backend.pojo.user;
+import org.springdoc.core.converters.models.PageableAsQueryParam;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -36,7 +39,5 @@ public interface UserRepository extends JpaRepository<user, Long> {
 
   @Query("SELECT u FROM users u JOIN u.bookedDormitory d WHERE d.id = :dormitoryId")
   List<user> findByCheckInedDormitoryId(@Param("dormitoryId") int dormitoryId);
-
-
 }
 

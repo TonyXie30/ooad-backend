@@ -153,6 +153,7 @@ public class UserController {
         user user = userService.findByUsername(username);
         return userService.checkMailbox(user);
     }
+
     @PostMapping(value = "api/getRoomCheckInedUsers")
     @ResponseBody
     public List<user> getRoomCheckInedUsers(@RequestParam Integer dormitoryid){
