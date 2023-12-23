@@ -52,8 +52,8 @@ public class DormitoryService {
         // 调用 JpaRepository 的 findAll 方法，传入 Specification 对象
         return new PageImpl<>(dormitoryRepository.findAll(spec,sort_));
     }
-    public boolean checkRoomAvailable(String dormitoryId){
-        dormitory dormitory = dormitoryRepository.findById(Integer.parseInt(dormitoryId));
+    public boolean checkRoomAvailable(Integer dormitoryId){
+        dormitory dormitory = dormitoryRepository.findById(dormitoryId);
         int bookedBed = dormitory.getBed();
         int bookedNumber = dormitory.getBookedNum();
         return bookedBed>bookedNumber;
@@ -68,8 +68,8 @@ public class DormitoryService {
                 buildingName);
     }
 
-    public dormitory findById(String dormitoryId){
-        return dormitoryRepository.findById(Integer.parseInt(dormitoryId));
+    public dormitory findById(Integer dormitoryId){
+        return dormitoryRepository.findById(dormitoryId);
     }
 
     public dormitory checkRoomExisted(dormitory dormitory){

@@ -41,7 +41,7 @@ public class AdminDormInfoController {
         if(dormitory==null){
             throw new MyException(Code.MISSING_FIELD);
         }
-        dormitory dor_DB = dormitoryService.findById(Integer.toString(dormitory.getId()));
+        dormitory dor_DB = dormitoryService.findById(dormitory.getId());
         if(dor_DB==null){
             throw new MyException(Code.DORMITORY_NOT_EXIST);
         }

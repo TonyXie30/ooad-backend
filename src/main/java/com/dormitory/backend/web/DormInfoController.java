@@ -57,7 +57,7 @@ public class DormInfoController {
     @CrossOrigin
     @PostMapping(value = "api/checkDorm")
     @ResponseBody
-    public boolean checkDormAvailableOrNot(@RequestParam String dormitoryId){
+    public boolean checkDormAvailableOrNot(@RequestParam Integer dormitoryId){
         if (dormitoryId==null){
             throw new MyException(Code.MISSING_FIELD);
         }
@@ -69,7 +69,7 @@ public class DormInfoController {
     @CrossOrigin
     @PostMapping(value = "api/checkInDorm")
     @ResponseBody
-    public void checkInDorm(@RequestParam String dormitoryId, @RequestParam String username,
+    public void checkInDorm(@RequestParam Integer dormitoryId, @RequestParam String username,
                             @JsonPropertyDescription(value = "若不指定则后端会查询当前系统时间")
                             @RequestParam(required = false) Timestamp time){
         if (dormitoryId==null||username==null){
@@ -93,7 +93,7 @@ public class DormInfoController {
     @PostMapping(value = "api/treeOfComments")
     @Transactional
     @ResponseBody
-    public ResponseEntity<List<CommentResponseDTO>> allComment(@RequestParam String dormitory_id){
+    public ResponseEntity<List<CommentResponseDTO>> allComment(@RequestParam Integer dormitory_id){
         dormitory dorm = dormitoryService.findById(dormitory_id);
         List<comment> lst =dormitoryService.treeOfComments(dorm);
         List<CommentResponseDTO> commentDTOs = lst
