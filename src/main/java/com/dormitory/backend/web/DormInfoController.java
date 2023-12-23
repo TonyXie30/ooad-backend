@@ -90,6 +90,22 @@ public class DormInfoController {
             }
         }
     }
+
+    @PostMapping(value = "api/checkOutDorm")
+    @ResponseBody
+    public void checkOutDorm(@RequestParam String username,@RequestParam Integer dormitoryid){
+        user user = userService.findByUsername(username);
+        dormitory dormitory = dormitoryService.findById(dormitoryid);
+        if(dormitory == null || user == null){
+            throw new MyException(Code.GENERAL_NOT_EXIST);
+        }
+        if(user.getBookedDormitory().getId()!=dormitoryid){
+            throw new MyException(Code.NOT_BOOKED_DORMITORY);
+        }
+        dormitoryService.checkOut(dormitory);
+        userService.checkOut(user);
+    }
+
     @PostMapping(value = "api/treeOfComments")
     @Transactional
     @ResponseBody

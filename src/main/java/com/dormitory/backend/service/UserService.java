@@ -237,4 +237,9 @@ public class UserService{
     public List<user> getRoomCheckInedUsers(Integer dormitoryid) {
         return userRepository.findByCheckInedDormitoryId(dormitoryid);
     }
+
+    public void checkOut(user user) {
+        user.setBookedDormitory(null);
+        userRepository.save(user);
+    }
 }

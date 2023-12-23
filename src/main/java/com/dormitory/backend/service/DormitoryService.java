@@ -110,4 +110,9 @@ public class DormitoryService {
         dormitory.setBookedNum(dormitory.getBookedNum()+bookedNum);
         dormitoryRepository.save(dormitory);
     }
+
+    public void checkOut(dormitory dormitory) {
+        dormitory.setBookedNum(dormitory.getBookedNum()-1);
+        dormitoryRepository.save(dormitory);
+    }
 }
