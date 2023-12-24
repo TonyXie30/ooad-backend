@@ -1,9 +1,6 @@
 package com.dormitory.backend.service;
 
-import com.dormitory.backend.api.CommentRepository;
-import com.dormitory.backend.api.DormitoryRepository;
-import com.dormitory.backend.api.DormitorySpecifications;
-import com.dormitory.backend.api.SelectionTimeConfigRepository;
+import com.dormitory.backend.api.*;
 import com.dormitory.backend.config.Code;
 import com.dormitory.backend.config.MyException;
 import com.dormitory.backend.pojo.*;
@@ -25,10 +22,15 @@ public class DormitoryService {
     SelectionTimeConfigRepository selectionTimeConfigRepository;
     @Autowired
     CommentRepository commentRepository;
+    @Autowired
+    UserRepository userRepository;
 
-    public Page<dormitory> findByHouseNumAndFloorAndBuildingNameAndLocation(
-            String houseNum, Integer floor, String buildingName, String location,Integer page,Integer limit,String sort){
-        Specification<dormitory> spec = DormitorySpecifications.findByCriteria(houseNum, floor, buildingName, location);
+    public Page<dormitory> findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree(
+            String houseNum, Integer floor, String buildingName, String location,
+            Gender gender, Degree degree,
+            Integer page,Integer limit,String sort){
+        Specification<dormitory> spec = DormitorySpecifications
+                .findByCriteria(houseNum, floor, buildingName, location, gender, degree);
         if(page != null && limit != null){
             Sort sort_ = Sort.by("location","buildingName","floor","houseNum");
             if (sort==null||sort.equals("+")){
@@ -45,10 +47,12 @@ public class DormitoryService {
         }
         // 调用 JpaRepository 的 findAll 方法，传入 Specification 对象
     }
-    public Page<dormitory> findByHouseNumAndFloorAndBuildingNameAndLocation(
-            String houseNum, Integer floor, String buildingName, String location){
+    public Page<dormitory> findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree(
+            String houseNum, Integer floor, String buildingName, String location,
+            Gender gender, Degree degree){
         Sort sort_ = Sort.by("location","buildingName","floor","houseNum").ascending();
-        Specification<dormitory> spec = DormitorySpecifications.findByCriteria(houseNum, floor, buildingName, location);
+        Specification<dormitory> spec = DormitorySpecifications
+                .findByCriteria(houseNum, floor, buildingName, location,gender,degree);
         // 调用 JpaRepository 的 findAll 方法，传入 Specification 对象
         return new PageImpl<>(dormitoryRepository.findAll(spec,sort_));
     }

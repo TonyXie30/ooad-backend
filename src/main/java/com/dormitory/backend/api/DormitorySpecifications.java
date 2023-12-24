@@ -1,5 +1,7 @@
 package com.dormitory.backend.api;
 
+import com.dormitory.backend.pojo.Degree;
+import com.dormitory.backend.pojo.Gender;
 import com.dormitory.backend.pojo.dormitory;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
@@ -9,7 +11,8 @@ import java.awt.print.Pageable;
 public class DormitorySpecifications {
 
     public static Specification<dormitory> findByCriteria(
-            String houseNum, Integer floor, String buildingName, String location) {
+            String houseNum, Integer floor, String buildingName, String location,
+            Gender gender, Degree degree) {
         return (root, query, criteriaBuilder) -> {
             // 构建查询条件
 
@@ -33,6 +36,14 @@ public class DormitorySpecifications {
             // 示例：如果 location 不为空，添加对 location 字段的查询条件
             if (location != null && !location.isEmpty()) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("location"), location));
+            }
+
+            if (gender != null) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("gender"), gender));
+            }
+
+            if (degree != null) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("degree"), degree));
             }
 
 

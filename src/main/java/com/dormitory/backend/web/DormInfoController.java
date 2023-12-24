@@ -32,13 +32,25 @@ public class DormInfoController {
     @ResponseBody
     public Page<dormitory> findDorm(@RequestParam(required = false) String houseNum, @RequestParam(required = false) Integer floor,
                                     @RequestParam(required = false) String buildingName, @RequestParam(required = false) String location,
+                                    @RequestParam(required = false) String username,
                                     @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit,
                                     @RequestParam(required = false) String sort
     ){
+        Gender gender = null;
+        Degree degree = null;
+        if(username!=null) {
+            user user = userService.findByUsername(username);
+            if (user != null){
+                gender = user.getGender();
+                degree = user.getDegree();
+            }
+        }
         if(page == null && limit == null){
-            return dormitoryService.findByHouseNumAndFloorAndBuildingNameAndLocation(houseNum, floor, buildingName, location);
+            return dormitoryService
+                    .findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree(houseNum, floor, buildingName, location, gender, degree);
         }else{
-            return dormitoryService.findByHouseNumAndFloorAndBuildingNameAndLocation(houseNum, floor, buildingName, location,page,limit,sort);
+            return dormitoryService
+                    .findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree(houseNum, floor, buildingName, location, gender, degree, page,limit,sort);
         }
     }
     @CrossOrigin
