@@ -35,9 +35,13 @@ public class SystemController {
     @ResponseBody
     public String exchangeApply(@RequestParam String username,@RequestParam String to){
         user user = userService.findByUsername(username);
-        user touser = userService.findByUsername(username);
+        user touser = userService.findByUsername(to);
         if (user==null) throw new MyException(Code.USER_NOT_EXIST);
         if (touser==null) throw new MyException(Code.USER_NOT_EXIST);
+        if (!user.getGender().getGender().equals(touser.getGender().getGender())||
+        !user.getDegree().getDegree().equals(touser.getDegree().getDegree())){
+            throw new MyException(Code.EXCHANGE_TYPE_NOT_MATCH);
+        }
         if (user.getBookedDormitory()==null && touser.getBookedDormitory()==null){
             throw new MyException(Code.EXCHANGE_NULL_DORMITORY);
         }
