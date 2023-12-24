@@ -22,7 +22,10 @@ public enum Code {
     GENERAL_NOT_EXIST(5110, "At least one attribute referring to not exist in database"),
     NOT_HAVE_THIS_MEMBER(5111, "The team don't have this member"),
     TIME_CONFIG_NOT_EXIST(5112, "Corresponding time configuration not exist in database"),
-    NOT_BOOKED_DORMITORY(5113, "This dormitory is not booked yet");
+    NOT_BOOKED_DORMITORY(5113, "This dormitory is not booked yet"),
+    EXCHANGE_APPLICATION_NOT_EXIST(5114, "Try to approve an exchange application that doesn't exist"),
+    EXCHANGE_SAME_DORMITORY(5115, "Cannot exchange to the same dormitory"),
+    EXCHANGE_NULL_DORMITORY(5116, "At least one student should have checked in a dormitory");
 
     private final int code;
     private final String msg;

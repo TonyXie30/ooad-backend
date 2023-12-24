@@ -242,4 +242,13 @@ public class UserService{
         user.setBookedDormitory(null);
         userRepository.save(user);
     }
+
+    public void exchangeRoom(user user1, user user2) {
+        dormitory temp1 = (user1.getBookedDormitory());
+        dormitory temp2 = (user2.getBookedDormitory());
+        user1.setBookedDormitory(temp2);
+        user2.setBookedDormitory(temp1);
+        userRepository.save(user1);
+        userRepository.save(user2);
+    }
 }
