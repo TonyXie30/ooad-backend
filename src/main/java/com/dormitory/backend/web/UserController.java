@@ -27,12 +27,13 @@ public class UserController {
     UserService userService;
     @Autowired
     CommentService commentService;
+
     @CrossOrigin
     @PostMapping(value = "api/checkUserIsCheckedIn")
     @ResponseBody
-    public boolean checkUserIsCheckedIn(@RequestParam String username){
+    public boolean checkUserIsCheckedIn(@RequestParam String username) {
         user userInDB = userService.findByUsername(username);
-        return userInDB.getBookedDormitory()!=null;
+        return userInDB.getBookedDormitory() != null;
     }
 
     @CrossOrigin
@@ -41,53 +42,53 @@ public class UserController {
     public Page<user> getUsers(@RequestParam(required = false) Integer page,
                                @RequestParam(required = false) Integer limit,
                                @RequestParam(required = false) String sort,
-                               @RequestParam(required = false,value = "sortBy[]") String[] sortBy){
+                               @RequestParam(required = false, value = "sortBy[]") String[] sortBy) {
 
-        if(sortBy==null) {
+        if (sortBy == null) {
             return userService.getUsers(page, limit, sort);
-        } else{
+        } else {
             List<String> sortByList = new ArrayList<>(List.of(sortBy));
             Field[] fields = user.class.getDeclaredFields();
             List<String> attr = new ArrayList<>();
-            for (Field f:fields) {
+            for (Field f : fields) {
                 f.setAccessible(true);
                 for (int i = 0; i < sortByList.size(); i++) {
                     String by = sortByList.get(i);
-                    if(by.equals(f.getName())){
+                    if (by.equals(f.getName())) {
                         attr.add(f.getName());
                         sortByList.remove(i);
-                        System.out.println("match: "+f.getName());
+                        System.out.println("match: " + f.getName());
                         break;
                     }
                 }
             }
-            return userService.getUsers(page, limit, sort,attr.toArray(new String[0]));
+            return userService.getUsers(page, limit, sort, attr.toArray(new String[0]));
         }
     }
 
     @CrossOrigin
     @PostMapping(value = "api/getUser")
     @ResponseBody
-    public user getUser(@RequestParam String username){
+    public user getUser(@RequestParam String username) {
         return userService.findByUsername(username);
     }
 
     @PostMapping(value = "api/getComment")
     @ResponseBody
-    public List<comment> getComment(@RequestParam Integer dormitoryId, @RequestParam Integer parentId){
-        if (dormitoryId==null) //在数据库中0就是null，输入0就是无parent
+    public List<comment> getComment(@RequestParam Integer dormitoryId, @RequestParam Integer parentId) {
+        if (dormitoryId == null) //在数据库中0就是null，输入0就是无parent
             throw new MyException(Code.MISSING_FIELD);
-        return userService.getComment(dormitoryId,parentId);
+        return userService.getComment(dormitoryId, parentId);
     }
 
-    @PostMapping(value = "api/setComment",produces = "application/json")
+    @PostMapping(value = "api/setComment", produces = "application/json")
     @Transactional
     @ResponseBody
-    public Map<String,Object> setComment(@RequestParam String username, @RequestParam String dormitoryId, @RequestParam String content, @RequestParam(required = false) Integer parentId){
-        if (username==null||dormitoryId==null)
+    public Map<String, Object> setComment(@RequestParam String username, @RequestParam String dormitoryId, @RequestParam String content, @RequestParam(required = false) Integer parentId) {
+        if (username == null || dormitoryId == null)
             throw new MyException(Code.MISSING_FIELD);
-        comment comment = userService.setComment(username,dormitoryId,content,parentId);
-        Map<String,Object> map = new HashMap<>();
+        comment comment = userService.setComment(username, dormitoryId, content, parentId);
+        Map<String, Object> map = new HashMap<>();
         map.put("comment_id", comment.getId());
         map.put("parent_id", comment.getParent().getId());
         map.put("create_time", comment.getCreate_time());
@@ -98,7 +99,7 @@ public class UserController {
     @PostMapping(value = "api/getBookMark")
     @Transactional
     @ResponseBody
-    public List<dormitory> getBookMark(@RequestParam String username){
+    public List<dormitory> getBookMark(@RequestParam String username) {
         user author = userService.findByUsername(username);
         return userService.getBookMark(author);
     }
@@ -107,55 +108,56 @@ public class UserController {
     @PostMapping(value = "api/setBookMark")
     @Transactional
     @ResponseBody
-    public void setBookMark(@RequestParam String dormitoryId,@RequestParam String username){
-        if (username==null||dormitoryId==null)
+    public void setBookMark(@RequestParam String dormitoryId, @RequestParam String username) {
+        if (username == null || dormitoryId == null)
             throw new MyException(Code.MISSING_FIELD);
-        userService.setBookMark(dormitoryId,username);
+        userService.setBookMark(dormitoryId, username);
     }
 
     @PostMapping(value = "api/setFavourTime")
     @ResponseBody
     public void setFavourTime(@RequestParam String username,
                               @RequestParam @Schema(description = "hh:mm:ss (请先在timeRange表插入数据)") Time time,
-                              @RequestParam @Schema(description = "标识设置起床或入睡，0表示起床，1表示睡觉") Integer type){
+                              @RequestParam @Schema(description = "标识设置起床或入睡，0表示起床，1表示睡觉") Integer type) {
 //        type:0 - 起床，1 - 睡觉
 //        start 的 01 分别表示时间段的 起止
-        if(username==null||time==null||type==null){
+        if (username == null || time == null || type == null) {
             throw new MyException(Code.MISSING_FIELD);
         }
 
         user userInDB = userService.findByUsername(username);
 
         timeRange time_ = userService.findTimeSlot(time);
-        if(time_==null){
+        if (time_ == null) {
             throw new MyException(Code.TIME_NOT_EXIST);
         }
 
-        if(type==0){
-            userService.setUpTime(userInDB,time_);
-        } else if (type==1) {
-            userService.setBedTime(userInDB,time_);
+        if (type == 0) {
+            userService.setUpTime(userInDB, time_);
+        } else if (type == 1) {
+            userService.setBedTime(userInDB, time_);
         }
     }
 
     @PostMapping(value = "api/communicate")
     @ResponseBody
-    public void communicate(@RequestParam String receiver_name,@RequestParam String sender_name,
-                            @RequestParam String content){
+    public void communicate(@RequestParam String receiver_name, @RequestParam String sender_name,
+                            @RequestParam String content) {
         user sender = userService.findByUsername(sender_name);
         user receiver = userService.findByUsername(receiver_name);
-        userService.communicate(sender,receiver,content);
+        userService.communicate(sender, receiver, content);
     }
 
     @PostMapping(value = "api/checkMailbox")
     @ResponseBody
-    public List<Notification> checkMailbox(@RequestParam String username){
+    public List<Notification> checkMailbox(@RequestParam String username) {
         user user = userService.findByUsername(username);
         return userService.checkMailbox(user);
     }
 
     @PostMapping(value = "api/getRoomCheckInedUsers")
     @ResponseBody
-    public List<user> getRoomCheckInedUsers(@RequestParam Integer dormitoryid){
+    public List<user> getRoomCheckInedUsers(@RequestParam Integer dormitoryid) {
         return userService.getRoomCheckInedUsers(dormitoryid);
+    }
 }
