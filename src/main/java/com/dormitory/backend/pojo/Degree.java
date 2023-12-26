@@ -8,10 +8,6 @@ import jakarta.persistence.*;
 @Schema
 public class Degree {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "degree_id")
-    @Schema
-    int id;
     @Column(unique = true)
     @Schema
     String degree;
@@ -20,14 +16,6 @@ public class Degree {
         this.degree = degree;
     }
     public Degree(){}
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getDegree() {
         return degree;
@@ -40,5 +28,16 @@ public class Degree {
     @Override
     public String toString() {
         return degree;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (this.getClass() != obj.getClass()) {
+            return false;
+        }
+        return this.degree.equals(((Degree) obj).getDegree());
     }
 }

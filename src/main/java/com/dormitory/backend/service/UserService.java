@@ -195,12 +195,6 @@ public class UserService{
         }
     }
 
-    public Gender getGender(String gender){
-        return genderRepository.findByGender(gender);
-    }
-    public Degree getDegree(String degree){
-        return degreeRepository.findByDegree(degree);
-    }
     public List<UserProjection> recommendFriend(String username){
         user user = userRepository.findByUsername(username);
         if (user==null)
@@ -250,5 +244,9 @@ public class UserService{
         user2.setBookedDormitory(temp1);
         userRepository.save(user1);
         userRepository.save(user2);
+    }
+
+    public user updateUser(user user) {
+        return userRepository.save(user);
     }
 }

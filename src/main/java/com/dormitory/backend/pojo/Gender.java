@@ -7,11 +7,8 @@ import jakarta.persistence.*;
 @Table(schema = "public")
 @Schema
 public class Gender {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "gender_id")
-    @Schema
-    int id;
     @Column(unique = true)
     @Schema
     String gender;
@@ -20,14 +17,6 @@ public class Gender {
         this.gender = gender;
     }
     public Gender(){}
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getGender() {
         return gender;
@@ -40,5 +29,16 @@ public class Gender {
     @Override
     public String toString() {
         return gender;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (this.getClass() != obj.getClass()) {
+            return false;
+        }
+        return this.gender.equals(((Gender) obj).getGender());
     }
 }

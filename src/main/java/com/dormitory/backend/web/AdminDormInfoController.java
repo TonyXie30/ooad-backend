@@ -30,8 +30,8 @@ public class AdminDormInfoController {
         if(dormitory==null||dormitory.getGender().getGender()==null||dormitory.getDegree().getDegree()==null){
             throw new MyException(Code.MISSING_FIELD);
         }
-        dormitory.setGender(userService.getGender(dormitory.getGender().getGender()));
-        dormitory.setDegree(userService.getDegree(dormitory.getDegree().getDegree()));
+        dormitory.setGender(dormitory.getGender());
+        dormitory.setDegree(dormitory.getDegree());
         return dormitoryService.addDormitory(dormitory);
     }
     @CrossOrigin
@@ -45,10 +45,10 @@ public class AdminDormInfoController {
         if(dor_DB==null){
             throw new MyException(Code.DORMITORY_NOT_EXIST);
         }
-        if (dormitory.getGender()!=null && !Objects.equals(dormitory.getGender().getGender(), dor_DB.getGender().getGender()))
-            dor_DB.setGender(userService.getGender(dormitory.getGender().getGender()));
-        if (dormitory.getDegree()!=null && !Objects.equals(dormitory.getDegree().getDegree(), dor_DB.getDegree().getDegree()))
-            dor_DB.setDegree(userService.getDegree(dormitory.getDegree().getDegree()));
+        if (dormitory.getGender()!=null && !Objects.equals(dormitory.getGender(), dor_DB.getGender()))
+            dor_DB.setGender(dormitory.getGender());
+        if (dormitory.getDegree()!=null && !Objects.equals(dormitory.getDegree(), dor_DB.getDegree()))
+            dor_DB.setDegree(dormitory.getDegree());
         if (dormitory.getFloor()!=0 && dormitory.getFloor()!=dor_DB.getFloor())
             dor_DB.setFloor(dormitory.getFloor());
         if (dormitory.getBuildingName()!=null && !Objects.equals(dormitory.getBuildingName(), dor_DB.getBuildingName()))
@@ -111,12 +111,8 @@ public class AdminDormInfoController {
         if(config.getGender()==null||config.getDegree()==null){
             throw new MyException(Code.MISSING_FIELD);
         }
-        Gender gender = userService.getGender(config
-                .getGender() //获取Gender对象
-                .getGender() /*获取Gender名*/);
-        Degree degree = userService.getDegree(config
-                .getDegree() //获取Gender对象
-                .getDegree() /*获取Gender名*/);
+        Gender gender = config.getGender();
+        Degree degree = config.getDegree();
         if(gender==null||degree==null){
             throw new MyException(Code.GENERAL_NOT_EXIST);
         }

@@ -38,8 +38,8 @@ public class SystemController {
         user touser = userService.findByUsername(to);
         if (user==null) throw new MyException(Code.USER_NOT_EXIST);
         if (touser==null) throw new MyException(Code.USER_NOT_EXIST);
-        if (!user.getGender().getGender().equals(touser.getGender().getGender())||
-        !user.getDegree().getDegree().equals(touser.getDegree().getDegree())){
+        if (!user.getGender().equals(touser.getGender())||
+        !user.getDegree().equals(touser.getDegree())){
             throw new MyException(Code.EXCHANGE_TYPE_NOT_MATCH);
         }
         if (user.getBookedDormitory()==null && touser.getBookedDormitory()==null){
