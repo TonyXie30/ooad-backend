@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -94,6 +96,48 @@ public class UserController {
         map.put("create_time", comment.getCreate_time());
         return map;
     }
+    @PostMapping(value = "api/updateUser")
+    @Transactional
+    @ResponseBody
+    public user updateUser(@RequestBody user user) {
+        if(user.getUsername()==null){
+            throw new MyException(Code.MISSING_FIELD);
+        }
+        user userInDB = userService.findByUsername(user.getUsername());
+        if (userInDB == null){
+            throw new MyException(Code.USER_NOT_EXIST);
+        }
+        Field[] fieldsDB = userInDB.getClass().getDeclaredFields();
+        Field[] fields =  user.getClass().getDeclaredFields();
+        try {
+            for (Field fieldDB:fieldsDB) {
+                for (Field field : fields) {
+                    fieldDB.setAccessible(true);
+                    field.setAccessible(true);
+                    String attributeName=field.getName();
+                    if(attributeName.equals("bookedDormitory") || attributeName.equals("bookmark")){
+                        continue;
+                    }
+                    if (field.getName().equals(fieldDB.getName()) &&
+                            field.get(user) != null &&
+                            !field.get(user).equals(fieldDB.get(userInDB))){
+
+
+                        String methodName=attributeName.substring(0,1).toUpperCase()+attributeName.substring(1);
+
+                        Method set = userInDB
+                                .getClass()
+                                .getMethod("set" + methodName,fieldDB.getType());
+                        set.invoke(userInDB, field.get(user));
+                    }
+                }
+            }
+        }catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+        return userService.updateUser(userInDB);
+    }
+
 
 
     @PostMapping(value = "api/getBookMark")
