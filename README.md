@@ -77,5 +77,7 @@ given by front-end, then re-assemble the object before saving it.
 
 ### Subject information
 
+At src/main/resources/subject.sql,
+
 ![subject](img.png)
 
