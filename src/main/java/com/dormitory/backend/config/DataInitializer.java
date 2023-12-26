@@ -35,6 +35,12 @@ public class DataInitializer implements ApplicationRunner {
         System.out.println("degree initialization success");
     }
 
+    public void subjectInitialization() {
+        String sql = readSQLFile(new File("src/main/resources/subject.sql"));
+        jdbcTemplate.execute(sql);
+        System.out.println("subject initialization success");
+    }
+
     public void systemInitialization(){
         String sql = "INSERT INTO users(admin,password,username) " +
                 "VALUES (true,'system','System') ON CONFLICT(username) do nothing ;";
@@ -46,6 +52,7 @@ public class DataInitializer implements ApplicationRunner {
         timeRangeInitialization();
         genderInitialization();
         degreeInitialization();
+        subjectInitialization();
         systemInitialization();
     }
 }

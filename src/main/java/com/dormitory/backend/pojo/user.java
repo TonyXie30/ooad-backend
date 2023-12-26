@@ -3,8 +3,6 @@ package com.dormitory.backend.pojo;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import java.util.List;
 
@@ -21,9 +19,6 @@ public class user {
     @Column(nullable = false,unique = true)
     @Schema
     private String username;
-    @Column(nullable = false)
-    @Schema
-    private String password;
     @ManyToOne
     @JoinColumn(name = "gender",referencedColumnName = "gender")
     @Schema
@@ -33,9 +28,12 @@ public class user {
     @Schema
     private Degree degree;
     @ManyToOne
-    @JoinColumn(name = "subject_id")
+    @JoinColumn(name = "subject_id",referencedColumnName = "subject_id")
     @Schema
-    private subject subject;
+    private Subject subject;
+    @Column(nullable = false)
+    @Schema
+    private String password;
     @ManyToOne
     @JoinColumn(name = "bedtime",referencedColumnName = "timeslot")
     @Schema
@@ -52,8 +50,6 @@ public class user {
     @JoinColumn(name = "dormitory_id")
     @Schema
     private dormitory bookedDormitory;
-
-
     @ManyToOne
     @JoinTable(name = "leader_id")
     @Schema
@@ -129,11 +125,11 @@ public class user {
         this.bookedDormitory = bookedDormitory;
     }
 
-    public subject getSubject() {
+    public Subject getSubject() {
         return subject;
     }
 
-    public void setSubject(subject subject) {
+    public void setSubject(Subject subject) {
         this.subject = subject;
     }
 
