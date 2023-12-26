@@ -1,5 +1,9 @@
 package com.dormitory.backend.pojo;
 
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.dormitory.backend.converter.DegreeConverter;
+import com.dormitory.backend.converter.GenderConverter;
+import com.dormitory.backend.converter.SubjectConverter;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -11,28 +15,29 @@ import java.util.List;
 @Table(schema = "public")
 @Schema
 public class user {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    @Schema
-    private int id;
+
     @Column(nullable = false,unique = true)
     @Schema
+    @ExcelProperty(value = "姓名")
     private String username;
     @ManyToOne
     @JoinColumn(name = "gender",referencedColumnName = "gender")
     @Schema
+    @ExcelProperty(value = "性别", converter = GenderConverter.class)
     private Gender gender;
     @ManyToOne
     @JoinColumn(name = "degree",referencedColumnName = "degree")
     @Schema
+    @ExcelProperty(value = "学位", converter = DegreeConverter.class)
     private Degree degree;
     @ManyToOne
     @JoinColumn(name = "subject_id",referencedColumnName = "subject_id")
     @Schema
+    @ExcelProperty(value = "专业代码", converter = SubjectConverter.class)
     private Subject subject;
     @Column(nullable = false)
     @Schema
+    @ExcelProperty(value = "密码")
     private String password;
     @ManyToOne
     @JoinColumn(name = "bedtime",referencedColumnName = "timeslot")
@@ -55,6 +60,11 @@ public class user {
     @Schema
     @JsonBackReference //防止json打印无限递归
     private user leaderId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    @Schema
+    private int id;
 
     @Column
     @Schema

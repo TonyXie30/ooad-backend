@@ -9,6 +9,7 @@ import com.dormitory.backend.service.CommentService;
 import com.dormitory.backend.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,11 +26,12 @@ public class AdminUserController {
      *
      * @param file excel表格（.xlsx/.xls/.csv）
      */
-    @CrossOrigin
-    @PostMapping("api/admin/user/register/upload")
+    @CrossOrigin("http://localhost:8080")
+    @PostMapping(path = "api/admin/user/register/upload",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseBody
-    public void createAccountsByExcel(MultipartFile file){
+    public void createAccountsByExcel(@RequestPart("file") MultipartFile file){
         try{
+            System.out.println("upload...");
             // 这里默认每次会读取100条数据 然后返回过来 直接调用使用数据就行
             // 具体需要返回多少行可以在`PageReadListener`的构造函数第二项添加指定
 //            .read()中，第一个参数输入文件（也支持文件路径），第二个参数指定每行映射到的类，
@@ -47,7 +49,12 @@ public class AdminUserController {
 //                        允许密码留空，默认密码123456
                         newUser.setPassword("123456");
                     }
+                    if(userService.findByUsername(newUser.getUsername())!=null){
+//                        不允许有同一用户名。
+                        continue;
+                    }
                     userService.register(newUser);
+                    userService.teamUp(newUser,newUser);
                 }
             })).sheet().doRead();
         } catch (IOException e) {

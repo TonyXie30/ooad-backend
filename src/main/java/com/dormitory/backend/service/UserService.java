@@ -32,6 +32,8 @@ public class UserService{
     @Autowired
     GenderRepository genderRepository;
     @Autowired
+    SubjectRepository subjectRepository;
+    @Autowired
     SelectionTimeConfigRepository selectionTimeConfigRepository;
 
     public user findByUsername(String username) {
@@ -248,5 +250,11 @@ public class UserService{
 
     public user updateUser(user user) {
         return userRepository.save(user);
+    }
+
+    public Subject getSubject(String subjectId) {
+        Subject temp = subjectRepository.findById(subjectId);
+        System.out.println(temp.getname());
+        return temp;
     }
 }
