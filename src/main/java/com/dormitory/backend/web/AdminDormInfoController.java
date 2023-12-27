@@ -1,19 +1,23 @@
 package com.dormitory.backend.web;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.support.ExcelTypeEnum;
+import com.alibaba.excel.write.metadata.style.WriteCellStyle;
+import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
 import com.dormitory.backend.config.Code;
 import com.dormitory.backend.config.MyException;
-import com.dormitory.backend.pojo.Degree;
-import com.dormitory.backend.pojo.Gender;
-import com.dormitory.backend.pojo.SelectionTimeConfig;
-import com.dormitory.backend.pojo.dormitory;
+import com.dormitory.backend.pojo.*;
 import com.dormitory.backend.service.DormitoryService;
 import com.dormitory.backend.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @RestController
 public class AdminDormInfoController {
@@ -76,6 +80,55 @@ public class AdminDormInfoController {
         return dormitory;
     }
 
+
+    public void exportSelectionInformation(){
+
+    }
+
+    /*导出周计划*/
+//    https://huaweicloud.csdn.net/63876ecfdacf622b8df8c069.html
+    @CrossOrigin("http://localhost:8080")
+    @PostMapping(path = "api/admin/selectionInfo/export")
+    @ResponseBody
+    public void exportSelectionInformationExcel(@RequestParam(required = false) String location,
+                                                     @RequestParam(required = false) String buildingName,
+                                                     @RequestParam(required = false) String floor,
+                                                     @RequestParam(required = false) String houseNum,
+                                                     @RequestParam(required = false) String fileName,
+                                                     HttpServletResponse response) throws Exception{
+        if(fileName==null){
+            fileName = "Dormitory_Selection_Information";
+        }
+        location = location==null?"":location;
+        buildingName = buildingName==null?"":buildingName;
+        floor = floor==null?"":floor;
+        houseNum = houseNum==null?"":houseNum;
+
+        //文件名含中文需要转码
+        String fileNameFull =
+                URLEncoder.encode(fileName + ".xlsx", StandardCharsets.UTF_8);
+        //将需要导出的数据从数据库中查出
+        List<SelectionInfoExcelData> list = dormitoryService.getSelectionInfo(location, buildingName, floor, houseNum);
+
+        WriteCellStyle headWriteCellStyle = new WriteCellStyle();
+        //设置头居中
+        headWriteCellStyle.setHorizontalAlignment(HorizontalAlignment.CENTER);
+        //内容策略
+        WriteCellStyle contentWriteCellStyle = new WriteCellStyle();
+        //设置 水平居中
+        contentWriteCellStyle.setHorizontalAlignment(HorizontalAlignment.LEFT);
+        HorizontalCellStyleStrategy horizontalCellStyleStrategy = new HorizontalCellStyleStrategy(headWriteCellStyle, contentWriteCellStyle); //由于自定义了合并策略，所以此处默认合并策略并未使用
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setCharacterEncoding("utf-8");
+        response.setHeader("Content-Disposition", "attachment;filename=" + fileNameFull);
+        //将OutputStream对象附着到EasyExcel的ExcelWriter实例
+        EasyExcel.write(response.getOutputStream(), SelectionInfoExcelData.class) //（输出流， 文件头）
+                .excelType(ExcelTypeEnum.XLSX)
+                .autoCloseStream(false)
+                .sheet("Dormitory Selection Information") //第一个sheet的名
+                .doWrite(list); //写入数据
+    }
+
     @CrossOrigin
     @PostMapping(value = "api/admin/setSelectionTime")
     @ResponseBody
@@ -120,4 +173,5 @@ public class AdminDormInfoController {
         config.setGender(gender);
         return config;
     }
+
 }

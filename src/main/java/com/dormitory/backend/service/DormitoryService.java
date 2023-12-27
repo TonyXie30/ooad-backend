@@ -119,4 +119,9 @@ public class DormitoryService {
         dormitory.setBookedNum(dormitory.getBookedNum()-1);
         dormitoryRepository.save(dormitory);
     }
+
+    public List<SelectionInfoExcelData> getSelectionInfo(String location, String buildingName,
+                                                         String floor, String houseNum) {
+        return dormitoryRepository.getSelectionInfoData(location, buildingName, String.valueOf(floor), houseNum);
+    }
 }
