@@ -59,6 +59,9 @@ public class UserService{
     public void bookRoom(user user, dormitory dorm){
         user.setBookedDormitory(dorm);
         List<user> members = findByLeaderId(user);
+        for (user member:members){
+            member.setBookedDormitory(dorm);
+        }
         userRepository.saveAll(members); //contains leader
     }
     public List<user> findByLeaderId(user user){
@@ -197,7 +200,18 @@ public class UserService{
     public List<user> getUsersByBookmarkedDormitoryId(int dormitoryId) {
         return userRepository.findByBookmarkedDormitoryId(dormitoryId);
     }
-
+    public void requestTeamUp(user leader, user sender){
+        user system = userRepository.findByUsername("System");
+        communicate(system, leader, """
+                Notification:
+                    There's a new application for your team. Please check his profile and decide whether he would join the team.
+                    Here's his brief introduction:
+                    id: %d,
+                    name: %s,
+                    gender: %s,
+                    subject: %s
+                """.formatted(sender.getId(),sender.getUsername(),sender.getGender().toString(),sender.getSubject().getname()));
+    }
     public void disbandTeam(user leader) {
         List<user> group_member = userRepository.findByLeaderId(leader);
         leader.setLeaderId(leader);

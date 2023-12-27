@@ -111,5 +111,17 @@ public class TeamController {
         return new Team(userList,user.getLeaderId(),userList.size());
     }
 
-//    TODO:申请换宿舍
+    @CrossOrigin("http://localhost:8080")
+    @PostMapping(value = "api/requestTeamUp")
+    @ResponseBody
+    public void requestTeamUp(String leaderName, String username){
+        if (leaderName==null)
+            throw new MyException(Code.MISSING_FIELD);
+        user leader = userService.findByUsername(leaderName);
+        user sender = userService.findByUsername(username);
+        if (leader==null||sender==null)
+            throw new MyException(Code.USER_NOT_EXIST);
+        userService.requestTeamUp(leader,sender);
+    }
+
 }
