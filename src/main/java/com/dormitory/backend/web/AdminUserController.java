@@ -49,10 +49,11 @@ public class AdminUserController {
 //                        允许密码留空，默认密码123456
                         newUser.setPassword("123456");
                     }
-                    if(userService.findByUsername(newUser.getUsername())!=null){
+                    if(userService.findByUsernameUnCheck(newUser.getUsername())!=null){
 //                        不允许有同一用户名。
                         continue;
                     }
+                    newUser.setAdmin(false);
                     userService.register(newUser);
                     userService.teamUp(newUser,newUser);
                 }

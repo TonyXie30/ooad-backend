@@ -41,10 +41,12 @@ public interface UserRepository extends JpaRepository<user, Long> {
   @Query("SELECT u FROM users u JOIN u.bookedDormitory d WHERE d.id = :dormitoryId")
   List<user> findByCheckInedDormitoryId(@Param("dormitoryId") int dormitoryId);
 
-  @Query(value="SELECT u FROM users u WHERE u.username != :username and u.gender= :gender and u.degree = :degree")
-  Page<user> findPageFilterByUser(String username, Gender gender, Degree degree,Pageable pageable);
+  @Query(value="SELECT u FROM users u WHERE u.username != :#{#hostUser.username} and " +
+          "u.gender= :#{#hostUser.gender} and u.degree = :#{#hostUser.degree}")
+  Page<user> findPageFilterByUser(user hostUser,Pageable pageable);
 
-  @Query(value="SELECT u FROM users u WHERE u.username != :username and u.gender= :gender and u.degree = :degree")
-  List<user> findFilterByUser(String username, Gender gender, Degree degree);
+  @Query(value="SELECT u FROM users u WHERE u.username != :#{#hostUser.username} and " +
+          "u.gender= :#{#hostUser.gender} and u.degree = :#{#hostUser.degree}")
+  List<user> findFilterByUser(user hostUser);
 }
 

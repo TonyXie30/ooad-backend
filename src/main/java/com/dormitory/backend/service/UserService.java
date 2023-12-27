@@ -155,7 +155,7 @@ public class UserService{
         else {
             System.out.println(user.getUsername());
             return userRepository
-                    .findPageFilterByUser(user.getUsername(),user.getGender(),user.getDegree(),pageable);
+                    .findPageFilterByUser(user,pageable);
         }
 //        if(page != null && limit != null){
 //            PageRequest pageable = PageRequest.of(page,limit,sort_);
