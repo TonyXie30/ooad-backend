@@ -132,23 +132,39 @@ public class UserService{
 
     public Page<user> getUsers(Integer page,Integer limit,String sort){
         return getUsers(page,limit,sort, new String[]{"id"});
-        // 调用 JpaRepository 的 findAll 方法，传入 Specification 对象
     }
     public Page<user> getUsers(Integer page,Integer limit,String sort,String[] attr){
         return getUsersBy(page,limit,sort,attr,null);
     }
+    public Page<user> getUsers(Integer page, Integer limit, String sort, user hostUser, String[] attr) {
+        return getUsersBy(page,limit,sort,attr,hostUser);
+    }
     public Page<user> getUsersBy(Integer page, Integer limit, String sort,
-                                 String[] attr, String by) {
+                                 String[] attr, user user) {
         Sort sort_ = getSort(sort, attr);
+        PageRequest pageable;
         if(page != null && limit != null){
-            PageRequest pageable = PageRequest.of(page,limit,sort_);
-            if(by==null)return userRepository.findAll(pageable);
-//            根据某一属性提取对应
-//            return userRepository.getBy(by,pageable);
-        }else{
-            if(by==null)return new PageImpl<>(userRepository.findAll(sort_));
+            pageable = PageRequest.of(page,limit,sort_);
+        }else {
+            pageable = PageRequest.of(0,Integer.MAX_VALUE,sort_);
         }
-        return null;
+        if(user==null) return userRepository.findAll(pageable);
+        else {
+            System.out.println(user.getUsername());
+            return userRepository
+                    .findPageFilterByUser(user.getUsername(),user.getGender(),user.getDegree(),pageable);
+        }
+//        if(page != null && limit != null){
+//            PageRequest pageable = PageRequest.of(page,limit,sort_);
+//
+//        }else{
+//            if(user==null) return new PageImpl<>(userRepository.findAll(sort_));
+//            else {
+//                List<user> temp = userRepository
+//                        .findFilterByUser(user.getUsername(),user.getGender(),user.getDegree());
+//                return new PageImpl<>(temp);
+//            }
+//        }
     }
 
     public void deleteUser(user user) {
@@ -257,4 +273,6 @@ public class UserService{
         System.out.println(temp.getname());
         return temp;
     }
+
+
 }

@@ -1,10 +1,11 @@
 package com.dormitory.backend.api;
 
+import com.dormitory.backend.pojo.Degree;
+import com.dormitory.backend.pojo.Gender;
 import com.dormitory.backend.pojo.UserProjection;
 import com.dormitory.backend.pojo.user;
-import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -39,5 +40,11 @@ public interface UserRepository extends JpaRepository<user, Long> {
 
   @Query("SELECT u FROM users u JOIN u.bookedDormitory d WHERE d.id = :dormitoryId")
   List<user> findByCheckInedDormitoryId(@Param("dormitoryId") int dormitoryId);
+
+  @Query(value="SELECT u FROM users u WHERE u.username != :username and u.gender= :gender and u.degree = :degree")
+  Page<user> findPageFilterByUser(String username, Gender gender, Degree degree,Pageable pageable);
+
+  @Query(value="SELECT u FROM users u WHERE u.username != :username and u.gender= :gender and u.degree = :degree")
+  List<user> findFilterByUser(String username, Gender gender, Degree degree);
 }
 

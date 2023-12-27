@@ -44,26 +44,33 @@ public class UserController {
     public Page<user> getUsers(@RequestParam(required = false) Integer page,
                                @RequestParam(required = false) Integer limit,
                                @RequestParam(required = false) String sort,
+                               @RequestParam(required = false) String username,
                                @RequestParam(required = false, value = "sortBy[]") String[] sortBy) {
 
-        if (sortBy == null) {
-            return userService.getUsers(page, limit, sort);
-        } else {
-            List<String> sortByList = new ArrayList<>(List.of(sortBy));
-            Field[] fields = user.class.getDeclaredFields();
-            List<String> attr = new ArrayList<>();
-            for (Field f : fields) {
-                f.setAccessible(true);
-                for (int i = 0; i < sortByList.size(); i++) {
-                    String by = sortByList.get(i);
-                    if (by.equals(f.getName())) {
-                        attr.add(f.getName());
-                        sortByList.remove(i);
-                        System.out.println("match: " + f.getName());
-                        break;
-                    }
+        if (sortBy==null){
+            sortBy = new String[]{"id"};
+        }
+        List<String> sortByList = new ArrayList<>(List.of(sortBy));
+        Field[] fields = user.class.getDeclaredFields();
+        List<String> attr = new ArrayList<>();
+        for (Field f : fields) {
+            f.setAccessible(true);
+            for (int i = 0; i < sortByList.size(); i++) {
+                String by = sortByList.get(i);
+                if (by.equals(f.getName())) {
+                    attr.add(f.getName());
+                    sortByList.remove(i);
+                    System.out.println("match: " + f.getName());
+                    break;
                 }
             }
+        }
+
+        if (username!=null){
+            user hostUser = userService.findByUsername(username);
+            if(hostUser==null) throw new MyException(Code.USER_NOT_EXIST);
+            return userService.getUsers(page, limit, sort, hostUser, attr.toArray(new String[0]));
+        }else {
             return userService.getUsers(page, limit, sort, attr.toArray(new String[0]));
         }
     }
