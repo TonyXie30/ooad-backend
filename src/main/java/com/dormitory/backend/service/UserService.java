@@ -65,10 +65,10 @@ public class UserService{
         userRepository.saveAll(members); //contains leader
     }
     public List<user> findByLeaderId(user user){
-        return userRepository.findByLeaderId(user.getLeaderId());
+        return userRepository.findByLeaderId(user.getLeaderId().getId());
     }
     public List<user> findByLeaderId(String username){
-        return userRepository.findByLeaderId(findByUsername(username).getLeaderId());
+        return userRepository.findByLeaderId(findByUsername(username).getLeaderId().getId());
     }
     public void teamUp(user member, user leader){
         member.setLeaderId(leader);
@@ -213,7 +213,7 @@ public class UserService{
                 """.formatted(sender.getId(),sender.getUsername(),sender.getGender().toString(),sender.getSubject().getname()));
     }
     public void disbandTeam(user leader) {
-        List<user> group_member = userRepository.findByLeaderId(leader);
+        List<user> group_member = userRepository.findByLeaderId(leader.getId());
         leader.setLeaderId(leader);
         userRepository.save(leader);
         group_member.remove(leader);

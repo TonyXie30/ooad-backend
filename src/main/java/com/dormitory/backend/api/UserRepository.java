@@ -16,7 +16,9 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<user, Long> {
   user findByUsername(String username);
   user findById(int id);
-  List<user> findByLeaderId(user leaderId);
+
+  @Query("SELECT u from users u WHERE u.leaderId.id = :leaderId")
+  List<user> findByLeaderId(Integer leaderId);
   @Query("SELECT u FROM users u JOIN u.bookmark b WHERE b.id = :dormitoryId")
   List<user> findByBookmarkedDormitoryId(@Param("dormitoryId") int dormitoryId);
 
