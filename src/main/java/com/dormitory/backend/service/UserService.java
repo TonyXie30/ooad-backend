@@ -12,10 +12,15 @@ import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class UserService{
+
+
 
     @Autowired
     UserRepository userRepository;
@@ -288,5 +293,16 @@ public class UserService{
         return temp;
     }
 
-
+    public void saveExchangeApplicationCache(
+            ConcurrentHashMap<String, Set<String>> exchangeApplicationCache) {
+        exchangeApplicationCache.forEach((usr,fromSet)->{
+            user userInDB = findByUsername(usr);
+            Set<user> fromSetToDB = new HashSet<>();
+            fromSet.forEach(from->{
+                fromSetToDB.add(findByUsername(from));
+            });
+            userInDB.setExchangeApplication(fromSetToDB);
+            userRepository.save(userInDB);
+        });
+    }
 }

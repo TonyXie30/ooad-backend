@@ -4,11 +4,15 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import com.dormitory.backend.converter.DegreeConverter;
 import com.dormitory.backend.converter.GenderConverter;
 import com.dormitory.backend.converter.SubjectConverter;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity(name = "users")
@@ -65,6 +69,15 @@ public class user {
     @Column(name = "user_id")
     @Schema
     private int id;
+
+    @ManyToMany
+    @JoinTable(name = "exchange_application",
+            joinColumns = {@JoinColumn(name = "username",referencedColumnName = "username")},
+            inverseJoinColumns = {@JoinColumn(name = "from_username",referencedColumnName = "username")}
+    )
+    @Schema
+    @JsonIgnore
+    private Set<user> exchangeApplication;
 
     @Column
     @Schema
@@ -168,5 +181,33 @@ public class user {
     }
     public void insertBookmark(dormitory dormitory){
         this.bookmark.add(dormitory);
+    }
+
+    public Set<user> getExchangeApplication(){
+        return exchangeApplication;
+    }
+
+    public Set<String> getExchangeApplicationNameList() {
+        Set<String> set = new HashSet<>();
+        exchangeApplication.forEach(user -> set.add(user.getUsername()));
+        return set;
+    }
+
+
+    public void setExchangeApplication(Set<user> exchangeApplication) {
+        this.exchangeApplication = exchangeApplication;
+    }
+
+    @Override
+    public int hashCode() {
+        return username.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof user)){
+            throw new IllegalArgumentException("obj is not user");
+        }
+        return username.equals(((user) obj).getUsername());
     }
 }
