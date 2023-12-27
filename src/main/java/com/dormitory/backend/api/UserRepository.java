@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
 
 public interface UserRepository extends JpaRepository<user, Long> {
   user findByUsername(String username);
@@ -50,5 +51,8 @@ public interface UserRepository extends JpaRepository<user, Long> {
   @Query(value="SELECT u FROM users u WHERE u.username != :#{#hostUser.username} and " +
           "u.gender= :#{#hostUser.gender} and u.degree = :#{#hostUser.degree}")
   List<user> findFilterByUser(user hostUser);
+
+  @Query(value = "SELECT u.exchangeApplication FROM users u WHERE u.username = :username")
+  Set<user> findExchangeApplications(String username);
 }
 

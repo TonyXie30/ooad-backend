@@ -274,6 +274,10 @@ public class UserService{
         userRepository.save(user);
     }
 
+    public Set<user> getExchangeApplicationList(String username){
+        return userRepository.findExchangeApplications(username);
+    }
+
     public void exchangeRoom(user user1, user user2) {
         dormitory temp1 = (user1.getBookedDormitory());
         dormitory temp2 = (user2.getBookedDormitory());
@@ -293,16 +297,16 @@ public class UserService{
         return temp;
     }
 
-    public void saveExchangeApplicationCache(
-            ConcurrentHashMap<String, Set<String>> exchangeApplicationCache) {
-        exchangeApplicationCache.forEach((usr,fromSet)->{
-            user userInDB = findByUsername(usr);
-            Set<user> fromSetToDB = new HashSet<>();
-            fromSet.forEach(from->{
-                fromSetToDB.add(findByUsername(from));
-            });
-            userInDB.setExchangeApplication(fromSetToDB);
-            userRepository.save(userInDB);
-        });
-    }
+//    public void saveExchangeApplicationCache(
+//            ConcurrentHashMap<String, Set<String>> exchangeApplicationCache) {
+//        exchangeApplicationCache.forEach((usr,fromSet)->{
+//            user userInDB = findByUsername(usr);
+//            Set<user> fromSetToDB = new HashSet<>();
+//            fromSet.forEach(from->{
+//                fromSetToDB.add(findByUsername(from));
+//            });
+//            userInDB.setExchangeApplication(fromSetToDB);
+//            userRepository.save(userInDB);
+//        });
+//    }
 }
