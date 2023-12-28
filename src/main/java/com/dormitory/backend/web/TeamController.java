@@ -31,7 +31,16 @@ public class TeamController {
                 System.out.println("existed leader");
                 return member;
             }
-            userService.teamUp(member,leader);
+            if(member.getId()!=member.getLeaderId().getId()){
+//                先退队才能进队
+                throw new MyException(Code.ALREADY_IN_TEAM);
+            }
+            if(leader.getId()!=leader.getLeaderId().getId()){
+                user realLeader = userService.findByUsername(leader.getLeaderId().getUsername());
+                userService.teamUp(member,realLeader);
+            }else {
+                userService.teamUp(member, leader);
+            }
             return member;
         }catch (IllegalArgumentException e){
             System.out.println(e.getMessage());
@@ -114,14 +123,23 @@ public class TeamController {
     @CrossOrigin("http://localhost:8080")
     @PostMapping(value = "api/requestTeamUp")
     @ResponseBody
-    public void requestTeamUp(String leaderName, String username){
-        if (leaderName==null)
+    public void requestTeamUp(String leaderName, String username) {
+        if (leaderName == null)
             throw new MyException(Code.MISSING_FIELD);
+
         user leader = userService.findByUsername(leaderName);
         user sender = userService.findByUsername(username);
-        if (leader==null||sender==null)
+        if (leader == null || sender == null)
             throw new MyException(Code.USER_NOT_EXIST);
-        userService.requestTeamUp(leader,sender);
+        if (sender.getId() != sender.getLeaderId().getId()) {
+//            先退队才能申请加其他队
+            throw new MyException(Code.ALREADY_IN_TEAM);
+        }
+        if (leader.getId() != leader.getLeaderId().getId()) {
+            user realLeader = userService.findByUsername(leader.getLeaderId().getUsername());
+            userService.requestTeamUp(realLeader, sender);
+        } else {
+            userService.requestTeamUp(leader, sender);
+        }
     }
-
 }

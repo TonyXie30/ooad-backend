@@ -7,7 +7,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity(name = "Degree")
 @Table(schema = "public")
 @Schema
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class Degree {
     @Id
     @Column(unique = true)

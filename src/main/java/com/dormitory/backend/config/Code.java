@@ -26,7 +26,8 @@ public enum Code {
     EXCHANGE_APPLICATION_NOT_EXIST(5114, "Try to approve an exchange application that doesn't exist"),
     EXCHANGE_SAME_DORMITORY(5115, "Cannot exchange to the same dormitory"),
     EXCHANGE_NULL_DORMITORY(5116, "At least one student should have checked in a dormitory"),
-    EXCHANGE_TYPE_NOT_MATCH(5117, "Two students should be same gender and degree");
+    EXCHANGE_TYPE_NOT_MATCH(5117, "Two students should be same gender and degree"),
+    ALREADY_IN_TEAM(5118, "The member is already in a team");
 
     private final int code;
     private final String msg;
