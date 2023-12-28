@@ -105,4 +105,9 @@ public class SystemController {
 
         return userService.recommendFriend(username);
     }
+    @PostMapping("api/deleteNotification")
+    @ResponseBody
+    public void deleteNotification(@RequestParam long notification_id){
+        userService.deleteNotification(notification_id);
+    }
 }

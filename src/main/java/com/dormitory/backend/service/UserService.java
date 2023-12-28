@@ -296,6 +296,10 @@ public class UserService{
         System.out.println(temp.getname());
         return temp;
     }
+    public void deleteNotification(long id){
+        Notification notification = notificationRepository.findById(id);
+        notificationRepository.delete(notification);
+    }
 
 //    public void saveExchangeApplicationCache(
 //            ConcurrentHashMap<String, Set<String>> exchangeApplicationCache) {
