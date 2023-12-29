@@ -4,7 +4,14 @@ import com.dormitory.backend.api.*;
 import com.dormitory.backend.config.Code;
 import com.dormitory.backend.config.MyException;
 import com.dormitory.backend.pojo.*;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
+import jakarta.annotation.Resource;
+import org.apache.catalina.core.ApplicationContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -24,7 +31,6 @@ public class DormitoryService {
     CommentRepository commentRepository;
     @Autowired
     UserRepository userRepository;
-
     public Page<dormitory> findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree(
             String houseNum, Integer floor, String buildingName, String location,
             Gender gender, Degree degree,
@@ -72,6 +78,7 @@ public class DormitoryService {
                 buildingName);
     }
 
+    @Cacheable(cacheNames = "fetchById",cacheManager = "dormCacheManager", key = "#dormitoryId")
     public dormitory findById(Integer dormitoryId){
         return dormitoryRepository.findById(dormitoryId);
     }

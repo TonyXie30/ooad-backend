@@ -92,8 +92,9 @@ public class DormInfoController {
             if (user.getLeaderId().getId() != user.getId()){
                 throw new MyException(Code.UNAUTHORISED_NOT_LEADER);
             }
+            dormitory dormitory = dormitoryService.findById(dormitoryId);
+            if (dormitory==null) throw new MyException(Code.DORMITORY_NOT_EXIST);
             if (dormitoryService.checkRoomAvailable(dormitoryId) && checkTime_(user,time)){
-                dormitory dormitory = dormitoryService.findById(dormitoryId);
                 userService.bookRoom(user,dormitory);
                 dormitoryService.bookRoom(dormitory);
             }

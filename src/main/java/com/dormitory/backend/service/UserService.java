@@ -5,6 +5,7 @@ import com.dormitory.backend.config.Code;
 import com.dormitory.backend.config.MyException;
 import com.dormitory.backend.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +42,7 @@ public class UserService{
     @Autowired
     SelectionTimeConfigRepository selectionTimeConfigRepository;
 
+    @Cacheable(cacheNames = "fetchById",cacheManager = "userCacheManager", key = "#username")
     public user findByUsername(String username) {
         if(username==null){
             throw new MyException(Code.MISSING_FIELD);
@@ -51,6 +53,7 @@ public class UserService{
         }
         return userInDB;
     }
+
     public user findByUsernameUnCheck(String username) {
         if(username==null){
             throw new MyException(Code.MISSING_FIELD);
@@ -79,7 +82,7 @@ public class UserService{
         member.setLeaderId(leader);
         userRepository.save(member);
         //系统通知组队信息
-        user system = userRepository.findByUsername("System");
+        user system = findByUsername("System");
         communicate(system,member, """
                 Notification:
                     You have teamed up with the leader %s, whose id=%d. Please pay attention to that. If you have\s
@@ -97,7 +100,7 @@ public class UserService{
     }
     public comment setComment(String username, String dormitoryId, String content, Integer parentId){
         comment object = new comment(content);
-        user author = userRepository.findByUsername(username);
+        user author = findByUsername(username);
         object.setUser(author);
         dormitory dormitory1 = dormitoryRepository.findById(Integer.parseInt(dormitoryId));
         object.setDormitory(dormitory1);
@@ -111,7 +114,7 @@ public class UserService{
         }
         //info the user who add dorm as bookmark
         List<user> receiverGroup = getUsersByBookmarkedDormitoryId(Integer.parseInt(dormitoryId));
-        user system = userRepository.findByUsername("System");
+        user system = findByUsername("System");
         receiverGroup.forEach(user -> communicate(system, user, """
                 Notification:
                 The dormitory %s in %s Room%s you set as bookmark has new comments. Have a check! If you have\s
@@ -125,13 +128,13 @@ public class UserService{
         return commentRepository.findByDormitoryAndParent(dormitoryRepository.findById(dormitoryId), commentRepository.findById(parentId));
     }
     public void setBookMark(String dormitoryId,String username){
-        user author = userRepository.findByUsername(username);
+        user author = findByUsername(username);
         dormitory dorm = dormitoryRepository.findById(Integer.parseInt(dormitoryId));
         author.insertBookmark(dorm);
         userRepository.save(author);
     }
     public List<dormitory> getBookMark(String username){
-        user author = userRepository.findByUsername(username);
+        user author = findByUsername(username);
         return author.getBookmark();
     }
     public List<dormitory> getBookMark(user author){
@@ -206,7 +209,7 @@ public class UserService{
         return userRepository.findByBookmarkedDormitoryId(dormitoryId);
     }
     public void requestTeamUp(user leader, user sender){
-        user system = userRepository.findByUsername("System");
+        user system = findByUsername("System");
         communicate(system, leader, """
                 Notification:
                     There's a new application for your team. Please check his profile and decide whether he would join the team.
@@ -222,7 +225,7 @@ public class UserService{
         leader.setLeaderId(leader);
         userRepository.save(leader);
         group_member.remove(leader);
-        user system = userRepository.findByUsername("System");
+        user system = findByUsername("System");
         for (user member : group_member) {
             member.setLeaderId(member);
             userRepository.save(leader);
@@ -233,7 +236,7 @@ public class UserService{
     }
 
     public List<UserProjection> recommendFriend(String username){
-        user user = userRepository.findByUsername(username);
+        user user = findByUsername(username);
         if (user==null)
             throw new MyException(Code.USER_NOT_EXIST);
         if (user.getGender()==null||user.getDegree()==null||user.getBedtime()==null||user.getUptime()==null)
@@ -246,7 +249,7 @@ public class UserService{
         SelectionTimeConfig timeConfig = selectionTimeConfigRepository
                 .findByGenderAndDegree(user.getGender(),user.getDegree());
         if (timeConfig==null){
-            throw new  MyException(Code.TIME_CONFIG_NOT_EXIST);
+            return false;
         }
         return time.after(timeConfig.getStartTime()) & time.before(timeConfig.getEndTime());
     }

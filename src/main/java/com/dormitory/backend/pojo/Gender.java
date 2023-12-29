@@ -7,6 +7,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity(name = "Gender")
 @Table(schema = "public")
 @Schema
+
 public class Gender {
 
     @Id

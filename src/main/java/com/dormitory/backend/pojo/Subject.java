@@ -3,6 +3,7 @@ package com.dormitory.backend.pojo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import org.springframework.cache.annotation.Cacheable;
 
 @Entity(name = "subject")
 @Table(schema = "public")
@@ -17,6 +18,7 @@ public class Subject {
     @Schema
     String name;
 
+    @Cacheable("Subject_name")
     public String getname() {
         return name;
     }

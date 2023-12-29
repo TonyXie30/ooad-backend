@@ -39,6 +39,7 @@ public class LoginController {
         } else {
             session.setAttribute("username",user.getUsername());
             Hibernate.initialize(user.getBookmark());
+            Hibernate.initialize(user.getExchangeApplication());
 //            Hibernate.initialize(user.getBedtime());
 //            Hibernate.initialize(user.getWakeupTime());
             return user;
