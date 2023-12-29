@@ -5,6 +5,8 @@ import com.dormitory.backend.config.MyException;
 import com.dormitory.backend.pojo.*;
 import com.dormitory.backend.service.CommentService;
 import com.dormitory.backend.service.UserService;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,7 +106,11 @@ public class UserController {
     @PostMapping(value = "api/updateUser")
     @Transactional
     @ResponseBody
-    public user updateUser(@RequestBody user user) {
+    @Operation(summary = "更新用户个人信息",
+            description = "根据传入的username及其他个人信息来更新值，当传入属性为null/与原值相同/不是个人信息类时会被忽略")
+    public user updateUser(@RequestBody
+                               @JsonPropertyDescription(value = "必须传入username")
+                               user user) {
         if(user.getUsername()==null){
             throw new MyException(Code.MISSING_FIELD);
         }
