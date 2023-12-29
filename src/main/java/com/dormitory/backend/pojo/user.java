@@ -7,6 +7,7 @@ import com.dormitory.backend.converter.SubjectConverter;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
@@ -76,7 +77,7 @@ public class user {
             inverseJoinColumns = {@JoinColumn(name = "from_username",referencedColumnName = "username")}
     )
     @Schema
-    @JsonIgnore
+    @JsonIgnoreProperties
     private Set<user> exchangeApplication;
 
     @Column
@@ -183,16 +184,10 @@ public class user {
         this.bookmark.add(dormitory);
     }
 
+    @JsonIgnoreProperties
     public Set<user> getExchangeApplication(){
         return exchangeApplication;
     }
-
-    public Set<String> getExchangeApplicationNameList() {
-        Set<String> set = new HashSet<>();
-        exchangeApplication.forEach(user -> set.add(user.getUsername()));
-        return set;
-    }
-
 
     public void setExchangeApplication(Set<user> exchangeApplication) {
         this.exchangeApplication = exchangeApplication;
