@@ -40,6 +40,7 @@ public class user {
     @Schema
     @ExcelProperty(value = "专业代码", converter = SubjectConverter.class)
     private Subject subject;
+
     @Column(nullable = false)
     @Schema
     @ExcelProperty(value = "密码")
@@ -70,6 +71,9 @@ public class user {
     @Column(name = "user_id")
     @Schema
     private int id;
+    @Column
+    @Schema
+    private String photo;
 
     @ManyToMany
     @JoinTable(name = "exchange_application",
@@ -182,6 +186,14 @@ public class user {
     }
     public void insertBookmark(dormitory dormitory){
         this.bookmark.add(dormitory);
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     @JsonIgnoreProperties

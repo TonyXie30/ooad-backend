@@ -100,6 +100,7 @@ public class UserController {
         map.put("create_time", comment.getCreate_time());
         return map;
     }
+
     @PostMapping(value = "api/updateUser")
     @Transactional
     @ResponseBody
@@ -119,7 +120,9 @@ public class UserController {
                     fieldDB.setAccessible(true);
                     field.setAccessible(true);
                     String attributeName=field.getName();
-                    if(attributeName.equals("bookedDormitory") || attributeName.equals("bookmark")){
+                    if(attributeName.equals("bookedDormitory") ||
+                            attributeName.equals("bookmark") ||
+                            attributeName.equals("id")){
                         continue;
                     }
                     if (field.getName().equals(fieldDB.getName()) &&

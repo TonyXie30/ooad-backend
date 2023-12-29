@@ -288,7 +288,8 @@ public class UserService{
     }
 
     public user updateUser(user user) {
-        return userRepository.save(user);
+        userRepository.save(user);
+        return userRepository.findByUsername(user.getUsername());
     }
 
     public Subject getSubject(String subjectId) {
