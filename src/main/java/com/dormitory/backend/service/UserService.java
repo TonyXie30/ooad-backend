@@ -246,7 +246,7 @@ public class UserService{
         SelectionTimeConfig timeConfig = selectionTimeConfigRepository
                 .findByGenderAndDegree(user.getGender(),user.getDegree());
         if (timeConfig==null){
-            throw new  MyException(Code.TIME_CONFIG_NOT_EXIST);
+            return false;
         }
         return time.after(timeConfig.getStartTime()) & time.before(timeConfig.getEndTime());
     }
