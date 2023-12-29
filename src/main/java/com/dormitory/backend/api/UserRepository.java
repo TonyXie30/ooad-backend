@@ -51,8 +51,5 @@ public interface UserRepository extends JpaRepository<user, Long> {
   @Query(value="SELECT u FROM users u WHERE u.username != :#{#hostUser.username} and " +
           "u.gender= :#{#hostUser.gender} and u.degree = :#{#hostUser.degree}")
   List<user> findFilterByUser(user hostUser);
-
-  @Query(value = "SELECT u.exchangeApplication FROM users u WHERE u.username = :username")
-  Set<user> findExchangeApplications(String username);
 }
 

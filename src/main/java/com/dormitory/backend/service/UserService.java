@@ -215,7 +215,7 @@ public class UserService{
                     name: %s,
                     gender: %s,
                     subject: %s
-                """.formatted(sender.getId(),sender.getUsername(),sender.getGender().toString(),sender.getSubject().getname()));
+                """.formatted(sender.getId(),sender.getUsername(),sender.getGender().toString(),sender.getSubject().getName()));
     }
     public void disbandTeam(user leader) {
         List<user> group_member = userRepository.findByLeaderId(leader.getId());
@@ -274,8 +274,42 @@ public class UserService{
         userRepository.save(user);
     }
 
-    public Set<user> getExchangeApplicationList(String username){
-        return userRepository.findExchangeApplications(username);
+//    public Set<user> getExchangeApplicationList(String username){
+//        return userRepository.findExchangeApplications(username);
+//    }
+    public void exchangeApply(user sender, user receiver){
+        user system = userRepository.findByUsername("System");
+        communicate(system, receiver, """
+                Notification:
+                    There's a new application for room exchange. Please check his profile and decide whether he would join the team.
+                    Here's his brief introduction:
+                    id: %d,
+                    name: %s,
+                    gender: %s,
+                    subject: %s
+                """.formatted(sender.getId(),sender.getUsername(),sender.getGender().toString(),sender.getSubject().getName()));
+    }
+
+    public void exchangeAcceptNotification(user user,user fromUser) {
+        user system = userRepository.findByUsername("System");
+        communicate(system, fromUser, """
+                Notification:
+                    Your exchange application to user "%s" has been accepted.
+                    Your room is changed from: %s -> %s
+                """.formatted(user.getUsername(),
+                fromUser.getBookedDormitory().getHouseNum(),
+                user.getBookedDormitory().getHouseNum()));
+    }
+
+    public void exchangeRejectNotification(user user,user fromUser) {
+        user system = userRepository.findByUsername("System");
+        communicate(system, fromUser, """
+                Notification:
+                    Your exchange application to user "%s" has been accepted.
+                    Your room is changed from: %s -> %s
+                """.formatted(user.getUsername(),
+                fromUser.getBookedDormitory().getHouseNum(),
+                user.getBookedDormitory().getHouseNum()));
     }
 
     public void exchangeRoom(user user1, user user2) {
@@ -294,13 +328,15 @@ public class UserService{
 
     public Subject getSubject(String subjectId) {
         Subject temp = subjectRepository.findById(subjectId);
-        System.out.println(temp.getname());
+        System.out.println(temp.getName());
         return temp;
     }
     public void deleteNotification(long id){
         Notification notification = notificationRepository.findById(id);
         notificationRepository.delete(notification);
     }
+
+
 
 //    public void saveExchangeApplicationCache(
 //            ConcurrentHashMap<String, Set<String>> exchangeApplicationCache) {

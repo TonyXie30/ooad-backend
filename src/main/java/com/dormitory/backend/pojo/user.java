@@ -75,15 +75,6 @@ public class user {
     @Schema
     private String photo;
 
-    @ManyToMany
-    @JoinTable(name = "exchange_application",
-            joinColumns = {@JoinColumn(name = "username",referencedColumnName = "username")},
-            inverseJoinColumns = {@JoinColumn(name = "from_username",referencedColumnName = "username")}
-    )
-    @Schema
-    @JsonIgnoreProperties
-    private Set<user> exchangeApplication;
-
     @Column
     @Schema
     private boolean admin;
@@ -194,15 +185,6 @@ public class user {
 
     public void setPhoto(String photo) {
         this.photo = photo;
-    }
-
-    @JsonIgnoreProperties
-    public Set<user> getExchangeApplication(){
-        return exchangeApplication;
-    }
-
-    public void setExchangeApplication(Set<user> exchangeApplication) {
-        this.exchangeApplication = exchangeApplication;
     }
 
     @Override
