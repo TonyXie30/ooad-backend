@@ -1,4 +1,5 @@
 package com.dormitory.backend.pojo;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -41,6 +42,7 @@ public class dormitory {
     @Schema
     int bed;
     @ManyToMany(mappedBy = "bookmark")
+    @JsonBackReference
     @Schema
     List<user> marked_users;
 
