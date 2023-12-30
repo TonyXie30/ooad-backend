@@ -282,13 +282,15 @@ public class UserService{
         dormitory dorm = sender.getBookedDormitory();
         communicate(system, receiver, """
                 Notification:
+                    User %s:
                     There's a new application for room exchange. Please check his profile.
                     Here's the brief introduction of dorm:
                     id: %d,
                     location: %s,
                     buildingName: %s,
                     Room No.: %s
-                """.formatted(dorm.getId(),dorm.getLocation(),dorm.getBuildingName(),dorm.getHouseNum()));
+                    Apply from: %s
+                """.formatted(receiver.getUsername(),sender.getUsername(),dorm.getId(),dorm.getLocation(),dorm.getBuildingName(),dorm.getHouseNum()));
     }
 
     public void exchangeAcceptNotification(user user,user fromUser) {
