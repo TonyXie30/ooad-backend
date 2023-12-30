@@ -302,6 +302,7 @@ public class UserService{
                 """.formatted(user.getUsername(),
                 fromUser.getBookedDormitory().getHouseNum(),
                 user.getBookedDormitory().getHouseNum()));
+        exchangeRoom(user,fromUser);
     }
 
     public void exchangeRejectNotification(user user,user fromUser) {
