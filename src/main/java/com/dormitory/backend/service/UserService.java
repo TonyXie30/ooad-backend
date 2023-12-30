@@ -279,15 +279,16 @@ public class UserService{
 //    }
     public void exchangeApply(user sender, user receiver){
         user system = userRepository.findByUsername("System");
+        dormitory dorm = sender.getBookedDormitory();
         communicate(system, receiver, """
                 Notification:
-                    There's a new application for room exchange. Please check his profile and decide whether he would join the team.
-                    Here's his brief introduction:
+                    There's a new application for room exchange. Please check his profile.
+                    Here's the brief introduction of dorm:
                     id: %d,
-                    name: %s,
-                    gender: %s,
-                    subject: %s
-                """.formatted(sender.getId(),sender.getUsername(),sender.getGender().toString(),sender.getSubject().getName()));
+                    location: %s,
+                    buildingName: %s,
+                    Room No.: %s
+                """.formatted(dorm.getId(),dorm.getLocation(),dorm.getBuildingName(),dorm.getHouseNum()));
     }
 
     public void exchangeAcceptNotification(user user,user fromUser) {
