@@ -290,7 +290,7 @@ public class UserService{
                     buildingName: %s,
                     Room No.: %s
                     Apply from: %s
-                """.formatted(receiver.getUsername(),sender.getUsername(),dorm.getId(),dorm.getLocation(),dorm.getBuildingName(),dorm.getHouseNum()));
+                """.formatted(receiver.getUsername(),dorm.getId(),dorm.getLocation(),dorm.getBuildingName(),dorm.getHouseNum(),sender.getUsername()));
     }
 
     public void exchangeAcceptNotification(user user,user fromUser) {
