@@ -11,6 +11,14 @@ public class LoginInterceptor  implements HandlerInterceptor {
     @Override
     public boolean preHandle (HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         HttpSession session = httpServletRequest.getSession();
+//
+//        if (session.getAttribute("username") == null) {
+//            httpServletResponse.sendRedirect("/api/login");
+//            return false; // 阻止请求继续执行
+//        }
+//
+//        // 用户已登录，允许请求继续执行
+//        return true;
         String contextPath=session.getServletContext().getContextPath();
         String[] requireAuthPages = new String[]{
                 "/home",
