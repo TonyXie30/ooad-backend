@@ -6,6 +6,7 @@ import com.dormitory.backend.config.Code;
 import com.dormitory.backend.config.MyException;
 import com.dormitory.backend.pojo.user;
 import com.dormitory.backend.service.CommentService;
+import com.dormitory.backend.service.DormitoryService;
 import com.dormitory.backend.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ public class AdminUserController {
     UserService userService;
     @Autowired
     CommentService commentService;
+    @Autowired
+    DormitoryService dormitoryService;
     /**
      * 这个接口接收前端发送的excel，实现批量注册学生账号。
      *
@@ -65,6 +68,7 @@ public class AdminUserController {
     @CrossOrigin
     @PostMapping("api/admin/user/deleteUser")
     @ResponseBody
+    @Transactional
     public void deleteUser(@RequestParam String username) {
         if (username == null) {
             throw new MyException(Code.MISSING_FIELD);
@@ -72,6 +76,9 @@ public class AdminUserController {
         user userInDB = userService.findByUsername(username);
         if (userInDB == null) {
             throw new MyException(Code.USER_NOT_EXIST);
+        }
+        if(userInDB.getBookedDormitory() != null){
+            dormitoryService.checkOut(userInDB.getBookedDormitory());
         }
         userService.deleteUser(userInDB);
     }

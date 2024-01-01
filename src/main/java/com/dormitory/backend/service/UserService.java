@@ -5,17 +5,15 @@ import com.dormitory.backend.config.Code;
 import com.dormitory.backend.config.MyException;
 import com.dormitory.backend.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalTime;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class UserService{
@@ -176,6 +174,9 @@ public class UserService{
     }
 
     public void deleteUser(user user) {
+//        该方法不是队长也可以调用。
+        disbandTeam(user);
+        notificationRepository.deleteByReceiver(user);
         userRepository.delete(user);
     }
 
