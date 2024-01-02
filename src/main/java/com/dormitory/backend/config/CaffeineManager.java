@@ -1,13 +1,11 @@
 package com.dormitory.backend.config;
 
-import com.dormitory.backend.converter.SubjectConverter;
-import com.dormitory.backend.pojo.dormitory;
-import com.dormitory.backend.pojo.user;
+import com.dormitory.backend.pojo.Dormitory;
+import com.dormitory.backend.pojo.User;
 import com.dormitory.backend.service.DormitoryService;
 import com.dormitory.backend.service.UserService;
 import com.github.benmanes.caffeine.cache.CacheLoader;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.LoadingCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -20,7 +18,6 @@ import org.springframework.lang.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
@@ -112,10 +109,10 @@ public class CaffeineManager {
                 .refreshAfterWrite(2,TimeUnit.SECONDS);
     }
 
-    private dormitory getDorm(Integer key) {
+    private Dormitory getDorm(Integer key) {
         return dormitoryService.findById(key);
     }
-    private user getUser(String key) {
+    private User getUser(String key) {
         return userService.findByUsernameUnCheck(key);
     }
 //    private final ConcurrentMap<String, Cache> cacheMap = new ConcurrentHashMap<>(16);
