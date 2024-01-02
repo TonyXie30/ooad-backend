@@ -22,12 +22,12 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry){
-        registry.addInterceptor(getLoginIntercepter()).addPathPatterns("/**").excludePathPatterns("/api/login");
+        registry.addInterceptor(getLoginIntercepter()).addPathPatterns("/api/*").excludePathPatterns("/api/login","/api/register","/swagger-ui.html", "/v2/api-docs", "/swagger-resources/**");
     }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        String allowedIp = "*";
+        String allowedIp = "http://localhost/";
         registry.addMapping("/**")
                 .allowedOrigins(allowedIp)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")

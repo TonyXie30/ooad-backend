@@ -114,7 +114,18 @@ public class UserService{
                 any questions, please communicate with the admin.
                                     
                 Sent by System.
-                """.formatted(dormitoryId, dormitory1.getBuildingName(), dormitory1.getBookedNum())));
+                """.formatted(dormitoryId, dormitory1.getBuildingName(), dormitory1.getHouseNum())));
+        //send notification to the parent comment
+        if (object.getId()!=object.getParent().getId()){
+            User parentCommentOwner = object.getParent().getUser();
+            communicate(system, parentCommentOwner, """
+                    Notification:
+                    The comment you set up has been commented by another person. Have a check! Id you have any\s
+                    questions, please communicate with the admin.
+                    
+                    Sent by System
+                    """);
+        }
         return object;
     }
     public List<Comment> getComment(Integer dormitoryId, Integer parentId){

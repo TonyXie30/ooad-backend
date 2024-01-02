@@ -1,5 +1,4 @@
 package com.dormitory.backend.interceptor;
-import com.dormitory.backend.pojo.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -19,34 +18,16 @@ public class LoginInterceptor  implements HandlerInterceptor {
 //
 //        // 用户已登录，允许请求继续执行
 //        return true;
-        String contextPath=session.getServletContext().getContextPath();
-        String[] requireAuthPages = new String[]{
-                "/home",
-        };
 
-        String uri = httpServletRequest.getRequestURI();
-
-        uri = StringUtils.remove(uri, contextPath+"/");
-        String page = uri;
-
-        if(begingWith(page, requireAuthPages)){
-            User user = (User) session.getAttribute("username");
-            if(user==null) {
-                httpServletResponse.sendRedirect("login");
-                return false;
-            }
+        // 检查用户是否已登录
+        if (session.getAttribute("username") != null) {
+            return true;
+        } else {
+            // 用户未登录，返回未授权的响应
+            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return false;
         }
-        return true;
+
     }
 
-    private boolean begingWith(String page, String[] requiredAuthPages) {
-        boolean result = false;
-        for (String requiredAuthPage : requiredAuthPages) {
-            if(StringUtils.startsWith(page, requiredAuthPage)) {
-                result = true;
-                break;
-            }
-        }
-        return result;
-    }
 }
