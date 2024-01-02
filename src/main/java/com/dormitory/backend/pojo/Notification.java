@@ -2,7 +2,6 @@ package com.dormitory.backend.pojo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 
 @Entity(name="Notification")
@@ -17,13 +16,13 @@ public class Notification {
     @ManyToOne
     @JoinColumn(name = "sender_id",referencedColumnName = "user_id")
     @Schema
-    private user sender;
+    private User sender;
 
 
     @ManyToOne
     @JoinColumn(name = "receiver_id",referencedColumnName = "user_id")
     @Schema
-    private user receiver;
+    private User receiver;
 
     @Column(name = "content")
     @Schema
@@ -41,19 +40,19 @@ public class Notification {
         return id;
     }
 
-    public user getSender() {
+    public User getSender() {
         return sender;
     }
 
-    public void setSender(user sender) {
+    public void setSender(User sender) {
         this.sender = sender;
     }
 
-    public user getReceiver() {
+    public User getReceiver() {
         return receiver;
     }
 
-    public void setReceiver(user receiver) {
+    public void setReceiver(User receiver) {
         this.receiver = receiver;
     }
 

@@ -2,8 +2,8 @@ package com.dormitory.backend.web;
 
 import com.dormitory.backend.config.Code;
 import com.dormitory.backend.config.MyException;
+import com.dormitory.backend.pojo.User;
 import com.dormitory.backend.pojo.UserProjection;
-import com.dormitory.backend.pojo.user;
 import com.dormitory.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,8 +27,8 @@ public class SystemController {
     @PostMapping("api/exchangeRoom")
     @ResponseBody
     public void exchangeRoom(@RequestParam String username,@RequestParam String to){
-        user user = userService.findByUsername(username);
-        user touser = userService.findByUsername(to);
+        User user = userService.findByUsername(username);
+        User touser = userService.findByUsername(to);
         if (user.getBookedDormitory() == null && touser.getBookedDormitory() == null) {
             throw new MyException(Code.EXCHANGE_NULL_DORMITORY);
         }
@@ -41,31 +41,31 @@ public class SystemController {
     /*
    //    public String exchangeApply(@RequestParam String username,@RequestParam String to){
    //
-   //        user touser = userService.findByUsername(to);
-   //        user user = userService.findByUsername(username);
-   ////        user touser = userService.findByUsername(to);
-   //        if (user==null) throw new MyException(Code.USER_NOT_EXIST);
+   //        User touser = userService.findByUsername(to);
+   //        User User = userService.findByUsername(username);
+   ////        User touser = userService.findByUsername(to);
+   //        if (User==null) throw new MyException(Code.USER_NOT_EXIST);
    //        if (touser==null) throw new MyException(Code.USER_NOT_EXIST);
-   //        if (!user.getGender().equals(touser.getGender())||
-   //        !user.getDegree().equals(touser.getDegree())){
+   //        if (!User.getGender().equals(touser.getGender())||
+   //        !User.getDegree().equals(touser.getDegree())){
    //            throw new MyException(Code.EXCHANGE_TYPE_NOT_MATCH);
    //        }
-   //        if (user.getBookedDormitory()==null && touser.getBookedDormitory()==null){
+   //        if (User.getBookedDormitory()==null && touser.getBookedDormitory()==null){
    //            throw new MyException(Code.EXCHANGE_NULL_DORMITORY);
    //        }
    //
-   //        if (user.getBookedDormitory()==null||touser.getBookedDormitory()==null) {
-   //            Set<user> applicationList = userService.getExchangeApplicationList(to);
-   //            applicationList.add(user);
+   //        if (User.getBookedDormitory()==null||touser.getBookedDormitory()==null) {
+   //            Set<User> applicationList = userService.getExchangeApplicationList(to);
+   //            applicationList.add(User);
    //            touser.setExchangeApplication(applicationList);
    //            userService.updateUser(touser);
    //            return "warning: one student has not checked in yet";
    //        } else{
    ////            Both checked in
-   //            if (user.getBookedDormitory().getId()==touser.getBookedDormitory().getId())
+   //            if (User.getBookedDormitory().getId()==touser.getBookedDormitory().getId())
    //                throw new MyException(Code.EXCHANGE_SAME_DORMITORY);
-   //            Set<user> applicationList = userService.getExchangeApplicationList(to);
-   //            applicationList.add(user);
+   //            Set<User> applicationList = userService.getExchangeApplicationList(to);
+   //            applicationList.add(User);
    //            touser.setExchangeApplication(applicationList);
    //            userService.updateUser(touser);
    //            return "success";
@@ -76,8 +76,8 @@ public class SystemController {
     @ResponseBody
 
     public String exchangeApply(@RequestParam String username,@RequestParam String to) {
-        user user = userService.findByUsername(username);
-        user touser = userService.findByUsername(to);
+        User user = userService.findByUsername(username);
+        User touser = userService.findByUsername(to);
         if (user.getBookedDormitory() == null && touser.getBookedDormitory() == null) {
             throw new MyException(Code.EXCHANGE_NULL_DORMITORY);
         }
@@ -99,8 +99,8 @@ public class SystemController {
         exchangeOpe(username, from, 1);
     }
     private void exchangeOpe(String username, String from, int type) {
-        user user_ = userService.findByUsername(username);
-        user fromUser = userService.findByUsername(from);
+        User user_ = userService.findByUsername(username);
+        User fromUser = userService.findByUsername(from);
         switch (type){
             case 0 -> userService.exchangeAcceptNotification(user_,fromUser);
             case 1 -> userService.exchangeRejectNotification(user_,fromUser);
@@ -109,16 +109,16 @@ public class SystemController {
 
 //    @PostMapping("api/getExchangeApplications")
 //    @ResponseBody
-//    public Set<user> getExchangeApplications(@RequestParam String username){
+//    public Set<User> getExchangeApplications(@RequestParam String username){
 //        if (userService.findByUsername(username)==null) throw new MyException(Code.USER_NOT_EXIST);
 //        return userService.getExchangeApplicationList(username);
 //    }
 
-    private user checkApplicationCache(String username){
-        user user = userService.findByUsername(username);
+    private User checkApplicationCache(String username){
+        User user = userService.findByUsername(username);
         if (user==null) throw new MyException(Code.USER_NOT_EXIST);
 //        if(exchangeApplicationCache.)
-//            exchangeApplicationCache.putIfAbsent(username,user.getExchangeApplicationNameList());
+//            exchangeApplicationCache.putIfAbsent(username,User.getExchangeApplicationNameList());
         return user;
     }
 

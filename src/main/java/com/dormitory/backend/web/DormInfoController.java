@@ -30,7 +30,7 @@ public class DormInfoController {
     @CrossOrigin
     @PostMapping(value = "api/findDorm")
     @ResponseBody
-    public Page<dormitory> findDorm(@RequestParam(required = false) String houseNum, @RequestParam(required = false) Integer floor,
+    public Page<Dormitory> findDorm(@RequestParam(required = false) String houseNum, @RequestParam(required = false) Integer floor,
                                     @RequestParam(required = false) String buildingName, @RequestParam(required = false) String location,
                                     @RequestParam(required = false) String username,
                                     @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit,
@@ -39,7 +39,7 @@ public class DormInfoController {
         Gender gender = null;
         Degree degree = null;
         if(username!=null) {
-            user user = userService.findByUsername(username);
+            User user = userService.findByUsername(username);
             if (user != null){
                 gender = user.getGender();
                 degree = user.getDegree();
@@ -88,12 +88,12 @@ public class DormInfoController {
             throw new MyException(Code.MISSING_FIELD);
         }
         else{
-            user user = userService.findByUsername(username);
+            User user = userService.findByUsername(username);
             if (user.getLeaderId().getId() != user.getId()){
                 throw new MyException(Code.UNAUTHORISED_NOT_LEADER);
             }
             if (dormitoryService.checkRoomAvailable(dormitoryId) && checkTime_(user,time)){
-                dormitory dormitory = dormitoryService.findById(dormitoryId);
+                Dormitory dormitory = dormitoryService.findById(dormitoryId);
                 userService.bookRoom(user,dormitory);
                 dormitoryService.bookRoom(dormitory);
             }
@@ -106,8 +106,8 @@ public class DormInfoController {
     @PostMapping(value = "api/checkOutDorm")
     @ResponseBody
     public void checkOutDorm(@RequestParam String username,@RequestParam Integer dormitoryid){
-        user user = userService.findByUsername(username);
-        dormitory dormitory = dormitoryService.findById(dormitoryid);
+        User user = userService.findByUsername(username);
+        Dormitory dormitory = dormitoryService.findById(dormitoryid);
         if(dormitory == null || user == null){
             throw new MyException(Code.GENERAL_NOT_EXIST);
         }
@@ -122,12 +122,12 @@ public class DormInfoController {
     @Transactional
     @ResponseBody
     public ResponseEntity<List<CommentResponseDTO>> allComment(@RequestParam Integer dormitory_id){
-        dormitory dorm = dormitoryService.findById(dormitory_id);
-        List<comment> lst =dormitoryService.treeOfComments(dorm);
+        Dormitory dorm = dormitoryService.findById(dormitory_id);
+        List<Comment> lst =dormitoryService.treeOfComments(dorm);
         List<CommentResponseDTO> commentDTOs = lst
                 .stream()
                 .map(commentId -> {
-                    comment comment = commentService.findById(commentId.getId());
+                    Comment comment = commentService.findById(commentId.getId());
                     return comment != null ? commentService.convertToDTO(comment) : null;
                 })
                 .filter(Objects::nonNull)
@@ -165,10 +165,10 @@ public class DormInfoController {
 
 //    模板方法
     public boolean checkTime_(String username, Timestamp time){
-        user user = userService.findByUsername(username);
+        User user = userService.findByUsername(username);
         return checkTime_(user,time);
     }
-    public boolean checkTime_(user user, Timestamp time){
+    public boolean checkTime_(User user, Timestamp time){
         if(time==null){
             time = new Timestamp(new java.util.Date().getTime());
         }

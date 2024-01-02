@@ -25,11 +25,11 @@ public class DormitoryService {
     @Autowired
     UserRepository userRepository;
 
-    public Page<dormitory> findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree(
+    public Page<Dormitory> findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree(
             String houseNum, Integer floor, String buildingName, String location,
             Gender gender, Degree degree,
             Integer page,Integer limit,String sort){
-        Specification<dormitory> spec = DormitorySpecifications
+        Specification<Dormitory> spec = DormitorySpecifications
                 .findByCriteria(houseNum, floor, buildingName, location, gender, degree);
         if(page != null && limit != null){
             Sort sort_ = Sort.by("location","buildingName","floor","houseNum");
@@ -47,17 +47,17 @@ public class DormitoryService {
         }
         // 调用 JpaRepository 的 findAll 方法，传入 Specification 对象
     }
-    public Page<dormitory> findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree(
+    public Page<Dormitory> findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree(
             String houseNum, Integer floor, String buildingName, String location,
             Gender gender, Degree degree){
         Sort sort_ = Sort.by("location","buildingName","floor","houseNum").ascending();
-        Specification<dormitory> spec = DormitorySpecifications
+        Specification<Dormitory> spec = DormitorySpecifications
                 .findByCriteria(houseNum, floor, buildingName, location,gender,degree);
         // 调用 JpaRepository 的 findAll 方法，传入 Specification 对象
         return new PageImpl<>(dormitoryRepository.findAll(spec,sort_));
     }
     public boolean checkRoomAvailable(Integer dormitoryId){
-        dormitory dormitory = dormitoryRepository.findById(dormitoryId);
+        Dormitory dormitory = dormitoryRepository.findById(dormitoryId);
         int bookedBed = dormitory.getBed();
         int bookedNumber = dormitory.getBookedNum();
         return bookedBed>bookedNumber;
@@ -72,19 +72,19 @@ public class DormitoryService {
                 buildingName);
     }
 
-    public dormitory findById(Integer dormitoryId){
+    public Dormitory findById(Integer dormitoryId){
         return dormitoryRepository.findById(dormitoryId);
     }
 
-    public dormitory checkRoomExisted(dormitory dormitory){
+    public Dormitory checkRoomExisted(Dormitory dormitory){
         return dormitoryRepository.findById(dormitory.getId());
     }
 
-    public dormitory addDormitory(dormitory dormitory) {
+    public Dormitory addDormitory(Dormitory dormitory) {
         return dormitoryRepository.save(dormitory);
     }
 
-    public void removeDormitory(dormitory dormitory) {
+    public void removeDormitory(Dormitory dormitory) {
         dormitoryRepository.delete(dormitory);
     }
 
@@ -99,7 +99,7 @@ public class DormitoryService {
                 gender,
                 degree);
     }
-    public List<comment> treeOfComments(dormitory dormitory){
+    public List<Comment> treeOfComments(Dormitory dormitory){
         return commentRepository.findFirstLevelComments(dormitory);
     }
 
@@ -107,15 +107,15 @@ public class DormitoryService {
         selectionTimeConfigRepository.delete(configInDB);
     }
 
-    public void bookRoom(dormitory dormitory) {
+    public void bookRoom(Dormitory dormitory) {
         bookRoom(dormitory,1);
     }
-    public void bookRoom(dormitory dormitory, int bookedNum) {
+    public void bookRoom(Dormitory dormitory, int bookedNum) {
         dormitory.setBookedNum(dormitory.getBookedNum()+bookedNum);
         dormitoryRepository.save(dormitory);
     }
 
-    public void checkOut(dormitory dormitory) {
+    public void checkOut(Dormitory dormitory) {
         dormitory.setBookedNum(dormitory.getBookedNum()-1);
         dormitoryRepository.save(dormitory);
     }

@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 
-@EntityScan(basePackages = {"com.dormitory.backend.pojo"})
+@EntityScan(basePackages = {"com.Dormitory.backend.pojo"})
 @EnableTransactionManagement
 @SpringBootApplication
 public class BackendApplication {

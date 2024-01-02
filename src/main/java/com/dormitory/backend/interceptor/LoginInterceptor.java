@@ -1,5 +1,5 @@
 package com.dormitory.backend.interceptor;
-import com.dormitory.backend.pojo.user;
+import com.dormitory.backend.pojo.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -22,7 +22,7 @@ public class LoginInterceptor  implements HandlerInterceptor {
         String page = uri;
 
         if(begingWith(page, requireAuthPages)){
-            user user = (user) session.getAttribute("username");
+            User user = (User) session.getAttribute("username");
             if(user==null) {
                 httpServletResponse.sendRedirect("login");
                 return false;

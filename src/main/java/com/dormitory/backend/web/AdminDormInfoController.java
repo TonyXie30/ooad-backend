@@ -30,7 +30,7 @@ public class AdminDormInfoController {
     @CrossOrigin
     @PostMapping(value = "api/admin/addDormitory")
     @ResponseBody
-    public dormitory addDormitory(@RequestBody dormitory dormitory){
+    public Dormitory addDormitory(@RequestBody Dormitory dormitory){
         if(dormitory==null||dormitory.getGender().getGender()==null||dormitory.getDegree().getDegree()==null){
             throw new MyException(Code.MISSING_FIELD);
         }
@@ -41,11 +41,11 @@ public class AdminDormInfoController {
     @CrossOrigin
     @PostMapping(value = "api/admin/modifyDormitory")
     @ResponseBody
-    public dormitory modifyDormitory(@RequestBody dormitory dormitory){
+    public Dormitory modifyDormitory(@RequestBody Dormitory dormitory){
         if(dormitory==null){
             throw new MyException(Code.MISSING_FIELD);
         }
-        dormitory dor_DB = dormitoryService.findById(dormitory.getId());
+        Dormitory dor_DB = dormitoryService.findById(dormitory.getId());
         if(dor_DB==null){
             throw new MyException(Code.DORMITORY_NOT_EXIST);
         }
@@ -69,7 +69,7 @@ public class AdminDormInfoController {
     @CrossOrigin
     @PostMapping(value = "api/admin/removeDormitory")
     @ResponseBody
-    public dormitory removeDormitory(@RequestBody dormitory dormitory){
+    public Dormitory removeDormitory(@RequestBody Dormitory dormitory){
         if(dormitory==null){
             throw new MyException(Code.MISSING_FIELD);
         }

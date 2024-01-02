@@ -2,15 +2,13 @@ package com.dormitory.backend.api;
 
 import com.dormitory.backend.pojo.Degree;
 import com.dormitory.backend.pojo.Gender;
-import com.dormitory.backend.pojo.dormitory;
+import com.dormitory.backend.pojo.Dormitory;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.awt.print.Pageable;
-
 public class DormitorySpecifications {
 
-    public static Specification<dormitory> findByCriteria(
+    public static Specification<Dormitory> findByCriteria(
             String houseNum, Integer floor, String buildingName, String location,
             Gender gender, Degree degree) {
         return (root, query, criteriaBuilder) -> {
