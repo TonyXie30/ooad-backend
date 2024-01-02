@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 @Entity(name = "comment")
 @Table(schema = "public")
 @Schema
-public class comment {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
@@ -16,15 +16,15 @@ public class comment {
     @ManyToOne
     @JoinColumn(referencedColumnName = "comment_id",name = "parent_id")
     @Schema
-    comment parent;
+    Comment parent;
     @ManyToOne
     @JoinColumn(name = "dormitory_id")
     @Schema
-    dormitory dormitory;
+    Dormitory dormitory;
     @ManyToOne
     @JoinColumn(name = "user_id")
     @Schema
-    user user;
+    User user;
     @Column
     @Schema
     String content;
@@ -32,11 +32,11 @@ public class comment {
     @Column
     @Schema
     Timestamp create_time;
-    public comment(String content) {
+    public Comment(String content) {
         this.content = content;
     }
 
-    public comment() {
+    public Comment() {
     }
 
     public int getId() {
@@ -47,27 +47,27 @@ public class comment {
         this.id = id;
     }
 
-    public comment getParent() {
+    public Comment getParent() {
         return parent;
     }
 
-    public void setParent(comment parent) {
+    public void setParent(Comment parent) {
         this.parent = parent;
     }
 
-    public com.dormitory.backend.pojo.dormitory getDormitory() {
+    public Dormitory getDormitory() {
         return dormitory;
     }
 
-    public void setDormitory(com.dormitory.backend.pojo.dormitory dormitory) {
+    public void setDormitory(Dormitory dormitory) {
         this.dormitory = dormitory;
     }
 
-    public com.dormitory.backend.pojo.user getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(com.dormitory.backend.pojo.user user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

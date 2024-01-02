@@ -2,7 +2,7 @@ package com.dormitory.backend.service;
 
 import com.dormitory.backend.api.CommentRepository;
 import com.dormitory.backend.pojo.CommentResponseDTO;
-import com.dormitory.backend.pojo.comment;
+import com.dormitory.backend.pojo.Comment;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,13 +15,13 @@ public class CommentService {
     @Autowired
     CommentRepository commentRepository;
 
-    public comment findById(int id){
+    public Comment findById(int id){
         return commentRepository.findById(id);
     }
-    public List<comment> getAllChildComments(comment parent){
-        List<comment> comments = commentRepository.findByParent(parent);
-        List<comment> result = new ArrayList<>();
-        for (comment comment : comments) {
+    public List<Comment> getAllChildComments(Comment parent){
+        List<Comment> comments = commentRepository.findByParent(parent);
+        List<Comment> result = new ArrayList<>();
+        for (Comment comment : comments) {
             if (!result.contains(comment))
                 result.add(comment);
             if (comment!=parent)
@@ -31,15 +31,15 @@ public class CommentService {
     }
 
     @Transactional
-    public void deleteCommentAndChildrenRecursively(comment comment) {
-        List<comment> children = commentRepository.findByParent(comment);
-        for (comment child : children) {
+    public void deleteCommentAndChildrenRecursively(Comment comment) {
+        List<Comment> children = commentRepository.findByParent(comment);
+        for (Comment child : children) {
             if (child!=comment)
                 deleteCommentAndChildrenRecursively(child);
         }
         commentRepository.delete(comment);
     }
-    public CommentResponseDTO convertToDTO(comment comment) {
+    public CommentResponseDTO convertToDTO(Comment comment) {
         CommentResponseDTO dto = new CommentResponseDTO();
         dto.setAuthor(comment.getUser().getUsername());
         dto.setContent(comment.getContent());

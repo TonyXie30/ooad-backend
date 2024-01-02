@@ -4,13 +4,7 @@ import com.dormitory.backend.api.*;
 import com.dormitory.backend.config.Code;
 import com.dormitory.backend.config.MyException;
 import com.dormitory.backend.pojo.*;
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.LoadingCache;
-import jakarta.annotation.Resource;
-import org.apache.catalina.core.ApplicationContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -31,11 +25,11 @@ public class DormitoryService {
     CommentRepository commentRepository;
     @Autowired
     UserRepository userRepository;
-    public Page<dormitory> findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree(
+    public Page<Dormitory> findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree(
             String houseNum, Integer floor, String buildingName, String location,
-            Gender gender, Degree degree,
-            Integer page,Integer limit,String sort){
-        Specification<dormitory> spec = DormitorySpecifications
+Gender gender, Degree degree,
+Integer page, Integer limit, String sort){
+        Specification<Dormitory> spec = DormitorySpecifications
                 .findByCriteria(houseNum, floor, buildingName, location, gender, degree);
         if(page != null && limit != null){
             Sort sort_ = Sort.by("location","buildingName","floor","houseNum");
@@ -53,17 +47,17 @@ public class DormitoryService {
         }
         // 调用 JpaRepository 的 findAll 方法，传入 Specification 对象
     }
-    public Page<dormitory> findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree(
+    public Page<Dormitory> findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree(
             String houseNum, Integer floor, String buildingName, String location,
             Gender gender, Degree degree){
         Sort sort_ = Sort.by("location","buildingName","floor","houseNum").ascending();
-        Specification<dormitory> spec = DormitorySpecifications
+        Specification<Dormitory> spec = DormitorySpecifications
                 .findByCriteria(houseNum, floor, buildingName, location,gender,degree);
         // 调用 JpaRepository 的 findAll 方法，传入 Specification 对象
         return new PageImpl<>(dormitoryRepository.findAll(spec,sort_));
     }
     public boolean checkRoomAvailable(Integer dormitoryId){
-        dormitory dormitory = dormitoryRepository.findById(dormitoryId);
+        Dormitory dormitory = dormitoryRepository.findById(dormitoryId);
         int bookedBed = dormitory.getBed();
         int bookedNumber = dormitory.getBookedNum();
         return bookedBed>bookedNumber;
@@ -79,20 +73,20 @@ public class DormitoryService {
     }
 
     @Cacheable(cacheNames = "fetchById",cacheManager = "dormCacheManager", key = "#dormitoryId")
-    public dormitory findById(Integer dormitoryId){
+    public Dormitory findById(Integer dormitoryId){
         return dormitoryRepository.findById(dormitoryId);
     }
 
-    public dormitory checkRoomExisted(dormitory dormitory){
-        return dormitoryRepository.findById(dormitory.getId());
+    public Dormitory checkRoomExisted(Dormitory Dormitory){
+        return dormitoryRepository.findById(Dormitory.getId());
     }
 
-    public dormitory addDormitory(dormitory dormitory) {
-        return dormitoryRepository.save(dormitory);
+    public Dormitory addDormitory(Dormitory Dormitory) {
+        return dormitoryRepository.save(Dormitory);
     }
 
-    public void removeDormitory(dormitory dormitory) {
-        dormitoryRepository.delete(dormitory);
+    public void removeDormitory(Dormitory Dormitory) {
+        dormitoryRepository.delete(Dormitory);
     }
 
     public void setSelectionTime(SelectionTimeConfig config){
@@ -106,25 +100,25 @@ public class DormitoryService {
                 gender,
                 degree);
     }
-    public List<comment> treeOfComments(dormitory dormitory){
-        return commentRepository.findFirstLevelComments(dormitory);
+    public List<Comment> treeOfComments(Dormitory Dormitory){
+        return commentRepository.findFirstLevelComments(Dormitory);
     }
 
     public void deleteSelectionTime(SelectionTimeConfig configInDB) {
         selectionTimeConfigRepository.delete(configInDB);
     }
 
-    public void bookRoom(dormitory dormitory) {
-        bookRoom(dormitory,1);
+    public void bookRoom(Dormitory Dormitory) {
+        bookRoom(Dormitory,1);
     }
-    public void bookRoom(dormitory dormitory, int bookedNum) {
-        dormitory.setBookedNum(dormitory.getBookedNum()+bookedNum);
-        dormitoryRepository.save(dormitory);
+    public void bookRoom(Dormitory Dormitory, int bookedNum) {
+        Dormitory.setBookedNum(Dormitory.getBookedNum()+bookedNum);
+        dormitoryRepository.save(Dormitory);
     }
 
-    public void checkOut(dormitory dormitory) {
-        dormitory.setBookedNum(dormitory.getBookedNum()-1);
-        dormitoryRepository.save(dormitory);
+    public void checkOut(Dormitory Dormitory) {
+        Dormitory.setBookedNum(Dormitory.getBookedNum()-1);
+        dormitoryRepository.save(Dormitory);
     }
 
     public List<SelectionInfoExcelData> getSelectionInfo(String location, String buildingName,

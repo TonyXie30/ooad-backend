@@ -17,13 +17,14 @@ public class Subject {
     @Column(unique = true,nullable = false)
     @Schema
     String name;
+    
 
     @Cacheable("Subject_name")
-    public String getname() {
+    public String getName() {
         return name;
     }
 
-    public void setname(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 

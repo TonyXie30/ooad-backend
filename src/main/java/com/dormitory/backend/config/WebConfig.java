@@ -2,6 +2,7 @@ package com.dormitory.backend.config;
 
 
 import com.dormitory.backend.interceptor.LoginInterceptor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -21,13 +22,14 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry){
-        registry.addInterceptor(getLoginIntercepter()).addPathPatterns("/**").excludePathPatterns("/login");
+        registry.addInterceptor(getLoginIntercepter()).addPathPatterns("/**").excludePathPatterns("/api/login");
     }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
+        String allowedIp = "*";
         registry.addMapping("/**")
-                .allowedOrigins("*")
+                .allowedOrigins(allowedIp)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
 
                 .maxAge(1800)

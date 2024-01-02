@@ -2,14 +2,13 @@ package com.dormitory.backend.pojo;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.util.List;
 
 @Entity(name = "dormitory")
 @Table(schema = "public")
 @Schema
-public class dormitory {
+public class Dormitory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "dormitory_id")
@@ -44,7 +43,7 @@ public class dormitory {
     @ManyToMany(mappedBy = "bookmark")
     @JsonBackReference
     @Schema
-    List<user> marked_users;
+    List<User> marked_users;
 
     public int getId() {
         return id;
@@ -106,11 +105,11 @@ public class dormitory {
         this.degree = degree;
     }
 
-    public List<user> getMarked_users() {
+    public List<User> getMarked_users() {
         return marked_users;
     }
 
-    public void setMarked_users(List<user> marked_users) {
+    public void setMarked_users(List<User> marked_users) {
         this.marked_users = marked_users;
     }
 

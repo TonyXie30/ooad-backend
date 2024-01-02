@@ -7,7 +7,7 @@ import java.sql.Time;
 @Entity(name = "time_range")
 @Table(schema = "public")
 @Schema
-public class timeRange {
+public class TimeRange {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "timeslot_id")

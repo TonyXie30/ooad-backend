@@ -4,8 +4,9 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.read.listener.PageReadListener;
 import com.dormitory.backend.config.Code;
 import com.dormitory.backend.config.MyException;
-import com.dormitory.backend.pojo.user;
+import com.dormitory.backend.pojo.User;
 import com.dormitory.backend.service.CommentService;
+import com.dormitory.backend.service.DormitoryService;
 import com.dormitory.backend.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ public class AdminUserController {
     UserService userService;
     @Autowired
     CommentService commentService;
+    @Autowired
+    DormitoryService dormitoryService;
     /**
      * 这个接口接收前端发送的excel，实现批量注册学生账号。
      *
@@ -39,8 +42,8 @@ public class AdminUserController {
 //            .sheet()中，可指定表页序数或表名来指定读取的文件中的表，默认为第一张。
 
 //            easyExcel实现了分段读取，对内存友好，可在占用少量内存的情况下读取大表格。
-            EasyExcel.read(file.getInputStream(), user.class, new PageReadListener<user>(dataList -> {
-                for (user newUser:dataList) {
+            EasyExcel.read(file.getInputStream(), User.class, new PageReadListener<User>(dataList -> {
+                for (User newUser:dataList) {
                     if(newUser.getUsername()==null){
 //                        没有名字是没有意义的。
                         continue;
@@ -65,13 +68,17 @@ public class AdminUserController {
     @CrossOrigin
     @PostMapping("api/admin/user/deleteUser")
     @ResponseBody
+    @Transactional
     public void deleteUser(@RequestParam String username) {
         if (username == null) {
             throw new MyException(Code.MISSING_FIELD);
         }
-        user userInDB = userService.findByUsername(username);
+        User userInDB = userService.findByUsername(username);
         if (userInDB == null) {
             throw new MyException(Code.USER_NOT_EXIST);
+        }
+        if(userInDB.getBookedDormitory() != null){
+            dormitoryService.checkOut(userInDB.getBookedDormitory());
         }
         userService.deleteUser(userInDB);
     }

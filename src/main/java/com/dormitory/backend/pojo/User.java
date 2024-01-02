@@ -6,20 +6,16 @@ import com.dormitory.backend.converter.GenderConverter;
 import com.dormitory.backend.converter.SubjectConverter;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @Entity(name = "users")
 @Table(schema = "public")
 @Schema
-public class user {
+public class User {
 
     @Column(nullable = false,unique = true)
     @Schema
@@ -47,24 +43,24 @@ public class user {
     @ManyToOne
     @JoinColumn(name = "bedtime",referencedColumnName = "timeslot")
     @Schema
-    private timeRange bedtime;
+    private TimeRange bedtime;
     @ManyToOne
     @JoinColumn(name = "uptime",referencedColumnName = "timeslot")
     @Schema
-    private timeRange uptime;
+    private TimeRange uptime;
     @ManyToMany //@Fetch(FetchMode.JOIN)
     @JoinTable(name = "bookmark")
     @Schema
-    private List<dormitory> bookmark;
+    private List<Dormitory> bookmark;
     @ManyToOne
     @JoinColumn(name = "dormitory_id")
     @Schema
-    private dormitory bookedDormitory;
+    private Dormitory bookedDormitory;
     @ManyToOne
     @JoinTable(name = "leader_id")
     @Schema
     @JsonBackReference //防止json打印无限递归
-    private user leaderId;
+    private User leaderId;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -73,15 +69,6 @@ public class user {
     @Column
     @Schema
     private String photo;
-
-    @ManyToMany
-    @JoinTable(name = "exchange_application",
-            joinColumns = {@JoinColumn(name = "username",referencedColumnName = "username")},
-            inverseJoinColumns = {@JoinColumn(name = "from_username",referencedColumnName = "username")}
-    )
-    @Schema
-    @JsonIgnoreProperties
-    private Set<user> exchangeApplication;
 
     @Column
     @Schema
@@ -120,11 +107,11 @@ public class user {
         this.degree = degree;
     }
 
-    public user getLeaderId() {
+    public User getLeaderId() {
         return leaderId;
     }
 
-    public void setLeaderId(user leaderId) {
+    public void setLeaderId(User leaderId) {
         this.leaderId = leaderId;
     }
 
@@ -136,19 +123,19 @@ public class user {
         this.username = username;
     }
 
-    public List<dormitory> getBookmark() {
+    public List<Dormitory> getBookmark() {
         return bookmark;
     }
 
-    public void setBookmark(List<dormitory> bookmark) {
+    public void setBookmark(List<Dormitory> bookmark) {
         this.bookmark = bookmark;
     }
 
-    public dormitory getBookedDormitory() {
+    public Dormitory getBookedDormitory() {
         return bookedDormitory;
     }
 
-    public void setBookedDormitory(dormitory bookedDormitory) {
+    public void setBookedDormitory(Dormitory bookedDormitory) {
         this.bookedDormitory = bookedDormitory;
     }
 
@@ -160,19 +147,19 @@ public class user {
         this.subject = subject;
     }
 
-    public timeRange getBedtime() {
+    public TimeRange getBedtime() {
         return bedtime;
     }
 
-    public void setBedtime(timeRange bedtime) {
+    public void setBedtime(TimeRange bedtime) {
         this.bedtime = bedtime;
     }
 
-    public timeRange getUptime() {
+    public TimeRange getUptime() {
         return uptime;
     }
 
-    public void setUptime(timeRange uptime) {
+    public void setUptime(TimeRange uptime) {
         this.uptime = uptime;
     }
 
@@ -183,7 +170,7 @@ public class user {
     public void setPassword(String password) {
         this.password = password;
     }
-    public void insertBookmark(dormitory dormitory){
+    public void insertBookmark(Dormitory dormitory){
         this.bookmark.add(dormitory);
     }
 
@@ -195,15 +182,6 @@ public class user {
         this.photo = photo;
     }
 
-    @JsonIgnoreProperties
-    public Set<user> getExchangeApplication(){
-        return exchangeApplication;
-    }
-
-    public void setExchangeApplication(Set<user> exchangeApplication) {
-        this.exchangeApplication = exchangeApplication;
-    }
-
     @Override
     public int hashCode() {
         return username.hashCode();
@@ -211,9 +189,9 @@ public class user {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof user)){
-            throw new IllegalArgumentException("obj is not user");
+        if (!(obj instanceof User)){
+            throw new IllegalArgumentException("obj is not User");
         }
-        return username.equals(((user) obj).getUsername());
+        return username.equals(((User) obj).getUsername());
     }
 }

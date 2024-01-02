@@ -1,5 +1,5 @@
 package com.dormitory.backend.interceptor;
-import com.dormitory.backend.pojo.user;
+import com.dormitory.backend.pojo.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -11,6 +11,14 @@ public class LoginInterceptor  implements HandlerInterceptor {
     @Override
     public boolean preHandle (HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         HttpSession session = httpServletRequest.getSession();
+//
+//        if (session.getAttribute("username") == null) {
+//            httpServletResponse.sendRedirect("/api/login");
+//            return false; // 阻止请求继续执行
+//        }
+//
+//        // 用户已登录，允许请求继续执行
+//        return true;
         String contextPath=session.getServletContext().getContextPath();
         String[] requireAuthPages = new String[]{
                 "/home",
@@ -22,7 +30,7 @@ public class LoginInterceptor  implements HandlerInterceptor {
         String page = uri;
 
         if(begingWith(page, requireAuthPages)){
-            user user = (user) session.getAttribute("username");
+            User user = (User) session.getAttribute("username");
             if(user==null) {
                 httpServletResponse.sendRedirect("login");
                 return false;

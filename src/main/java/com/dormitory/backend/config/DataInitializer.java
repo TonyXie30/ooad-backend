@@ -45,7 +45,7 @@ public class DataInitializer implements ApplicationRunner {
         String sql = "INSERT INTO users(admin,password,username) " +
                 "VALUES (true,'system','System') ON CONFLICT(username) do nothing ;";
         jdbcTemplate.execute(sql);
-        System.out.println("system user initialization success");
+        System.out.println("system User initialization success");
     }
     @Override
     public void run(ApplicationArguments args) {
