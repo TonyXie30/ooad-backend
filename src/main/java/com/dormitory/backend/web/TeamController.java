@@ -14,7 +14,7 @@ import java.util.List;
 public class TeamController {
     @Autowired
     private UserService userService;
-    @CrossOrigin("http://localhost:8080")
+    @CrossOrigin
     @PostMapping(value = "api/teamUp")
     @ResponseBody
     public User teamUp(@RequestParam String memberName, @RequestParam String leaderName){
@@ -47,23 +47,26 @@ public class TeamController {
         throw new MyException(Code.METHOD_FAILED);
     }
 
-    @CrossOrigin("http://localhost:8080")
+    @CrossOrigin
     @PostMapping(value = "api/leaveTeam")
     @ResponseBody
     public User leaveTeam(String username){
         if(username==null){
             throw new MyException(Code.MISSING_FIELD);
         }
+
         User user = userService.findByUsername(username);
-        //TODO: 队长退队一键解散
+
         if(user==null){
             throw new MyException(Code.USER_NOT_EXIST);
         }
+        if (user.getId()==user.getLeaderId().getId())
+            userService.disbandTeam(user);
         userService.teamUp(user,user);
         return user;
     }
 
-    @CrossOrigin("http://localhost:8080")
+    @CrossOrigin
     @PostMapping(value = "api/disbandTeam")
     @ResponseBody
     public void disbandTeam(String leader_name){
@@ -75,7 +78,7 @@ public class TeamController {
         userService.disbandTeam(leader);
     }
 
-    @CrossOrigin("http://localhost:8080")
+    @CrossOrigin
     @PostMapping(value = "api/kickMember")
     @ResponseBody
     public void kickMember(String leader_name,String username){
@@ -90,7 +93,7 @@ public class TeamController {
             userService.teamUp(user,user);
     }
 
-    @CrossOrigin("http://localhost:8080")
+    @CrossOrigin
     @PostMapping(value = "api/getTeamLeader")
     @ResponseBody
     public User getTeamLeader(String username){
@@ -104,7 +107,7 @@ public class TeamController {
         return user.getLeaderId();
     }
 
-    @CrossOrigin("http://localhost:8080")
+    @CrossOrigin
     @PostMapping(value = "api/getTeam")
     @ResponseBody
     public Team getTeam(String username){
@@ -119,7 +122,7 @@ public class TeamController {
         return new Team(userList,user.getLeaderId(),userList.size());
     }
 
-    @CrossOrigin("http://localhost:8080")
+    @CrossOrigin
     @PostMapping(value = "api/requestTeamUp")
     @ResponseBody
     public void requestTeamUp(String leaderName, String username) {

@@ -95,7 +95,9 @@ public class DormInfoController {
             if (dormitoryService.checkRoomAvailable(dormitoryId) && checkTime_(user,time)){
                 Dormitory dormitory = dormitoryService.findById(dormitoryId);
                 userService.bookRoom(user,dormitory);
-                dormitoryService.bookRoom(dormitory);
+                int bookedNum = userService.findByLeaderId(user).size()>1?userService.findByLeaderId(user).size():1;
+                dormitoryService.bookRoom(dormitory,bookedNum);
+                userService.disbandTeam(userService.findByUsername(username));
             }
             else {
                 throw new MyException(Code.Room_Occupied);
