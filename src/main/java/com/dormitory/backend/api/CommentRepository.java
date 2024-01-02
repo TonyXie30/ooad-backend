@@ -14,6 +14,6 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
     List<Comment> findByDormitory(Dormitory dormitory);
     List<Comment> findByParent(Comment parent);
     @Query("SELECT DISTINCT c FROM comment c join dormitory WHERE c.dormitory = :dormitory AND c.parent = c ORDER BY c.create_time DESC")
-    List<Comment> findFirstLevelComments(@Param("Dormitory") Dormitory dormitory);
+    List<Comment> findFirstLevelComments(@Param("dormitory") Dormitory dormitory);
 
 }
