@@ -16,7 +16,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Service
-public class UserService{
+public class UserService implements TeamSubject{
 
     @Autowired
     UserRepository userRepository;
@@ -83,13 +83,20 @@ public class UserService{
                     
                     Sent by System.
                 """.formatted(leader.getUsername(),leader.getId()));
-        communicate(system,leader, """
+        List<User> userList = userRepository.findByLeaderId(leader.getId());
+        userList.remove(member);
+        for (User single:userList){
+            communicate(system,single, """
                 Notification:
                     You have teamed up with the member %s, whose id=%d. Please pay attention to that. If you have\s
                     any questions, please communicate with the admin.
                     
                     Sent by System.
                 """.formatted(member.getUsername(),member.getId()));
+        }
+    }
+    public void kickMember(User user){
+        teamUp(user,user);
     }
     public Comment setComment(String username, String dormitoryId, String content, Integer parentId){
         Comment object = new Comment(content);

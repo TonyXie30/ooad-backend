@@ -90,7 +90,7 @@ public class TeamController {
         if (!team.contains(user))
             throw new MyException(Code.NOT_HAVE_THIS_MEMBER);
         else
-            userService.teamUp(user,user);
+            userService.kickMember(user);
     }
 
     @CrossOrigin

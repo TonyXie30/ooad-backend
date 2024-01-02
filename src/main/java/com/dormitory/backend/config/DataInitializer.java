@@ -43,7 +43,7 @@ public class DataInitializer implements ApplicationRunner {
 
     public void systemInitialization(){
         String sql = "INSERT INTO users(admin,password,username) " +
-                "VALUES (true,'system','System') ON CONFLICT(username) do nothing ;";
+                "VALUES (true,'54b53072540eeeb8f8e9343e71f28176','System') ON CONFLICT(username) do nothing ;";
         jdbcTemplate.execute(sql);
         System.out.println("system User initialization success");
     }
