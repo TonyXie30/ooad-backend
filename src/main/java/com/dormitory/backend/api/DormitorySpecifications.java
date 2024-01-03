@@ -22,7 +22,7 @@ public class DormitorySpecifications {
             }
 
             // 示例：如果 floor 不为空，添加对 floor 字段的查询条件
-            if (floor != null) {
+            if (floor != null && floor != -1) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("floor"), floor));
             }
 

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
+import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -18,6 +19,7 @@ import org.springframework.lang.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
@@ -49,6 +51,23 @@ public class CaffeineManager {
         cacheManager.setCaffeine(caffeineCacheBuilder());
         return cacheManager;
     }
+
+    @Bean(name = "stringKeyCacheManager",autowireCandidate = false)
+    public CacheManager stringKeyCacheManager(){
+        CaffeineCacheManager cacheManager = new CaffeineCacheManager();
+        cacheManager.setCaffeine(dormCaffeineCache());
+        cacheManager.setCacheLoader(new CacheLoader<>() {
+            @Nullable
+            @Override
+            public Object load(@NonNull Object key) {
+                return getDormBySpecification((String) key);
+            }
+        });
+        cacheManager.setCacheNames(new ArrayList<>(Arrays.asList("fetchByCompositeKey")));
+        return cacheManager;
+    }
+
+
 
     @Bean(name = "dormCacheManager",autowireCandidate = false)
     public CacheManager dormCacheBuilder(){
@@ -85,16 +104,16 @@ public class CaffeineManager {
                 .initialCapacity(100)
                 .maximumSize(500)
                 .expireAfterAccess(10, TimeUnit.MINUTES)
-                .weakKeys()
+//                .weakKeys()
                 .recordStats();
     }
 
     private Caffeine<Object, Object> dormCaffeineCache() {
         return Caffeine.newBuilder()
                 .initialCapacity(100)
-                .maximumSize(500)
+                .maximumSize(750)
                 .expireAfterAccess(10, TimeUnit.MINUTES)
-                .weakKeys()
+//                .weakKeys()
                 .recordStats()
                 .refreshAfterWrite(2,TimeUnit.SECONDS);
     }
@@ -102,9 +121,9 @@ public class CaffeineManager {
     private Caffeine<Object, Object> userCaffeineCache() {
         return Caffeine.newBuilder()
                 .initialCapacity(100)
-                .maximumSize(500)
+                .maximumSize(5000)
                 .expireAfterAccess(10, TimeUnit.MINUTES)
-                .weakKeys()
+//                .weakKeys()
                 .recordStats()
                 .refreshAfterWrite(2,TimeUnit.SECONDS);
     }
@@ -114,6 +133,13 @@ public class CaffeineManager {
     }
     private User getUser(String key) {
         return userService.findByUsernameUnCheck(key);
+    }
+
+    private Object getDormBySpecification(String key) {
+        String[] temp = key.split(":");
+        return dormitoryService.findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree(
+                temp[0],temp[1],temp[2],temp[3],temp[4],temp[5]
+        );
     }
 //    private final ConcurrentMap<String, Cache> cacheMap = new ConcurrentHashMap<>(16);
 //

@@ -25,6 +25,10 @@ public class DormitoryService {
     CommentRepository commentRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    GenderRepository genderRepository;
+    @Autowired
+    DegreeRepository degreeRepository;
     public Page<Dormitory> findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree(
             String houseNum, Integer floor, String buildingName, String location,
 Gender gender, Degree degree,
@@ -47,7 +51,14 @@ Integer page, Integer limit, String sort){
         }
         // 调用 JpaRepository 的 findAll 方法，传入 Specification 对象
     }
+    @Cacheable(cacheNames = "fetchByCompositeKey",cacheManager = "stringKeyCacheManager",keyGenerator = "dormKeyGenerator")
     public Page<Dormitory> findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree(
+            String houseNum, Integer floor, String buildingName, String location,
+            Gender gender, Degree degree){
+        return findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree_(
+                houseNum, floor, buildingName, location, gender, degree);
+    }
+    public Page<Dormitory> findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree_(
             String houseNum, Integer floor, String buildingName, String location,
             Gender gender, Degree degree){
         Sort sort_ = Sort.by("location","buildingName","floor","houseNum").ascending();
@@ -55,6 +66,22 @@ Integer page, Integer limit, String sort){
                 .findByCriteria(houseNum, floor, buildingName, location,gender,degree);
         // 调用 JpaRepository 的 findAll 方法，传入 Specification 对象
         return new PageImpl<>(dormitoryRepository.findAll(spec,sort_));
+    }
+    public Page<Dormitory> findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree(
+            String houseNum, String floor, String buildingName, String location,
+            String gender, String degree){
+        if(floor==null || floor.equals("null")){
+            return findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree_(
+                    houseNum, null, buildingName,
+                    location,genderRepository.findByGender(gender),degreeRepository.findByDegree(degree)
+            );
+        }
+        else{
+            return findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree_(
+                    houseNum, Integer.parseInt(floor), buildingName,
+                    location,genderRepository.findByGender(gender),degreeRepository.findByDegree(degree)
+            );
+        }
     }
     public boolean checkRoomAvailable(Integer dormitoryId){
         Dormitory dormitory = dormitoryRepository.findById(dormitoryId);
