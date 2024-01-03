@@ -56,11 +56,11 @@ public class DormitoryService {
         // 调用 JpaRepository 的 findAll 方法，传入 Specification 对象
         return new PageImpl<>(dormitoryRepository.findAll(spec,sort_));
     }
-    public boolean checkRoomAvailable(Integer dormitoryId){
+    public boolean checkRoomAvailable(Integer dormitoryId, int bookNum){
         Dormitory dormitory = dormitoryRepository.findById(dormitoryId);
         int bookedBed = dormitory.getBed();
         int bookedNumber = dormitory.getBookedNum();
-        return bookedBed>bookedNumber;
+        return bookedBed>bookedNumber+bookNum;
     }
     public List<String> findBuilding(String location){
         location = location==null?"":location;
