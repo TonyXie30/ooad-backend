@@ -1,5 +1,7 @@
 package com.dormitory.backend.utils;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -43,4 +45,5 @@ public class ReadFile {
 
         return result;
     }
+
 }

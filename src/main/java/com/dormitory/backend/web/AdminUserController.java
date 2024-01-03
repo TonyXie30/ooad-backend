@@ -1,5 +1,6 @@
 package com.dormitory.backend.web;
 
+import cn.hutool.crypto.SecureUtil;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.read.listener.PageReadListener;
 import com.dormitory.backend.config.Code;
@@ -8,13 +9,20 @@ import com.dormitory.backend.pojo.User;
 import com.dormitory.backend.service.CommentService;
 import com.dormitory.backend.service.DormitoryService;
 import com.dormitory.backend.service.UserService;
+import com.dormitory.backend.utils.ReadFile;
 import jakarta.transaction.Transactional;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.codec.digest.Md5Crypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.util.Arrays;
+
+import static org.apache.poi.poifs.crypt.HashAlgorithm.md5;
 
 @RestController
 public class AdminUserController {
@@ -56,6 +64,7 @@ public class AdminUserController {
 //                        不允许有同一用户名。
                         continue;
                     }
+                    newUser.setPassword(SecureUtil.md5(newUser.getPassword()));
                     newUser.setAdmin(false);
                     userService.register(newUser);
                     userService.teamUp(newUser,newUser);
