@@ -29,7 +29,7 @@ public class AdminUserController {
      *
      * @param file excel表格（.xlsx/.xls/.csv）
      */
-    @CrossOrigin("http://localhost:8080")
+    @CrossOrigin
     @PostMapping(path = "api/admin/user/register/upload",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseBody
     public void createAccountsByExcel(@RequestPart("file") MultipartFile file){

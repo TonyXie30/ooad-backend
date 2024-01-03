@@ -2,9 +2,11 @@ package com.dormitory.backend.api;
 
 import com.dormitory.backend.pojo.User;
 import com.dormitory.backend.pojo.UserProjection;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -48,5 +50,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
   @Query(value="SELECT u FROM users u WHERE u.username != :#{#hostUser.username} and " +
           "u.gender= :#{#hostUser.gender} and u.degree = :#{#hostUser.degree}")
   List<User> findFilterByUser(User hostUser);
+
+  @Query(value = "DELETE FROM bookmark WHERE bookmark_dormitory_id = :id",nativeQuery = true)
+  @Transactional
+  @Modifying
+    void deleteALlBookMarkByDorm(int id);
 }
 

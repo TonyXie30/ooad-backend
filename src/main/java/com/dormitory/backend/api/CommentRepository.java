@@ -1,7 +1,9 @@
 package com.dormitory.backend.api;
 
+import com.dormitory.backend.config.Code;
 import com.dormitory.backend.pojo.Dormitory;
 import com.dormitory.backend.pojo.Comment;
+import com.dormitory.backend.pojo.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,4 +18,8 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
     @Query("SELECT DISTINCT c FROM comment c join dormitory WHERE c.dormitory = :dormitory AND c.parent = c ORDER BY c.create_time DESC")
     List<Comment> findFirstLevelComments(@Param("dormitory") Dormitory dormitory);
 
+    void deleteByUser(User user);
+    void deleteByParent(Comment comment);
+
+    List<Comment> findAllByUser(User user);
 }

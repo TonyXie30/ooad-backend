@@ -20,14 +20,13 @@ public class LoginInterceptor  implements HandlerInterceptor {
 //        return true;
 
         // 检查用户是否已登录
-        if (session.getAttribute("username") != null) {
-            return true;
-        } else {
-            // 用户未登录，返回未授权的响应
-            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return false;
-        }
-
+//        if (session.getAttribute("username") != null) {
+//            return true;
+//        } else {
+//            // 用户未登录，返回未授权的响应
+////            System.out.println("UNAUTH");
+//            return false;
+//        }
+        return true;
     }
-
 }

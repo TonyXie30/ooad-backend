@@ -85,6 +85,17 @@ public class DormitoryService {
     }
 
     public void removeDormitory(Dormitory dormitory) {
+        List<Comment> comments = commentRepository.findByDormitory(dormitory);
+        commentRepository.deleteAllInBatch(comments);
+
+        List<User> users = userRepository.findByCheckInedDormitoryId(dormitory.getId());
+        for (User user: users) {
+            user.setBookedDormitory(null);
+            userRepository.save(user);
+        }
+
+        userRepository.deleteALlBookMarkByDorm(dormitory.getId());
+
         dormitoryRepository.delete(dormitory);
     }
 

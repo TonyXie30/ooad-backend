@@ -193,6 +193,12 @@ public class UserService implements TeamSubject{
 //        该方法不是队长也可以调用。
         disbandTeam(user);
         notificationRepository.deleteByReceiver(user);
+        notificationRepository.deleteBySender(user);
+        List<Comment> comments = commentRepository.findAllByUser(user);
+        for (Comment c: comments) {
+            c.setUser(userRepository.findByUsername("System"));
+            commentRepository.save(c);
+        }
         userRepository.delete(user);
     }
 

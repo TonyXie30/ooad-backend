@@ -87,7 +87,7 @@ public class AdminDormInfoController {
 
     /*导出周计划*/
 //    https://huaweicloud.csdn.net/63876ecfdacf622b8df8c069.html
-    @CrossOrigin("http://localhost:8080")
+    @CrossOrigin
     @PostMapping(path = "api/admin/selectionInfo/export")
     @ResponseBody
     public void exportSelectionInformationExcel(@RequestParam(required = false) String location,

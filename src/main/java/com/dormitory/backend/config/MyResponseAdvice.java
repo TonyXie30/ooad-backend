@@ -3,6 +3,7 @@ package com.dormitory.backend.config;
 import com.dormitory.backend.pojo.GlobalResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.Priority;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
@@ -19,7 +20,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
  * @author Jiachen<zhangjc1999 @ gmail.com>
  * @date   2020/10/30 10:03 下午
  */
-@ControllerAdvice(basePackages  =  "com.Dormitory.backend.web")
+@ControllerAdvice(basePackages = {"com.dormitory.backend.web"})
 public class MyResponseAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
@@ -30,6 +31,7 @@ public class MyResponseAdvice implements ResponseBodyAdvice<Object> {
     @Override
     public Object beforeBodyWrite(Object o, MethodParameter methodParameter, MediaType mediaType, Class aClass,
         ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
+        System.out.println("__________________");
         if (!(o instanceof GlobalResponse)) {
             GlobalResponse<Object> response = GlobalResponse.builder()
                 .code(0)

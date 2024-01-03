@@ -27,7 +27,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        String allowedIp = "http://localhost/";
+        String allowedIp = "*";
         registry.addMapping("/**")
                 .allowedOrigins(allowedIp)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
