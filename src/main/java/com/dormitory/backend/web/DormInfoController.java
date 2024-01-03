@@ -36,6 +36,14 @@ public class DormInfoController {
                                     @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit,
                                     @RequestParam(required = false) String sort
     ){
+        return findDorm_(houseNum, floor, buildingName, location, username, page, limit, sort);
+    }
+    public Page<Dormitory> findDorm_(String houseNum, Integer floor,
+                                     String buildingName, String location,
+                                     String username,
+                                     Integer page, Integer limit,
+                                     String sort
+    ){
         Gender gender = null;
         Degree degree = null;
         if(username!=null) {
@@ -44,6 +52,9 @@ public class DormInfoController {
                 gender = user.getGender();
                 degree = user.getDegree();
             }
+        }
+        if(floor==null){
+            floor=-1;
         }
         if(page == null && limit == null){
             return dormitoryService
@@ -92,11 +103,12 @@ public class DormInfoController {
             if (user.getLeaderId().getId() != user.getId()){
                 throw new MyException(Code.UNAUTHORISED_NOT_LEADER);
             }
+            Dormitory dormitory = dormitoryService.findById(dormitoryId);
+            if (dormitory==null) throw new MyException(Code.DORMITORY_NOT_EXIST);
             int bookNum = Math.max(userService.findByLeaderId(user).size(), 1);
             if (dormitoryService.checkRoomAvailable(dormitoryId,bookNum) && checkTime_(user,time)){
-                Dormitory dormitory = dormitoryService.findById(dormitoryId);
-                userService.bookRoom(user,dormitory);
                 dormitoryService.bookRoom(dormitory,bookNum);
+                userService.bookRoom(user,dormitory);
                 userService.disbandTeam(userService.findByUsername(username));
             }
             else {

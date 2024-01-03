@@ -34,6 +34,7 @@ public class LoginController {
             Hibernate.initialize(user.getBookmark());
 //            Hibernate.initialize(User.getBedtime());
 //            Hibernate.initialize(User.getWakeupTime());
+
             return user;
         }
     }

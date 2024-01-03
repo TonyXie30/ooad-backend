@@ -5,6 +5,7 @@ import com.dormitory.backend.config.Code;
 import com.dormitory.backend.config.MyException;
 import com.dormitory.backend.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -37,7 +38,9 @@ public class UserService implements TeamSubject{
     @Autowired
     SelectionTimeConfigRepository selectionTimeConfigRepository;
 
+    @Cacheable(cacheNames = "fetchById",cacheManager = "userCacheManager", key = "#username")
     public User findByUsername(String username) {
+
         if(username==null){
             throw new MyException(Code.MISSING_FIELD);
         }
@@ -47,6 +50,7 @@ public class UserService implements TeamSubject{
         }
         return userInDB;
     }
+
     public User findByUsernameUnCheck(String username) {
         if(username==null){
             throw new MyException(Code.MISSING_FIELD);
@@ -75,7 +79,7 @@ public class UserService implements TeamSubject{
         member.setLeaderId(leader);
         userRepository.save(member);
         //系统通知组队信息
-        User system = userRepository.findByUsername("System");
+        User system = findByUsername("System");
         communicate(system,member, """
                 Notification:
                     You have teamed up with the leader %s, whose id=%d. Please pay attention to that. If you have\s
@@ -98,9 +102,10 @@ public class UserService implements TeamSubject{
     public void kickMember(User user){
         teamUp(user,user);
     }
+
     public Comment setComment(String username, String dormitoryId, String content, Integer parentId){
         Comment object = new Comment(content);
-        User author = userRepository.findByUsername(username);
+        User author = findByUsername(username);
         object.setUser(author);
         Dormitory dormitory1 = dormitoryRepository.findById(Integer.parseInt(dormitoryId));
         object.setDormitory(dormitory1);
@@ -112,6 +117,7 @@ public class UserService implements TeamSubject{
         if (parentId==null){
             object.setParent(commentRepository.findById(object.getId()));
         }
+
         //info the User who add dorm as bookmark
         List<User> receiverGroup = getUsersByBookmarkedDormitoryId(Integer.parseInt(dormitoryId));
         User system = userRepository.findByUsername("System");
@@ -139,6 +145,7 @@ public class UserService implements TeamSubject{
         return commentRepository.findByDormitoryAndParent(dormitoryRepository.findById(dormitoryId), commentRepository.findById(parentId));
     }
     public void setBookMark(String dormitoryId,String username){
+
         User author = userRepository.findByUsername(username);
         Dormitory dorm = dormitoryRepository.findById(Integer.parseInt(dormitoryId));
         author.insertBookmark(dorm);
@@ -228,6 +235,7 @@ public class UserService implements TeamSubject{
     public List<User> getUsersByBookmarkedDormitoryId(int dormitoryId) {
         return userRepository.findByBookmarkedDormitoryId(dormitoryId);
     }
+
     public void requestTeamUp(User leader, User sender){
         User system = userRepository.findByUsername("System");
         communicate(system, leader, """
@@ -245,6 +253,7 @@ public class UserService implements TeamSubject{
         leader.setLeaderId(leader);
         userRepository.save(leader);
         group_member.remove(leader);
+
         User system = userRepository.findByUsername("System");
         for (User member : group_member) {
             member.setLeaderId(member);
@@ -256,6 +265,7 @@ public class UserService implements TeamSubject{
     }
 
     public List<UserProjection> recommendFriend(String username){
+
         User user = userRepository.findByUsername(username);
         if (user==null)
             throw new MyException(Code.USER_NOT_EXIST);

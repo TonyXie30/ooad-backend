@@ -2,13 +2,17 @@ package com.dormitory.backend.pojo;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity(name = "dormitory")
 @Table(schema = "public")
 @Schema
-public class Dormitory {
+@AllArgsConstructor
+@NoArgsConstructor
+public class Dormitory implements Cloneable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "dormitory_id")
@@ -129,6 +133,10 @@ public class Dormitory {
         this.bed = bed;
     }
 
-
-
+    @Override
+    public Object clone() {
+        return new Dormitory(id,location,buildingName,floor,houseNum,
+                new Gender(gender.getGender()),new Degree(degree.getDegree()),
+                bookedNum,bed,marked_users);
+    }
 }

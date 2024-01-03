@@ -27,7 +27,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        String allowedIp = "*";
+        String allowedIp = "http://8.138.84.46";
         registry.addMapping("/**")
                 .allowedOrigins(allowedIp)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")

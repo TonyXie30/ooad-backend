@@ -3,6 +3,7 @@ package com.dormitory.backend.pojo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.cache.annotation.Cacheable;
 
 @Entity(name = "Degree")
 @Table(schema = "public")
@@ -18,6 +19,7 @@ public class Degree {
     }
     public Degree(){}
 
+    @Cacheable("Degree")
     public String getDegree() {
         return degree;
     }

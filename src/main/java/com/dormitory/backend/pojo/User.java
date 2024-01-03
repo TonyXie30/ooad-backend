@@ -36,7 +36,6 @@ public class User {
     @Schema
     @ExcelProperty(value = "专业代码", converter = SubjectConverter.class)
     private Subject subject;
-
     @Column(nullable = false)
     @Schema
     @ExcelProperty(value = "密码")

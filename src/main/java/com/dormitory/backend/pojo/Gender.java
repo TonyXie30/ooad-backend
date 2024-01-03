@@ -2,11 +2,14 @@ package com.dormitory.backend.pojo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity(name = "Gender")
 @Table(schema = "public")
 @Schema
+
 public class Gender {
 
     @Id
