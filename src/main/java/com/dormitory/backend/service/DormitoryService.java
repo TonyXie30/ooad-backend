@@ -29,82 +29,83 @@ public class DormitoryService {
     GenderRepository genderRepository;
     @Autowired
     DegreeRepository degreeRepository;
+
     public Page<Dormitory> findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree(
             String houseNum, Integer floor, String buildingName, String location,
-Gender gender, Degree degree,
-Integer page, Integer limit, String sort){
+            Gender gender, Degree degree,
+            Integer page, Integer limit, String sort) {
         Specification<Dormitory> spec = DormitorySpecifications
                 .findByCriteria(houseNum, floor, buildingName, location, gender, degree);
-        if(page != null && limit != null){
-            Sort sort_ = Sort.by("location","buildingName","floor","houseNum");
-            if (sort==null||sort.equals("+")){
+        if (page != null && limit != null) {
+            Sort sort_ = Sort.by("location", "buildingName", "floor", "houseNum");
+            if (sort == null || sort.equals("+")) {
                 sort_ = sort_.ascending();
             } else {
                 sort_ = sort_.descending();
             }
 
-            PageRequest pageable = PageRequest.of(page,limit,sort_);
-            return dormitoryRepository.findAll(spec,pageable);
-        }else{
+            PageRequest pageable = PageRequest.of(page, limit, sort_);
+            return dormitoryRepository.findAll(spec, pageable);
+        } else {
 //            若强制调用该方法却缺少分页信息则抛出错误。不需要分页建议选择下方方法
             throw new MyException(Code.MISSING_FIELD);
         }
         // 调用 JpaRepository 的 findAll 方法，传入 Specification 对象
     }
-    @Cacheable(cacheNames = "fetchByCompositeKey",cacheManager = "stringKeyCacheManager",keyGenerator = "dormKeyGenerator")
+
+    @Cacheable(cacheNames = "fetchByCompositeKey", cacheManager = "stringKeyCacheManager", keyGenerator = "dormKeyGenerator")
     public Page<Dormitory> findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree(
             String houseNum, Integer floor, String buildingName, String location,
-            Gender gender, Degree degree){
+            Gender gender, Degree degree) {
         return findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree_(
                 houseNum, floor, buildingName, location, gender, degree);
     }
+
     public Page<Dormitory> findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree_(
             String houseNum, Integer floor, String buildingName, String location,
-            Gender gender, Degree degree){
-        Sort sort_ = Sort.by("location","buildingName","floor","houseNum").ascending();
+            Gender gender, Degree degree) {
+        Sort sort_ = Sort.by("location", "buildingName", "floor", "houseNum").ascending();
         Specification<Dormitory> spec = DormitorySpecifications
-                .findByCriteria(houseNum, floor, buildingName, location,gender,degree);
+                .findByCriteria(houseNum, floor, buildingName, location, gender, degree);
         // 调用 JpaRepository 的 findAll 方法，传入 Specification 对象
-        return new PageImpl<>(dormitoryRepository.findAll(spec,sort_));
+        return new PageImpl<>(dormitoryRepository.findAll(spec, sort_));
     }
-    public Page<Dormitory> findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree(
+
+    public List<Dormitory> findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree(
             String houseNum, String floor, String buildingName, String location,
-            String gender, String degree){
-        if(floor==null || floor.equals("null")){
-            return findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree_(
-                    houseNum, null, buildingName,
-                    location,genderRepository.findByGender(gender),degreeRepository.findByDegree(degree)
-            );
-        }
-        else{
-            return findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree_(
-                    houseNum, Integer.parseInt(floor), buildingName,
-                    location,genderRepository.findByGender(gender),degreeRepository.findByDegree(degree)
-            );
-        }
+            String gender, String degree) {
+        Sort sort_ = Sort.by("location", "buildingName", "floor", "houseNum").ascending();
+        Specification<Dormitory> spec = DormitorySpecifications
+                .findByCriteria(houseNum, Integer.parseInt(floor), buildingName,
+                        location, genderRepository.findByGender(gender), degreeRepository.findByDegree(degree));
+        return dormitoryRepository.findAll(spec, sort_);
+
     }
-    public boolean checkRoomAvailable(Integer dormitoryId){
+
+    public boolean checkRoomAvailable(Integer dormitoryId, Integer bookNum) {
         Dormitory dormitory = dormitoryRepository.findById(dormitoryId);
         int bookedBed = dormitory.getBed();
         int bookedNumber = dormitory.getBookedNum();
-        return bookedBed>bookedNumber;
+        return bookedBed > bookedNumber + bookNum;
     }
-    public List<String> findBuilding(String location){
-        location = location==null?"":location;
+
+    public List<String> findBuilding(String location) {
+        location = location == null ? "" : location;
         return dormitoryRepository.findBuilding(location);
     }
-    public List<String> findFloor(String location,String buildingName){
+
+    public List<String> findFloor(String location, String buildingName) {
         return dormitoryRepository.findFloor(
                 location,
                 buildingName);
     }
 
-    @Cacheable(cacheNames = "fetchById",cacheManager = "dormCacheManager", key = "#dormitoryId")
-    public Dormitory findById(Integer dormitoryId){
+    @Cacheable(cacheNames = "fetchById", cacheManager = "dormCacheManager", key = "#dormitoryId")
+    public Dormitory findById(Integer dormitoryId) {
         return dormitoryRepository.findById(dormitoryId);
     }
 
-    public Dormitory checkRoomExisted(Dormitory Dormitory){
+    public Dormitory checkRoomExisted(Dormitory Dormitory) {
         return dormitoryRepository.findById(Dormitory.getId());
     }
 
@@ -116,18 +117,21 @@ Integer page, Integer limit, String sort){
         dormitoryRepository.delete(Dormitory);
     }
 
-    public void setSelectionTime(SelectionTimeConfig config){
+    public void setSelectionTime(SelectionTimeConfig config) {
         selectionTimeConfigRepository.save(config);
     }
-    public SelectionTimeConfig getSelectionTime(Gender gender, Degree degree){
-        return selectionTimeConfigRepository.findByGenderAndDegree(gender,degree);
+
+    public SelectionTimeConfig getSelectionTime(Gender gender, Degree degree) {
+        return selectionTimeConfigRepository.findByGenderAndDegree(gender, degree);
     }
-    public List<SelectionTimeConfig> getSelectionTimeList(String gender, String degree){
+
+    public List<SelectionTimeConfig> getSelectionTimeList(String gender, String degree) {
         return selectionTimeConfigRepository.getSelectionTimeConfigListByGenderAndDegree(
                 gender,
                 degree);
     }
-    public List<Comment> treeOfComments(Dormitory Dormitory){
+
+    public List<Comment> treeOfComments(Dormitory Dormitory) {
         return commentRepository.findFirstLevelComments(Dormitory);
     }
 
@@ -136,15 +140,16 @@ Integer page, Integer limit, String sort){
     }
 
     public void bookRoom(Dormitory Dormitory) {
-        bookRoom(Dormitory,1);
+        bookRoom(Dormitory, 1);
     }
+
     public void bookRoom(Dormitory Dormitory, int bookedNum) {
-        Dormitory.setBookedNum(Dormitory.getBookedNum()+bookedNum);
+        Dormitory.setBookedNum(Dormitory.getBookedNum() + bookedNum);
         dormitoryRepository.save(Dormitory);
     }
 
     public void checkOut(Dormitory Dormitory) {
-        Dormitory.setBookedNum(Dormitory.getBookedNum()-1);
+        Dormitory.setBookedNum(Dormitory.getBookedNum() - 1);
         dormitoryRepository.save(Dormitory);
     }
 

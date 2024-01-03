@@ -85,7 +85,7 @@ public class DormInfoController {
             throw new MyException(Code.MISSING_FIELD);
         }
         else{
-            return dormitoryService.checkRoomAvailable(dormitoryId);
+            return dormitoryService.checkRoomAvailable(dormitoryId,0);
         }
     }
 
@@ -105,11 +105,12 @@ public class DormInfoController {
             }
             Dormitory dormitory = dormitoryService.findById(dormitoryId);
             if (dormitory==null) throw new MyException(Code.DORMITORY_NOT_EXIST);
-            if (dormitoryService.checkRoomAvailable(dormitoryId) && checkTime_(user,time)){
+            int bookedNum = Math.max(userService.findByLeaderId(user).size(), 1);
+            dormitoryService.bookRoom(dormitory,bookedNum);
+            if (dormitoryService.checkRoomAvailable(dormitoryId,bookedNum) && checkTime_(user,time)){
 
                 userService.bookRoom(user,dormitory);
-                int bookedNum = userService.findByLeaderId(user).size()>1?userService.findByLeaderId(user).size():1;
-                dormitoryService.bookRoom(dormitory,bookedNum);
+
                 userService.disbandTeam(userService.findByUsername(username));
             }
             else {

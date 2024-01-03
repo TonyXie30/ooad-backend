@@ -10,10 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
-import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
@@ -137,9 +137,21 @@ public class CaffeineManager {
 
     private Object getDormBySpecification(String key) {
         String[] temp = key.split(":");
-        return dormitoryService.findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree(
+        System.out.println(Arrays.toString(temp));
+        for (int i = 0; i < temp.length; i++) {
+            if(temp[i].equals("null")){
+                temp[i] = null;
+            }
+        }
+        List<Dormitory> temp_dorm = dormitoryService.findByHouseNumAndFloorAndBuildingNameAndLocationAndGenderAndDegree(
                 temp[0],temp[1],temp[2],temp[3],temp[4],temp[5]
         );
+        System.out.println(temp_dorm);
+        List<Dormitory> copy_list = new ArrayList<>();
+        for (Dormitory dormitory : temp_dorm) {
+            copy_list.add((Dormitory) dormitory.clone());
+        }
+        return new PageImpl<>(copy_list);
     }
 //    private final ConcurrentMap<String, Cache> cacheMap = new ConcurrentHashMap<>(16);
 //
